@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\edoma\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\edoma\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_VR-project-2022.-2079956810.00" t="ExcludeRecursive" />
+    <e p="E:\unity\VR-project-2022" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="ExampleAssets" t="Include">
+          <e p="Scripts" t="Include">
+            <e p="AnchorCreator.cs" t="Include" />
+            <e p="ARFeatheredPlaneMeshVisualizer.cs" t="Include" />
+          </e>
+          <e p="Shaders" t="Include">
+            <e p="FeatheredPlaneShader.shader" t="Include" />
+          </e>
+        </e>
+        <e p="Script" t="Include">
+          <e p="AStar" t="Include">
+            <e p="AStarSolver.cs" t="Include" />
+            <e p="AStarSquare.cs" t="Include" />
+            <e p="AStarSquareBasic.cs" t="Include" />
+            <e p="AStarStepSolver.cs" t="Include" />
+          </e>
+          <e p="Dijkstra" t="Include">
+            <e p="DijkstraMountain.cs" t="Include" />
+            <e p="DijkstraSolver.cs" t="Include" />
+            <e p="DijkstraSquare.cs" t="Include" />
+          </e>
+          <e p="Graph" t="Include">
+            <e p="Edge.cs" t="Include" />
+            <e p="Graph.cs" t="Include" />
+            <e p="Node.cs" t="Include" />
+            <e p="TileGraph.cs" t="Include" />
+          </e>
+          <e p="PlaceOnPlane.cs" t="Include" />
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\Bin" t="ExcludeRecursive" />
+      <e p="VR-project-2022.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
