@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8253142473519367986}
-  - component: {fileID: 8253142473519367985}
+  - component: {fileID: 5678901253280815183}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8253142473519367985
+--- !u!114 &5678901253280815183
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,20 +40,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8253142473519367984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecc912e86f3874a1ba07bea277686182, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c4f766f142c544148379758c022ec23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 10
   y: 10
-  edgeProbability: 1
-  RandomSeed: 0
   edgeColor: {r: 1, g: 0, b: 0, a: 1}
   gap: 0.05
-  startMaterial: {fileID: 2100000, guid: 8a2f7d47e2d132243a2116ce64679a9c, type: 2}
-  trackMaterial: {fileID: 2100000, guid: 8a2f7d47e2d132243a2116ce64679a9c, type: 2}
-  endMaterial: {fileID: 2100000, guid: 8a2f7d47e2d132243a2116ce64679a9c, type: 2}
+  firstMaterial: {fileID: 2100000, guid: 4fe229b2d25565748a911830ab166af6, type: 2}
+  secondMaterial: {fileID: 2100000, guid: b988e357788cf684e889ec1b97f47735, type: 2}
   sceneObject: {fileID: 3812772322166785469, guid: 53ed690033181eb43a0a634abfe009d8,
     type: 3}
-  stopAtFirstHit: 0
-  visitedMaterial: {fileID: 2100000, guid: 8a2f7d47e2d132243a2116ce64679a9c, type: 2}
-  heuristicToUse: 0
