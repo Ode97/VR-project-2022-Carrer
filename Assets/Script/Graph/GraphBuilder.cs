@@ -12,13 +12,14 @@ public class GraphBuilder : MonoBehaviour {
     public Material firstMaterial = null;
     public Material secondMaterial = null;
 
-	// what to put on the scene, not really meaningful
+    // what to put on the scene, not really meaningful
 	public GameObject sceneObject;
 
 	protected Node[,] matrix;
 	protected Graph g;
 	
 	void Start () {
+		
 		if (sceneObject != null)
 		{
 
@@ -43,7 +44,7 @@ public class GraphBuilder : MonoBehaviour {
 					transform.right * gap * (i - ((x - 1) / 2f)) +
 					transform.forward * gap * (j - ((y - 1) / 2f));
 				matrix[i, j].sceneObject.transform.rotation = transform.rotation;
-
+				
 				if ((i % 2 == 0 && j % 2 != 0) || (j % 2 == 0 && i % 2 != 0))
 				{
 					Debug.Log(i + " " + j);
@@ -62,5 +63,5 @@ public class GraphBuilder : MonoBehaviour {
 	protected virtual float Distance(Node from, Node to) {
         return 1f;
     }
-    
+
 }

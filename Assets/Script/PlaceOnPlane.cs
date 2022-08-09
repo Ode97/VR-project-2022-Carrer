@@ -2,77 +2,67 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARFoundation.Samples;
 using UnityEngine.XR.ARSubsystems;
 
 [RequireComponent(typeof(ARRaycastManager))]
-public class PlaceOnPlane : MonoBehaviour
+public class PlaceOnPlane : PressInputBase
 {
-    [SerializeField] private GameObject gameObjectToPlace;
+    [SerializeField]
+    [Tooltip("Instantiates this prefab on a plane at the touch location.")]
+    GameObject m_PlacedPrefab;
 
-    private GameObject visualObject;
-
-    private ARRaycastManager _raycastManager;
-
-    private UnityEvent placementUpdate;
-
-    private static List<ARRaycastHit> s_hits = new List<ARRaycastHit>();
-
-    private GameObject spawnedObject;
-
-    public GameObject GameObjectToPlace
+    /// <summary>
+    /// The prefab to instantiate on touch.
+    /// </summary>
+    public GameObject placedPrefab
     {
-        get => gameObjectToPlace;
-        set => gameObjectToPlace = value;
+        get { return m_PlacedPrefab; }
+        set { m_PlacedPrefab = value; }
     }
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-        _raycastManager = GetComponent<ARRaycastManager>();
+    /// <summary>
+    /// The object instantiated as a result of a successful raycast intersection with a plane.
+    /// </summary>
+    public GameObject spawnedObject { get; private set; }
 
-        if (placementUpdate == null)
-        {
-            placementUpdate = new UnityEvent();
-            //placementUpdate.AddListener(DiableVisual);
-        }
+    bool m_Pressed;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        m_RaycastManager = GetComponent<ARRaycastManager>();
     }
 
-    private bool TryGetTouchPosition(out Vector2 touchPosition)
-    {
-        if (Input.touchCount > 0)
-        {
-            touchPosition = Input.GetTouch(0).position;
-            return true;
-        }
-
-        touchPosition = default;
-        return false;
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if(!TryGetTouchPosition(out Vector2 touchPosition))
+
+        if (Pointer.current == null || m_Pressed == false)
             return;
 
-        if (_raycastManager.Raycast(touchPosition, s_hits, TrackableType.PlaneWithinPolygon))
-        {
-            var hitPose = s_hits[0].pose;
+        var touchPosition = Pointer.current.position.ReadValue();
 
+        if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
+        {
+            // Raycast hits are sorted by distance, so the first one
+            // will be the closest hit.
+            var hitPose = s_Hits[0].pose;
             if (spawnedObject == null)
             {
-                spawnedObject = Instantiate(gameObjectToPlace, hitPose.position, hitPose.rotation);
+                spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
+                FindObjectOfType<LoadBuildings>().SetGrid(spawnedObject.transform);
             }
-            else
-                spawnedObject.transform.position = hitPose.position;
-
-            placementUpdate.Invoke();
         }
     }
 
-    public void DisableVisual()
-    {
-        visualObject.SetActive(false);
-    }
+    protected override void OnPress(Vector3 position) => m_Pressed = true;
+
+    protected override void OnPressCancel() => m_Pressed = false;
+
+    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
+
+    ARRaycastManager m_RaycastManager;
 }
+
