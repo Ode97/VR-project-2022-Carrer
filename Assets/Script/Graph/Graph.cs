@@ -3,12 +3,12 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Graph {
 
 	// holds all edgeds going out from a node
 	private Dictionary<Node, List<Edge>> data;
-
 	public Graph() {
 		data = new Dictionary<Node, List<Edge>>();
 	}
@@ -18,6 +18,13 @@ public class Graph {
 		AddNode (e.to);
 		if (!data[e.from].Contains(e))
 			data [e.from].Add (e);
+
+		foreach (var d in data)
+		{
+			
+			Debug.Log(d.Key.sceneObject.name + " " + d.Value.Count);
+			
+		}
 	}
 
 	// used only by AddEdge 

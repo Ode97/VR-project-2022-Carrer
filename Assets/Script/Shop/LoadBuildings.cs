@@ -12,14 +12,11 @@ public class LoadBuildings : MonoBehaviour
     public Transform itemEntertainments;
     public Transform itemJobs;
     private Transform item;
-
-    private Transform grid;
     private Transform actual = null;
+    private int layer;
     //public LoadBuildings next;
     private Canvas canvas;
     private ARSessionOrigin _arSessionOrigin;
-    private Transform initPos;
-
     private int i = 0;
 
 
@@ -27,38 +24,44 @@ public class LoadBuildings : MonoBehaviour
     {
         canvas = GetComponent<Canvas>();
         _arSessionOrigin = FindObjectOfType<ARSessionOrigin>();
-        initPos = _arSessionOrigin.transform;
-    }
-
-    public void SetGrid(Transform g)
-    {
-        grid = g;
     }
 
     public void LoadHouses()
     {
-        if(actual)
+        if (actual)
+        {
             actual.gameObject.SetActive(false);
+        }
+
         i = 0;
         item = itemHouses;
+        layer = Constant.houseLayer;
         ShowObject();
     }
     
     public void LoadEntertainments()
     {
-        if(actual)
+        if (actual)
+        {
             actual.gameObject.SetActive(false);
+        }
+
         i = 0;
         item = itemEntertainments;
+        layer = Constant.entertainmentLayer;
         ShowObject();
     }
     
     public void LoadJobs()
     {
-        if(actual)
+        if (actual)
+        {
             actual.gameObject.SetActive(false);
+        }
+
         i = 0;
         item = itemJobs;
+        layer = Constant.jobLayer;
         ShowObject();
     }
 
@@ -73,23 +76,22 @@ public class LoadBuildings : MonoBehaviour
 
     public void Select()
     {
-        GameManager.GM().SetBuilding(item.GetChild(i).gameObject);
-        GameManager.GM().CloseMenu();
+        Destroy(actual.gameObject);
+        GameManager.GM().SetBuilding(item.GetChild(i).gameObject, layer);
+        GameManager.GM().CloseShop();
     }
 
     private void ShowObject()
-    {
-        //item.GetChild(i).gameObject.transform.position = new Vector3(GameManager.GM().mainCamera.transform.position.x, GameManager.GM().mainCamera.transform.position.y, GameManager.GM().mainCamera.transform.position.z + 150);
-        
-        actual = item.GetChild(i);
+    { 
+        if(SystemInfo.deviceType == DeviceType.Handheld)
+            actual = Instantiate(item.GetChild(i), _arSessionOrigin.camera.transform);
+        else
+        {
+            actual = Instantiate(item.GetChild(i));
+        }
+        actual.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        actual.localPosition = new Vector3(0, 0, 10);
         actual.gameObject.SetActive(true);
-        var pos = _arSessionOrigin.transform.position;
-        actual.position = new Vector3(pos.x, pos.y - 0.5f, pos.z + 20);
-        //_arSessionOrigin.MakeContentAppearAt(actual, new Vector3(pos.x, pos.y - 0.5f, pos.z + 20));
     }
-
-    private void Update()
-    {
-        //throw new NotImplementedException();
-    }
+    
 }

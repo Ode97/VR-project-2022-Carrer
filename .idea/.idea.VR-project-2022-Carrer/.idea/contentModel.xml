@@ -16,22 +16,28 @@
           </e>
         </e>
         <e p="Script" t="Include">
-          <e p="Build.cs" t="Include" />
-          <e p="GameManager.cs" t="Include" />
+          <e p="General" t="Include">
+            <e p="Build.cs" t="Include" />
+            <e p="Constant.cs" t="Include" />
+            <e p="GameManager.cs" t="Include" />
+            <e p="Menu.cs" t="Include" />
+            <e p="PlaceOnPlane.cs" t="Include" />
+            <e p="PressInputBase.cs" t="Include" />
+          </e>
           <e p="Graph" t="Include">
             <e p="Edge.cs" t="Include" />
             <e p="Graph.cs" t="Include" />
             <e p="GraphBuilder.cs" t="Include" />
             <e p="Node.cs" t="Include" />
+            <e p="PathfindingSolver.cs" t="Include" />
             <e p="TileGraph.cs" t="Include" />
           </e>
-          <e p="PlaceOnPlane.cs" t="Include" />
-          <e p="PressInputBase.cs" t="Include" />
           <e p="Shop" t="Include">
             <e p="ButtonDown.cs" t="Include" />
             <e p="LoadBuildings.cs" t="Include" />
             <e p="RotateObject.cs" t="Include" />
           </e>
+          <e p="Worker.cs" t="Include" />
         </e>
         <e p="Starter Package" t="Include">
           <e p="CarBehaviour.cs" t="Include" />

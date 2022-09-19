@@ -3,287 +3,28 @@
   <component name="ChangeListManager">
     <list default="true" id="27ab78de-c021-4dee-8230-af07ac070f3c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/No Name.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/No Name.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/accent_1.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/accent_1.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/aqua.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/aqua.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/black.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/black.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_3.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_3.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_5.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_5.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_6.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/blue_6.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/bright_green.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/bright_green.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/bright_pink.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/bright_pink.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/bright_yellow.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/bright_yellow.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/brown.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/brown.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/dark.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/dark.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/dark_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/dark_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/dark_blue.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/dark_blue.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/gray.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/gray.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/gray_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/gray_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green_001.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green_001.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green_3.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green_3.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green_yellow.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/green_yellow.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/house_roof.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/house_roof.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_001.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_001.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_005.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_005.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_015.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_015.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_016.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_016.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_019.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_019.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_020.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_020.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_021.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_021.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_022.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_022.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_023.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_023.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_028.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_028.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_029.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_029.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_030.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_030.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_031.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_031.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_032.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_032.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_033.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_033.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_034.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_034.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_038.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_038.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_042.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_042.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_047.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_047.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_049.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_049.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_050.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_050.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_051.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_051.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_053.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_053.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_054.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_054.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_055.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_055.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_056.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/mat_056.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/nowy2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/nowy2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/orange.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/orange.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/orange_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/orange_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/pink.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/pink.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/pink_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/pink_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/red_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/red_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/red_3.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/red_3.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/unnamed.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/unnamed.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/white.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/white.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/white_2P.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/white_2P.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/white_3.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/white_3.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/window.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/window.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow_2.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow_2.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow_3.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow_3.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow_4.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Materials/yellow_4.mat.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/bookstore_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/bookstore_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/cinema_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/cinema_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/clothing_store_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/clothing_store_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/computer_store_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/computer_store_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_1_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_1_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_10_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_10_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_11_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_11_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_12_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_12_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_13_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_13_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_14_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_14_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_15_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_15_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_16_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_16_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_17_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_17_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_18_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_18_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_19_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_19_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_1_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_1_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_20_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_20_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_21_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_21_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_22_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_22_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_23_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_23_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_24_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_24_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_25_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_25_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_26_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_26_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_27_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_27_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_28_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_28_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_29_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_29_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_2_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_2_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_30_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_30_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_31_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_31_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_32_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_32_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_33_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_33_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_34_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_34_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_3_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_3_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_4_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_4_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_5_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_5_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_6_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_6_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_7_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_7_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_8_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_8_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_9.000.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_2_v_9.000.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_3_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_3_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_4_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_4_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_5_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_5_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_6_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/house_6_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/school_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/school_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/software_company_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/software_company_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/sport_store_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/sport_store_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/studio_video_games_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/studio_video_games_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/toy_store_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/toy_store_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/university_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/university_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/video_games_store_mobile.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/Mobile/video_games_store_mobile.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/bookstore.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/bookstore.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/car_factory.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/car_factory.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/car_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/car_store.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/chemical_laboratory.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/chemical_laboratory.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/cinema.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/cinema.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/clothing_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/clothing_store.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/computer_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/computer_store.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/electronic_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/electronic_store.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/electronics_factory.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/electronics_factory.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/food_factory.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/food_factory.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/movie_studio.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/movie_studio.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/school.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/school.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/software_company.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/software_company.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/sport_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/sport_store.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/toy_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/toy_store.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/university.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/university.fbx.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/video_games_store.fbx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Buildings/video_games_store.fbx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Canvas.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefab/Grid.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Grid.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Plane.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/house_2_v_2.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/house_2_v_2.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/BlankAR.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BlankAR.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Build.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Build.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/GameManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/GameManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/Node.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/TileGraph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/TileGraph.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/PressInputBase.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/PressInputBase.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
@@ -296,15 +37,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/Script/GameManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.xr.arfoundation@4.1.10/Runtime/AR/ARPlaneManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Script/PressInputBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Starter Package/DrivingSurfaceManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Script/Graph/PathfindingSolver.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Script/Worker.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.xr.arfoundation@4.1.10/Runtime/AR/ARPlaneMeshVisualizer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../VR-project-2022/Library/PackageCache/com.unity.xr.arfoundation@4.1.10/Runtime/AR/ARPointCloudManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../AIVG/2021/Assets/Pathfinding/Graph/TileGraph.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.xr.arfoundation@4.1.10/Runtime/AR/ARInputManager.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Script/Build.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.3.0/InputSystem/Plugins/OnScreen/OnScreenButton.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -317,12 +58,22 @@
       <option value="$PROJECT_DIR$/Assets/Script/RotateObject.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Shop/HousesButtonDown.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Shop/ButtonDown.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/Build.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/BuildStreet.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Menu.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Constant.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Graph/TileGraph.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Graph/Node.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Build.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Graph/PathfindingSolver.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/General/Build.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Worker.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="2CeoKKzYtMoqIOgKCH39uTZ4Lnd" />
@@ -380,6 +131,14 @@
       <workItem from="1659951982939" duration="1836000" />
       <workItem from="1659966776142" duration="9297000" />
       <workItem from="1660056058480" duration="6992000" />
+      <workItem from="1660137629663" duration="8392000" />
+      <workItem from="1660226005400" duration="6398000" />
+      <workItem from="1660313272535" duration="1980000" />
+      <workItem from="1662545580833" duration="2607000" />
+      <workItem from="1662565375079" duration="7609000" />
+      <workItem from="1663160717072" duration="8770000" />
+      <workItem from="1663236909696" duration="19929000" />
+      <workItem from="1663575525912" duration="18337000" />
     </task>
     <servers />
   </component>

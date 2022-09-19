@@ -52,7 +52,11 @@ public class PlaceOnPlane : PressInputBase
             if (spawnedObject == null)
             {
                 spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
-                FindObjectOfType<LoadBuildings>().SetGrid(spawnedObject.transform);
+                GetComponent<ARPlaneManager>().enabled = false;
+                foreach (var plane in GetComponent<ARPlaneManager>().trackables)
+                {
+                    plane.gameObject.SetActive(false);
+                }
             }
         }
     }

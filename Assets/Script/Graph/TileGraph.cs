@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TileGraph {
 
@@ -10,7 +11,7 @@ public class TileGraph {
 	protected Node[,] matrix;
 	protected Dictionary<Node, float[]> map;
 	
-	public TileGraph(float x, float y, float ts) {
+	public TileGraph(float x, float y, float ts, GameObject o) {
 
 		tileSize = ts;
 

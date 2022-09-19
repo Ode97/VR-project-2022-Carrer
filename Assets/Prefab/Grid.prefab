@@ -49,5 +49,10 @@ MonoBehaviour:
   gap: 0.1
   firstMaterial: {fileID: 2100000, guid: 4fe229b2d25565748a911830ab166af6, type: 2}
   secondMaterial: {fileID: 2100000, guid: b988e357788cf684e889ec1b97f47735, type: 2}
+  streetMaterial: {fileID: 2100000, guid: af94923e07a9bd34290226d695c6f612, type: 2}
+  trees:
+  - {fileID: 192044, guid: 19682540d8a014522a319b1cf788aee2, type: 3}
+  - {fileID: 191266, guid: c44bd9bdc114d4a60932c0087d9d1732, type: 3}
+  - {fileID: 137650, guid: 826b6a0b570e8460990010fa615b5a2a, type: 3}
   sceneObject: {fileID: 3812772322166785469, guid: 53ed690033181eb43a0a634abfe009d8,
     type: 3}
