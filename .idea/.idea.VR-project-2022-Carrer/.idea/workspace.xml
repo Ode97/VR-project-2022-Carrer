@@ -5,28 +5,18 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefab/Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Canvas.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Grid.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Grid.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Plane.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane (1).prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane (1).prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane 1.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane 1.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane 2.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Plane 2.prefab.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/BlankAR.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BlankAR.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Build.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Build.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/GameManager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/GameManager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/Node.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/Node.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/TileGraph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/TileGraph.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PlaceOnPlane.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PressInputBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/PressInputBase.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/NavMeshAreas.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/General/Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/General/Build.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/General/Menu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/General/Menu.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Worker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Worker.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +27,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Script/General/SliderController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.xr.arfoundation@4.1.10/Runtime/AR/ARPlaneManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Starter Package/DrivingSurfaceManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Script/Graph/PathfindingSolver.cs" root0="FORCE_HIGHLIGHTING" />
@@ -69,9 +60,11 @@
       <option value="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Graph/PathfindingSolver.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/General/Build.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/General/SliderController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/General/Build.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/General/Menu.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Worker.cs" />
     </changedPaths>
@@ -138,7 +131,8 @@
       <workItem from="1662565375079" duration="7609000" />
       <workItem from="1663160717072" duration="8770000" />
       <workItem from="1663236909696" duration="19929000" />
-      <workItem from="1663575525912" duration="18337000" />
+      <workItem from="1663575525912" duration="19253000" />
+      <workItem from="1663679549549" duration="16620000" />
     </task>
     <servers />
   </component>

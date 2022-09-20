@@ -16,24 +16,19 @@ public class Build : MonoBehaviour, IPointerDownHandler
         gameManager = GameManager.GM();
     }
 
-    private int GetX()
-    {
-        return x;
-    }
-    
-    private int GetY()
-    {
-        return y;
-    }
-    
-
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(gameObject.layer != 0)
-            gameManager.OpenDismantle();
-        
-        gameManager.OpenMenu();
-        //this.GetComponentInParent<GraphBuilder>().gameObject.SetActive(false);
         gameManager.SetCell(gameObject);
+        
+        if(gameObject.layer == Constant.treeLayer)
+            gameManager.CutTree();
+        else if(gameObject.layer != 0)
+            gameManager.OpenDismantle();
+        else
+        {
+            gameManager.OpenMenu();
+        }
+        
+        //this.GetComponentInParent<GraphBuilder>().gameObject.SetActive(false);
     }
 }

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject buildingMenu;
     [SerializeField] private GameObject buttonsMenu;
     [SerializeField] private GameObject dismantle;
+    [SerializeField] private SliderController _sliderController;
     private static GameManager gm;
 
     private GameObject selectedCell;
@@ -22,9 +23,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public GameObject workerPrefab;
 
-    private GameObject worker;
+    private Worker worker;
 
     private PathfindingSolver _pathfindingSolver;
+
+    private int wood = 0;
     // Start is called before the first frame update
 
     public static GameManager GM()
@@ -88,43 +91,114 @@ public class GameManager : MonoBehaviour
         selectedCell = cell;
     }
 
-    public void SetBuilding(GameObject building, int layer)
+    private bool CheckNearStreet()
     {
-        bool ok = false;
         var gridPos = selectedCell.GetComponent<Build>();
-        Vector2 goal = new Vector2(0,0);
+        var w = worker.GetComponent<Worker>();
         if (gridPos.x != 9 && _graphBuilder.matrix[gridPos.x + 1, gridPos.y].sceneObject.layer == Constant.streetLayer){
-            goal = new Vector2(gridPos.x + 1, gridPos.y);
-            ok = true;
+            w.SetTarget(new Vector2(gridPos.x + 1, gridPos.y));
+            return true;
         }else if (gridPos.x != 0 && _graphBuilder.matrix[gridPos.x - 1, gridPos.y].sceneObject.layer == Constant.streetLayer){
-            goal = new Vector2(gridPos.x - 1, gridPos.y);
-            ok = true;
+            w.SetTarget(new Vector2(gridPos.x - 1, gridPos.y));
+            return true;
         }else if (gridPos.y != 9 && _graphBuilder.matrix[gridPos.x, gridPos.y + 1].sceneObject.layer == Constant.streetLayer){
-            goal = new Vector2(gridPos.x, gridPos.y + 1);
-            ok = true;
+            w.SetTarget(new Vector2(gridPos.x, gridPos.y + 1));
+            return true;
         }else if (gridPos.y != 0 && _graphBuilder.matrix[gridPos.x, gridPos.y - 1].sceneObject.layer == Constant.streetLayer){
-            goal = new Vector2(gridPos.x, gridPos.y - 1);
-            ok = true;
+            w.SetTarget(new Vector2(gridPos.x, gridPos.y - 1));
+            return true;
         }
 
-        if (ok)
+        return false;
+    }
+
+    public void SetBuilding(GameObject building, int layer)
+    {
+        worker.SetInfo(layer, 10, building);
+        MoveWorker();
+    }
+
+    public void SetStreet()
+    {
+        worker.SetInfo(Constant.streetLayer, 2);
+        MoveWorker();
+    }
+
+    private void MoveWorker()
+    {
+        if (CheckNearStreet())
         {
             //Debug.Log(worker.GetComponent<Worker>().x + " " + worker.GetComponent<Worker>().y + "   " + goal.x + " " + goal.y);
 
-            worker.GetComponent<Worker>().Walk(building, layer,
-                _pathfindingSolver.Solve(_graphBuilder.g,
-                    _graphBuilder[worker.GetComponent<Worker>().x, worker.GetComponent<Worker>().y],
-                    _graphBuilder[goal.x, goal.y]));
+            worker.Walk(_pathfindingSolver.Solve(_graphBuilder.g,
+                    _graphBuilder[worker.x, worker.y],
+                    _graphBuilder[worker.GetTarget().x, worker.GetTarget().y]));
         }
         else
         {
             Debug.Log("Devi costruire vicino ad una strada");
         }
-
     }
 
-    public void Build(GameObject building, int layer)
+    public void CutTree()
     {
+        worker.SetInfo(0, 5);
+        worker.tree = true;
+        MoveWorker();
+    }
+
+    private void DestroyTree()
+    {
+        wood++;
+        selectedCell.layer = 0;
+        Destroy(selectedCell.transform.GetChild(0).gameObject);
+        worker.tree = false;
+    }
+
+    public void Do(int layer, int time)
+    {
+        _sliderController.gameObject.SetActive(true);
+        var pos = selectedCell.transform.position;
+        _sliderController.transform.position = new Vector3(pos.x, pos.y + 0.05f, pos.z);
+        _sliderController.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+        _sliderController.slider.maxValue = time;
+        
+        StartCoroutine(Working(time, layer));
+    }
+
+    private IEnumerator Working(int t, int layer)
+    {
+        for(var i = 0; i <= t; i++)
+        {
+            yield return new WaitForSeconds(1);
+            _sliderController.UpdateProgress();
+        }
+        
+        if(layer == Constant.streetLayer)
+            CreateStreet();
+        else if (worker.tree)
+        {
+            DestroyTree();
+        }else if (layer == 0)
+        {
+            Dismantle();
+        }
+        else
+        {
+            CreateBuilding(worker.GetBuilding(), layer);
+        }
+        EndWork();
+    }
+
+    private void EndWork()
+    {
+        _sliderController.gameObject.SetActive(false);
+        _sliderController.Reset();
+    }
+
+    private void CreateBuilding(GameObject building, int layer)
+    {
+        
         GameObject g = Instantiate(building, selectedCell.transform);
         selectedCell.layer = layer;
         g.transform.localScale = new Vector3(0.08f, 0.08f, 0.08f);
@@ -134,78 +208,85 @@ public class GameManager : MonoBehaviour
         g.SetActive(true);
     }
 
-    public void SetStreet()
+    public void CreateStreet()
     {
-        selectedCell.GetComponent<MeshRenderer>().material = streetMat;
-        selectedCell.layer = Constant.streetLayer;
-        buttonsMenu.gameObject.SetActive(false);
-        var gridPos = selectedCell.GetComponent<Build>();
-        
-        if (gridPos.x != 9 && _graphBuilder.matrix[gridPos.x + 1, gridPos.y].sceneObject.layer == Constant.streetLayer)
+        if (selectedCell.layer == 0)
         {
-            var a = new Edge(_graphBuilder.matrix[gridPos.x + 1, gridPos.y],
-                _graphBuilder.matrix[gridPos.x, gridPos.y]);
-            var b = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
-                _graphBuilder.matrix[gridPos.x + 1, gridPos.y]);
-            _graphBuilder.g.AddEdge(a);
-            _graphBuilder.g.AddEdge(b);
-            
-        }
-        
-        if (gridPos.x != 0 && _graphBuilder.matrix[gridPos.x - 1, gridPos.y].sceneObject.layer == Constant.streetLayer)
-        {
-            var c = new Edge(_graphBuilder.matrix[gridPos.x - 1, gridPos.y],
-                _graphBuilder.matrix[gridPos.x, gridPos.y]);
-            var d = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
-                _graphBuilder.matrix[gridPos.x - 1, gridPos.y]);
-            _graphBuilder.g.AddEdge(c);
-            _graphBuilder.g.AddEdge(d);
-            
-        }
-        
-        if (gridPos.y != 9 && _graphBuilder.matrix[gridPos.x, gridPos.y + 1].sceneObject.layer == Constant.streetLayer)
-        {
-            var e = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y + 1],
-                _graphBuilder.matrix[gridPos.x, gridPos.y]);
-            var f = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
-                _graphBuilder.matrix[gridPos.x, gridPos.y + 1]);
-            _graphBuilder.g.AddEdge(e);
-            _graphBuilder.g.AddEdge(f);
-            
-        }
-        
-        if (gridPos.y != 0 && _graphBuilder.matrix[gridPos.x, gridPos.y - 1].sceneObject.layer == Constant.streetLayer)
-        {
-            var g = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y - 1],
-                _graphBuilder.matrix[gridPos.x, gridPos.y]);
-            var h = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
-                _graphBuilder.matrix[gridPos.x, gridPos.y - 1]);
-            _graphBuilder.g.AddEdge(g);
-            _graphBuilder.g.AddEdge(h);
-            
+            selectedCell.GetComponent<MeshRenderer>().material = streetMat;
+            selectedCell.layer = Constant.streetLayer;
+            buttonsMenu.gameObject.SetActive(false);
+            var gridPos = selectedCell.GetComponent<Build>();
+
+            if (gridPos.x != 9 && _graphBuilder.matrix[gridPos.x + 1, gridPos.y].sceneObject.layer ==
+                Constant.streetLayer)
+            {
+                var a = new Edge(_graphBuilder.matrix[gridPos.x + 1, gridPos.y],
+                    _graphBuilder.matrix[gridPos.x, gridPos.y]);
+                var b = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
+                    _graphBuilder.matrix[gridPos.x + 1, gridPos.y]);
+                _graphBuilder.g.AddEdge(a);
+                _graphBuilder.g.AddEdge(b);
+
+            }
+
+            if (gridPos.x != 0 && _graphBuilder.matrix[gridPos.x - 1, gridPos.y].sceneObject.layer ==
+                Constant.streetLayer)
+            {
+                var c = new Edge(_graphBuilder.matrix[gridPos.x - 1, gridPos.y],
+                    _graphBuilder.matrix[gridPos.x, gridPos.y]);
+                var d = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
+                    _graphBuilder.matrix[gridPos.x - 1, gridPos.y]);
+                _graphBuilder.g.AddEdge(c);
+                _graphBuilder.g.AddEdge(d);
+
+            }
+
+            if (gridPos.y != 9 && _graphBuilder.matrix[gridPos.x, gridPos.y + 1].sceneObject.layer ==
+                Constant.streetLayer)
+            {
+                var e = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y + 1],
+                    _graphBuilder.matrix[gridPos.x, gridPos.y]);
+                var f = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
+                    _graphBuilder.matrix[gridPos.x, gridPos.y + 1]);
+                _graphBuilder.g.AddEdge(e);
+                _graphBuilder.g.AddEdge(f);
+
+            }
+
+            if (gridPos.y != 0 && _graphBuilder.matrix[gridPos.x, gridPos.y - 1].sceneObject.layer ==
+                Constant.streetLayer)
+            {
+                var g = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y - 1],
+                    _graphBuilder.matrix[gridPos.x, gridPos.y]);
+                var h = new Edge(_graphBuilder.matrix[gridPos.x, gridPos.y],
+                    _graphBuilder.matrix[gridPos.x, gridPos.y - 1]);
+                _graphBuilder.g.AddEdge(g);
+                _graphBuilder.g.AddEdge(h);
+
+            }
         }
     }
 
     public void SpawnWorker(Transform cell)
     {
         var pos = cell.position;
-        worker = Instantiate(workerPrefab);
-        worker.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-        worker.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
+        var w = Instantiate(workerPrefab);
+        w.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+        w.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
+        worker = w.GetComponent<Worker>();
+    }
+
+    public void StartDismantle()
+    {
+        buttonsMenu.gameObject.SetActive(false);
+        worker.SetInfo(0, 10);
+        MoveWorker();
     }
 
     public void Dismantle()
     {
-        
-        /*for (int i = 0; i < selectedCell.transform.childCount; i++)
-        {
-            Destroy(selectedCell.transform.GetChild(i));
-        }*/
-        if(selectedCell.layer != Constant.treeLayer)
-            Destroy(selectedCell.transform.GetChild(0).gameObject);
-
+        Destroy(selectedCell.transform.GetChild(0).gameObject);
         selectedCell.layer = 0;
-        buttonsMenu.gameObject.SetActive(false);
     }
 
 }

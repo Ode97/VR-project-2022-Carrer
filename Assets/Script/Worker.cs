@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +13,11 @@ public class Worker : MonoBehaviour
     public int x = 0;
     public int y = 0;
     private int i = 0;
+    private Vector2 gridTarget;
     private Vector3 target;
     private float orientation;
+    private int time;
+    public bool tree;
     void Start()
     {
 
@@ -28,7 +32,14 @@ public class Worker : MonoBehaviour
             
             if (i == path.Length)
             {
-                GameManager.GM().Build(building, layer);
+                if (path.Length != 0)
+                {
+                    var actualPos = path[i - 1].to.sceneObject.GetComponent<Build>();
+                    x = actualPos.x;
+                    y = actualPos.y;
+                }
+
+                GameManager.GM().Do(layer, time);
                 busy = false;
                 stop = true;
             }
@@ -36,10 +47,9 @@ public class Worker : MonoBehaviour
             if (i < path.Length)
             {
                 var g = path[i].to.sceneObject.transform.position;
-                target = new Vector3(g.x, g.y + 0.005f, g.z);
+                target = new Vector3(g.x, g.y + 0.02f, g.z);
                 GetSteering();
             }
-            //GetComponent<Rigidbody>().velocity = goal - transform.position;
             
             //Debug.Log(path.Length + " " + i + " " + Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position));
             if (!stop && Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position) < 0.03f)
@@ -51,18 +61,48 @@ public class Worker : MonoBehaviour
         }
     }
 
-    public void Walk(GameObject b, int l, Edge[] p)
+    public void SetTarget(Vector2 g)
     {
-        building = b;
-        layer = l;
-        busy = true;
+        gridTarget = g;
+    }
+    
+    public Vector2 GetTarget()
+    {
+        return gridTarget;
+    }
+
+    public void Walk(Edge[] p)
+    {
+        i = 0;
         path = p;
+        busy = true;
     }
 
     private void GetSteering()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target, Time.deltaTime * 0.1f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(target - transform.position, Vector3.up), 0.2f);
+        var transform1 = transform;
+        var pos = transform1.position;
+        var rot = transform1.rotation;
+        transform.position = Vector3.MoveTowards(pos, target, Time.deltaTime * 0.1f);
+        transform.rotation = Quaternion.Lerp(rot, Quaternion.LookRotation(target - pos, Vector3.up), 0.2f);
+    }
 
+    public void SetInfo(int l, int workTime, GameObject b)
+    {
+        time = workTime;
+        building = b;
+        layer = l;
+        
+    }
+    
+    public void SetInfo(int l, int workTime)
+    {
+        time = workTime;
+        layer = l;
+    }
+
+    public GameObject GetBuilding()
+    {
+        return building;
     }
 }

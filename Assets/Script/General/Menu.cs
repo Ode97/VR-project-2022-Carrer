@@ -11,7 +11,7 @@ public class Menu : MonoBehaviour
     
     public void Dismantle()
     {
-        GameManager.GM().Dismantle();
+        GameManager.GM().StartDismantle();
     }
 
     public void OpenShop()

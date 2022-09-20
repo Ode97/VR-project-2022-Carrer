@@ -23,6 +23,7 @@
             <e p="Menu.cs" t="Include" />
             <e p="PlaceOnPlane.cs" t="Include" />
             <e p="PressInputBase.cs" t="Include" />
+            <e p="SliderController.cs" t="Include" />
           </e>
           <e p="Graph" t="Include">
             <e p="Edge.cs" t="Include" />
