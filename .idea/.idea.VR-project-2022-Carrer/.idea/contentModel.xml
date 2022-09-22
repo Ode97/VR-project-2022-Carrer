@@ -16,6 +16,8 @@
           </e>
         </e>
         <e p="Script" t="Include">
+          <e p="Building.cs" t="Include" />
+          <e p="Entertainment.cs" t="Include" />
           <e p="General" t="Include">
             <e p="Build.cs" t="Include" />
             <e p="Constant.cs" t="Include" />
@@ -32,6 +34,12 @@
             <e p="Node.cs" t="Include" />
             <e p="PathfindingSolver.cs" t="Include" />
             <e p="TileGraph.cs" t="Include" />
+          </e>
+          <e p="House.cs" t="Include" />
+          <e p="Job.cs" t="Include" />
+          <e p="People" t="Include">
+            <e p="People.cs" t="Include" />
+            <e p="PeopleManager.cs" t="Include" />
           </e>
           <e p="Shop" t="Include">
             <e p="ButtonDown.cs" t="Include" />

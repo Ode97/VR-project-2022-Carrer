@@ -1,29 +1,34 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class Worker : MonoBehaviour
+public class People : MonoBehaviour
 {
-    private int layer;
-    private GameObject building;
-    private Edge[] path;
+    private int x;
+
+    private int y;
+
+    private House house;
+
     private bool busy = false;
-    public int x = 0;
-    public int y = 0;
+
     private int i = 0;
-    private Vector2 gridTarget;
+
+    private Edge[] path;
+
     private Vector3 target;
-    private float orientation;
-    private int time;
-    public bool tree;
+
+    public List<Building> _buildings = new List<Building>();
+    
+    public bool jobFound = false;
+    
+    // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (busy)
@@ -37,8 +42,7 @@ public class Worker : MonoBehaviour
                     x = actualPos.x;
                     y = actualPos.y;
                 }
-
-                GameManager.GM().Do(layer, time);
+                
                 busy = false;
                 stop = true;
             }
@@ -57,27 +61,44 @@ public class Worker : MonoBehaviour
                     i++;
         
             }
+
+            if (stop)
+            {
+                var toX = x;
+                var toY = y;
+
+                Debug.Log(_buildings.Count);
+                if (_buildings.Count > 1)
+                {
+                    var b = _buildings[Random.Range(0, _buildings.Count)];
+                    toX = b.x;
+                    toY = b.y;
+                }
+                StartCoroutine(Move(toX, toY));
+            }
         }
-
     }
 
-    public void SetTarget(Vector2 g)
+    public void SetHouse(House h)
     {
-        gridTarget = g;
-    }
-    
-    public Vector2 GetTarget()
-    {
-        return gridTarget;
+        house = h;
+        _buildings.Add(h);
     }
 
-    public void Walk(Edge[] p)
+    public IEnumerator Move(int toX, int toY)
     {
+        path = GameManager.GM().PathSolver(x, y, toX, toY);
+        yield return new WaitForSeconds(5);
         i = 0;
-        path = p;
         busy = true;
     }
 
+    public void StartMove(int toX, int toY)
+    {
+        path = GameManager.GM().PathSolver(x, y, toX, toY);
+        busy = true;
+    }
+    
     private void GetSteering()
     {
         var transform1 = transform;
@@ -88,23 +109,6 @@ public class Worker : MonoBehaviour
         if(r.magnitude != 0)
             transform.rotation = Quaternion.Lerp(rot, Quaternion.LookRotation(r, Vector3.up), 0.2f);
     }
-
-    public void SetInfo(int l, int workTime, GameObject b)
-    {
-        time = workTime;
-        building = b;
-        layer = l;
-        
-    }
     
-    public void SetInfo(int l, int workTime)
-    {
-        time = workTime;
-        layer = l;
-    }
-
-    public GameObject GetBuilding()
-    {
-        return building;
-    }
+    
 }

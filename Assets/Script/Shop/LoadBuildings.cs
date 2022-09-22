@@ -14,7 +14,6 @@ public class LoadBuildings : MonoBehaviour
     private Transform item;
     private Transform actual = null;
     private int layer;
-    //public LoadBuildings next;
     private Canvas canvas;
     private ARSessionOrigin _arSessionOrigin;
     private int i = 0;
@@ -76,9 +75,17 @@ public class LoadBuildings : MonoBehaviour
 
     public void Select()
     {
-        Destroy(actual.gameObject);
-        GameManager.GM().SetBuilding(item.GetChild(i).gameObject, layer);
-        GameManager.GM().CloseShop();
+        if (actual.GetComponent<Building>().CheckWood())
+        {
+            Destroy(actual.gameObject);
+            GameManager.GM().SetBuilding(item.GetChild(i).gameObject, layer);
+            GameManager.GM().CloseShop();
+        }
+        else
+        {
+            Debug.Log("ti serve più legna");
+            GameManager.GM().CloseShop();
+        }
     }
 
     private void ShowObject()
