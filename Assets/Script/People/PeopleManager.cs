@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PeopleManager : MonoBehaviour
@@ -8,6 +9,9 @@ public class PeopleManager : MonoBehaviour
     private List<GameObject> peoples;
 
     private List<People> citizens = new List<People>();
+
+    private List<Entertainment> entertainment = new List<Entertainment>();
+    private List<Job> jobsRemain = new List<Job>();
 
     public void SpawnPeople(int num, House cell)
     {
@@ -22,11 +26,22 @@ public class PeopleManager : MonoBehaviour
             citizen.GetComponent<People>().SetHouse(cell);
             citizen.GetComponent<People>().StartMove(cell.x, cell.y);
             citizens.Add(citizen.GetComponent<People>());
+            citizen.GetComponent<People>()._buildings.AddRange(entertainment);
+            if (jobsRemain.Count > 0)
+            {
+                if (jobsRemain[0].CheckJob())
+                {
+                    citizen.GetComponent<People>()._buildings.Add(jobsRemain[0]);
+                }else
+                    jobsRemain.Remove(jobsRemain[0]);
+            }
+
         }
     }
 
     public void AddEntertainment(Entertainment cell)
     {
+        entertainment.Add(cell);
         foreach (var c in citizens)
         {
             c._buildings.Add(cell);
@@ -35,12 +50,17 @@ public class PeopleManager : MonoBehaviour
 
     public void AddJobs(Job cell)
     {
-        foreach (var c in citizens)
+        jobsRemain.Add(cell);
+        foreach (var c in citizens.Where(c => !c.jobFound))
         {
-            if (!c.jobFound)
+            if (cell.CheckJob())
             {
                 c._buildings.Add(cell);
                 c.jobFound = true;
+            }
+            else
+            {
+                jobsRemain.Remove(cell);
             }
         }
     }

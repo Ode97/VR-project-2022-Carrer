@@ -66,8 +66,7 @@ public class People : MonoBehaviour
             {
                 var toX = x;
                 var toY = y;
-
-                Debug.Log(_buildings.Count);
+                
                 if (_buildings.Count > 1)
                 {
                     var b = _buildings[Random.Range(0, _buildings.Count)];

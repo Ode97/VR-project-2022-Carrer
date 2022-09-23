@@ -18,13 +18,6 @@ public class Graph {
 		AddNode (e.to);
 		if (!data[e.from].Contains(e))
 			data [e.from].Add (e);
-
-		foreach (var d in data)
-		{
-			
-			Debug.Log(d.Key.sceneObject.name + " " + d.Value.Count);
-			
-		}
 	}
 
 	// used only by AddEdge 

@@ -2,51 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="27ab78de-c021-4dee-8230-af07ac070f3c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.VR-project-2022-Carrer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Cop.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Cop.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/CricketBatsman.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/CricketBatsman.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Doctor.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Doctor.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Knight.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Knight.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Nurse.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Nurse.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Patient.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Patient.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Pilgrim.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Pilgrim.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Robber.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Robber.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Santa.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Santa.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/SoccerPlayerBlue.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/SoccerPlayerBlue.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/SoccerPlayerRed.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/SoccerPlayerRed.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Streaker.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Streaker.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Witch.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Easy Primitive People/Prefab/Witch.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Canvas.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Canvas.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/GameManager.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/GameManager.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Grid.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Grid.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Slider.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Slider.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Resources/Poplar_Tree.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Resources/Poplar_Tree.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/ScenePrefab/Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/ScenePrefab/Canvas.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/BlankAR.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/BlankAR.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/New Scene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/Job.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Job.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/People/People.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/People/People.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Script/People/PeopleManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/People/PeopleManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Script/Worker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Script/Worker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,22 +59,22 @@
       <option value="$PROJECT_DIR$/Assets/Script/Build.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/GameManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Graph/PathfindingSolver.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Graph/GraphBuilder.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/General/SliderController.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/General/Build.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/General/Menu.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Entertainment.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/Job.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/PeopleManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/House.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Building.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Worker.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/People/PeopleManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/People/People.cs" />
-      <option value="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Graph/Graph.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/People/PeopleManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Job.cs" />
       <option value="$PROJECT_DIR$/Assets/Script/Shop/LoadBuildings.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/General/GameManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Script/Shop/RotateObject.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="2CeoKKzYtMoqIOgKCH39uTZ4Lnd" />
@@ -174,7 +142,8 @@
       <workItem from="1663575525912" duration="19253000" />
       <workItem from="1663679549549" duration="18171000" />
       <workItem from="1663769111226" duration="8861000" />
-      <workItem from="1663841457885" duration="20998000" />
+      <workItem from="1663841457885" duration="22273000" />
+      <workItem from="1663922965534" duration="15026000" />
     </task>
     <servers />
   </component>

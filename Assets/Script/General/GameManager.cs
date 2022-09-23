@@ -165,6 +165,7 @@ public class GameManager : MonoBehaviour
     public void SetStreet()
     {
         worker.SetInfo(Constant.streetLayer, 1);
+        buttonsMenu.SetActive(false);
         MoveWorker();
     }
 
@@ -268,8 +269,8 @@ public class GameManager : MonoBehaviour
             h.y = selectedCell.GetComponent<Build>().y;
             people += newP;
             wood -= h.woodNeed;
-            jobs = people - jobs;
-            entertainment = people - entertainment;
+            jobs += newP;
+            entertainment += newP;
             _peopleManager.SpawnPeople(newP, h);
         }
         else if(layer == Constant.jobLayer)
@@ -279,7 +280,7 @@ public class GameManager : MonoBehaviour
             j.x = selectedCell.GetComponent<Build>().x;
             j.y = selectedCell.GetComponent<Build>().y;
             
-            jobs = people - building.GetComponent<Job>().jobsNum;
+            jobs -= building.GetComponent<Job>().jobsNum;
             wood -= building.GetComponent<Job>().woodNeed;
             _peopleManager.AddJobs(j);
 
@@ -291,7 +292,7 @@ public class GameManager : MonoBehaviour
             e.x = selectedCell.GetComponent<Build>().x;
             e.y = selectedCell.GetComponent<Build>().y;
 
-            entertainment = people - building.GetComponent<Entertainment>().peopleEntertained;
+            entertainment -= building.GetComponent<Entertainment>().peopleEntertained;
             wood -= building.GetComponent<Entertainment>().woodNeed;
             _peopleManager.AddEntertainment(e);
         }
@@ -300,10 +301,10 @@ public class GameManager : MonoBehaviour
         jobText.text = jobs.ToString();
         entertainmentText.text = entertainment.ToString();
         woodText.text = wood.ToString();
-        g.transform.localScale = new Vector3(0.08f, 0.08f, 0.08f);
+        //g.transform.localScale.Set(0.08f, 0.08f, 0.08f);
         g.transform.localPosition = new Vector3(0f, 0f, 0f);
         var pos = _graphBuilder[worker.GetTarget().x, worker.GetTarget().y].sceneObject.transform.position;
-        g.transform.localRotation = Quaternion.LookRotation(pos - g.transform.position, Vector3.up);
+        g.transform.rotation = Quaternion.LookRotation(pos - selectedCell.transform.position, Vector3.up);
         g.GetComponent<RotateObject>().enabled = false;
         g.SetActive(true);
     }

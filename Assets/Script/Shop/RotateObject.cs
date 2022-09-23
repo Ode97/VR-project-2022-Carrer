@@ -9,14 +9,10 @@ using UnityEngine.XR.ARFoundation.Samples;
 
 public class RotateObject : MonoBehaviour
 {
-    float rotSpeed = 100;
-    private bool ok = false;
-    private Touch touch;
-    private Vector2 oldTouchPosition;
-    private Vector2 newTouchPosition;
 
     void Update()
     {
+        Debug.Log("touch: " + Input.touchCount);
         if(Input.touchCount > 0)
         {
             float rotateSpeed = 0.09f;
@@ -25,6 +21,7 @@ public class RotateObject : MonoBehaviour
             //Rotate the model based on offset
             Vector3 localAngle = this.transform.localEulerAngles;
             localAngle.y -= rotateSpeed * touchZero.deltaPosition.x;
+            localAngle.x += rotateSpeed * touchZero.deltaPosition.y;
             this.transform.localEulerAngles = localAngle;
         }
     }

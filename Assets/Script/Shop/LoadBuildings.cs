@@ -29,7 +29,7 @@ public class LoadBuildings : MonoBehaviour
     {
         if (actual)
         {
-            actual.gameObject.SetActive(false);
+            Destroy(actual.gameObject);
         }
 
         i = 0;
@@ -42,7 +42,7 @@ public class LoadBuildings : MonoBehaviour
     {
         if (actual)
         {
-            actual.gameObject.SetActive(false);
+            Destroy(actual.gameObject);
         }
 
         i = 0;
@@ -55,7 +55,7 @@ public class LoadBuildings : MonoBehaviour
     {
         if (actual)
         {
-            actual.gameObject.SetActive(false);
+            Destroy(actual.gameObject);
         }
 
         i = 0;
@@ -66,7 +66,7 @@ public class LoadBuildings : MonoBehaviour
 
     public void Next()
     {
-        actual.gameObject.SetActive(false);
+        Destroy(actual.gameObject);
         i++;
         if (i == item.childCount)
             i = 0;
@@ -89,16 +89,18 @@ public class LoadBuildings : MonoBehaviour
     }
 
     private void ShowObject()
-    { 
-        if(SystemInfo.deviceType == DeviceType.Handheld)
+    {
+        actual = item.GetChild(i);
+        if (SystemInfo.deviceType == DeviceType.Handheld){
             actual = Instantiate(item.GetChild(i), _arSessionOrigin.camera.transform);
-        else
-        {
+        }else{
             actual = Instantiate(item.GetChild(i));
         }
-        actual.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        actual.localPosition = new Vector3(0, 0, 10);
+        //actual.SetParent(_arSessionOrigin.camera.transform);
+        //actual.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        //actual.transform.localScale.Set(0.1f, 0.1f, 0.1f);
+        //actual.transform.rotation = Quaternion.identity;
+        actual.localPosition = new Vector3(0, 0, 20);
         actual.gameObject.SetActive(true);
     }
-    
 }
