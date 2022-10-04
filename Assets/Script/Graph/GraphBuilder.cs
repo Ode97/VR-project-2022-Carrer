@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -10,40 +11,44 @@ public class GraphBuilder : MonoBehaviour {
 
 	public int x = 10;
 	public int y = 10;
-	public Color edgeColor = Color.red;
 	public float gap = 0.01f;
     public Material firstMaterial = null;
-    public Material secondMaterial = null;
     public Material streetMaterial;
     public GameObject[] trees = new GameObject[3];
-    private bool s = false;
 
     // what to put on the scene, not really meaningful
 	public GameObject sceneObject;
 	
 	public Node[,] matrix;
-	protected float tileSize;
 	protected Dictionary<Node, float[]> map;
 	public Graph g;
 	
-	void Start () {
+	void Start ()
+	{
 		
+	}
+
+	public void Create()
+	{
+
 		if (sceneObject != null)
 		{
-			
+			GameManager.GM().SetGraphBuilder(this);
 			// create a x * y matrix of nodes (and scene objects)
 			g = new Graph();
-			matrix = CreateGrid(sceneObject, x, y, gap, firstMaterial, secondMaterial, streetMaterial);
-			// create a graph and put random edges inside
-			GameManager.GM().SetGraphBuilder(this);
+			if(!GameManager.GM().load)
+				matrix = CreateGrid(sceneObject, x, y, gap, firstMaterial, streetMaterial);
+			else
+			{
+				matrix = CreateLoadGrid(x, y, firstMaterial, streetMaterial, gap);
+			}
 		}
 	}
 
-	protected Node[,] CreateGrid(GameObject o, int x, int y, float gap, Material sm, Material em, Material st) {
+	protected Node[,] CreateGrid(GameObject o, int x, int y, float gap, Material sm, Material st) {
 		Node[,] matrix = new Node[x,y];
 
 		map = new Dictionary<Node, float[]> ();
-		
 		for (int i = 0; i < matrix.GetLength(0); i += 1) {
 			for (int j = 0; j < matrix.GetLength(1); j += 1)
 			{
@@ -58,25 +63,17 @@ public class GraphBuilder : MonoBehaviour {
 					transform.forward * gap * (j - ((y - 1) / 2f));
 				matrix[i, j].sceneObject.transform.rotation = transform.rotation;
 
-				if ((i % 2 == 0 && j % 2 != 0) || (j % 2 == 0 && i % 2 != 0) && s)
-				{
-					Debug.Log(i + " " + j);
-					p.GetComponent<MeshRenderer>().material = sm;
-				}
-				else
-				{
-					Debug.Log(i + " " + j + " a");
-					p.GetComponent<MeshRenderer>().material = em;
-				}
-
-				if (!s)
+				
+					
+				p.GetComponent<MeshRenderer>().material = sm;
+				if ((i == 0) && (j == 0))
 				{
 					p.GetComponent<MeshRenderer>().material = st;
 					p.layer = Constant.streetLayer;
 					GameManager.GM().SpawnWorker(p.transform);
-					g.AddNode(matrix[i,j]);
-					s = true;
+					g.AddNode(matrix[i, j]);
 				}
+
 				else
 				{
 					RandomTree(p);
@@ -87,10 +84,168 @@ public class GraphBuilder : MonoBehaviour {
 		return matrix;
 	
 	}
+	
+	protected Node[,] CreateLoadGrid(int x, int y, Material fm, Material sm, float gap) {
+		Node[,] matrix = new Node[x,y];
+
+		for (int i = 0; i < matrix.GetLength(0); i += 1) {
+			for (int j = 0; j < matrix.GetLength(1); j += 1)
+			{
+				GameObject p = Instantiate(sceneObject);
+				
+				p.GetComponent<MeshRenderer>().material = fm;
+				
+				p.GetComponent<Build>().x = i;
+				p.GetComponent<Build>().y = j;
+				matrix[i, j] = new Node("" + i + "," + j, p);
+				matrix[i, j].sceneObject.name = sceneObject.name + " " + i + " " + j;
+				
+				matrix[i, j].sceneObject.transform.position =
+					transform.position +
+					transform.right * gap * (i - ((x - 1) / 2f)) +
+					transform.forward * gap * (j - ((y - 1) / 2f));
+				matrix[i, j].sceneObject.transform.rotation = transform.rotation;
+			}
+		}
+
+		var houses = GameManager.GM().GetHouses();
+		var jobs = GameManager.GM().GetJobs();
+		var ents = GameManager.GM().GetEntertainments();
+		
+
+		for (int k = 0; k < 100; k++)
+		{
+			var d = (int)Mathf.Floor(k / 10);
+			var c = k % 10;
+			
+			matrix[c, d].sceneObject.layer = GameManager.GM().data.layers[k];
+			if (matrix[c, d].sceneObject.layer == Constant.houseLayer)
+			{ 
+				GameObject h = Instantiate(houses[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
+				h.SetActive(true);
+				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
+				h.GetComponent<House>().x = c;
+				h.GetComponent<House>().y = d;
+				GameManager.GM().SpawnPeople(h.GetComponent<House>().people, h.GetComponent<House>(), matrix[c, d].sceneObject.transform.position);
+			}else if (matrix[c, d].sceneObject.layer == Constant.entertainmentLayer)
+			{
+				GameObject h = Instantiate(ents[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
+				h.SetActive(true);
+				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
+				h.GetComponent<Entertainment>().x = c;
+				h.GetComponent<Entertainment>().y = d;
+				GameManager.GM().GetPeopleManager().AddEntertainment(h.GetComponent<Entertainment>());
+			}else if (matrix[c, d].sceneObject.layer == Constant.jobLayer)
+			{
+				GameObject h = Instantiate(jobs[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
+				h.SetActive(true);
+				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
+				h.GetComponent<Job>().x = c;
+				h.GetComponent<Job>().y = d;
+				GameManager.GM().GetPeopleManager().AddJobs(h.GetComponent<Job>());
+			}else if (matrix[c, d].sceneObject.layer == Constant.streetLayer)
+			{
+				matrix[c, d].sceneObject.GetComponent<MeshRenderer>().material = sm;
+				if (GameManager.GM().data.street[k, 0])
+				{
+					var e = new Edge(matrix[c, d], matrix[c, d+1]);
+					var r = new Edge(matrix[c, d+1], matrix[c, d]);
+					g.AddEdge(e);
+					g.AddEdge(r);
+				}
+				if (GameManager.GM().data.street[k, 1])
+				{
+					var e = new Edge(matrix[c+1, d], matrix[c, d]);
+					var r = new Edge(matrix[c, d], matrix[c+1, d]);
+					g.AddEdge(e);
+					g.AddEdge(r);
+				}
+				if (GameManager.GM().data.street[k, 2])
+				{
+					var e = new Edge(matrix[c, d-1], matrix[c, d]);
+					var r = new Edge(matrix[c, d], matrix[c, d-1]);
+					g.AddEdge(e);
+					g.AddEdge(r);
+				}
+				if (GameManager.GM().data.street[k, 3])
+				{
+					var e = new Edge(matrix[c-1, d], matrix[c, d]);
+					var r = new Edge(matrix[c, d], matrix[c-1, d]);
+					g.AddEdge(e);
+					g.AddEdge(r);
+				}
+				
+			}else if (matrix[c, d].sceneObject.layer == Constant.treeLayer)
+			{
+				var t = Random.Range(0, 3);
+				if (t < 1)
+				{
+					Instantiate(trees[0], matrix[c,d].sceneObject.transform);
+				}
+				else if (t < 2)
+				{
+					Instantiate(trees[1], matrix[c,d].sceneObject.transform);
+				}
+				else
+				{
+					Instantiate(trees[2], matrix[c,d].sceneObject.transform);
+				}
+			}
+		}
+		
+		GameManager.GM().SpawnWorker(matrix[0, 0].sceneObject.transform);
+
+		GameManager.GM().load = false;
+		
+		return matrix;
+	}
 
 
+	private void Rotation(GameObject go, int r, int x, int y, Node[,] matrix)
+	{
+		if (r == 0)
+		{
+			go.transform.rotation = Quaternion.LookRotation(matrix[x - 1, y].sceneObject.transform.position -
+			                                                matrix[x, y].sceneObject.transform.position);
+			
+			var e = new Edge(matrix[x - 1, y], matrix[x, y]);
+			var t = new Edge(matrix[x, y], matrix[x - 1, y]);
+			g.AddEdge(e);
+			g.AddEdge(t);
+		}
+		if (r == 1)
+		{
+			go.transform.rotation = Quaternion.LookRotation(matrix[x, y + 1].sceneObject.transform.position -
+			                                                matrix[x, y].sceneObject.transform.position);
+			
+			var e = new Edge(matrix[x, y], matrix[x, y + 1]);
+			var t = new Edge(matrix[x, y + 1], matrix[x, y]);
+			g.AddEdge(e);
+			g.AddEdge(t);
+		}
+		if (r == 2)
+		{
+			go.transform.rotation = Quaternion.LookRotation(matrix[x + 1, y].sceneObject.transform.position -
+			                                                matrix[x, y].sceneObject.transform.position);
+			
+			var e = new Edge(matrix[x + 1, y], matrix[x, y]);
+			var t = new Edge(matrix[x, y], matrix[x + 1, y]);
+			g.AddEdge(e);
+			g.AddEdge(t);
+		}
+		if (r == 3)
+		{
+			go.transform.rotation = Quaternion.LookRotation(matrix[x, y - 1].sceneObject.transform.position -
+			                                                matrix[x, y].sceneObject.transform.position);
+			
+			var e = new Edge(matrix[x, y], matrix[x, y - 1]);
+			var t = new Edge(matrix[x, y - 1], matrix[x, y]);
+			g.AddEdge(e);
+			g.AddEdge(t);
+		}
+	}
 
-private void RandomTree(GameObject g)
+	private void RandomTree(GameObject g)
 	{
 		var r = Random.Range(0f, 1f);
 		if (r <= 0.5f)

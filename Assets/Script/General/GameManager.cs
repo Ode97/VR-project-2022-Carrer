@@ -1,31 +1,39 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using Debug = UnityEngine.Debug;
 
+[System.Serializable]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject buildingMenu;
     [SerializeField] private GameObject buttonsMenu;
     [SerializeField] private GameObject dismantle;
-    [SerializeField] private SliderController _sliderController;
+    [SerializeField]
+    private GameObject ui;
+    public SliderController _sliderController;
+    public Canvas worldCanvas;
     private static GameManager gm;
 
     private GameObject selectedCell;
-    private GameObject selectedBuilding;
     public GraphBuilder _graphBuilder;
     [SerializeField]
     private Material streetMat;
     public GameObject workerPrefab;
-    [SerializeField] private ARSessionOrigin _arSessionOrigin;
+    public ARSessionOrigin _arSessionOrigin;
 
-    private Worker worker;
+    private Queue<Worker> worker = new Queue<Worker>();
 
     private PathfindingSolver _pathfindingSolver;
 
@@ -51,6 +59,13 @@ public class GameManager : MonoBehaviour
     private int workerNum = 0;
     [SerializeField]
     private TextMeshProUGUI workerText;
+
+    public Data data = new Data();
+    public bool load = false;
+    
+    private GameObject[] _houses;
+    private GameObject[] _entertainments;
+    private GameObject[] _jobs;
     
     // Start is called before the first frame update
     public static GameManager GM()
@@ -59,6 +74,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(worldCanvas);
         gm = this;
         _pathfindingSolver = GetComponent<PathfindingSolver>();
         buildingMenu.gameObject.SetActive(false);
@@ -68,20 +85,72 @@ public class GameManager : MonoBehaviour
         woodText.text = "0";
         workerText.text = "0";
 
+        var r = FindObjectOfType<LoadBuildings>();
+        
+        var x = r.itemHouses.childCount;
+        var k = r.itemEntertainments.childCount;
+        var j = r.itemJobs.childCount;
+
+        _houses = new GameObject[x];
+        _entertainments = new GameObject[k];
+        _jobs = new GameObject[j];
+
+        for (int i = 0; i < x; i++)
+        {
+            _houses[i] = r.itemHouses.GetChild(i).gameObject;
+        }
+        for (int i = 0; i < k; i++)
+        {
+            _entertainments[i] = r.itemEntertainments.GetChild(i).gameObject;
+        }
+        for (int i = 0; i < j; i++)
+        {
+            _jobs[i] = r.itemJobs.GetChild(i).gameObject;
+        }
+
+        load = false;
+        
+    }
+
+    public GameObject[] GetHouses()
+    {
+        return _houses;
+    }
+    
+    public GameObject[] GetEntertainments()
+    {
+        return _entertainments;
+    }
+    
+    public GameObject[] GetJobs()
+    {
+        return _jobs;
+    }
+
+    public void SetLoad(int wood, int people, int jobs, int ents, int workers)
+    {
+        this.wood = wood;
+        this.people = people;
+        this.jobs = jobs;
+        this.entertainment = ents;
+        this.workerNum = workers;
+        load = true;
+        SetText();
+
+    }
+
+    public void SetText()
+    {
+        peopleText.text = people.ToString();
+        jobText.text = jobs.ToString();
+        entertainmentText.text = entertainment.ToString();
+        woodText.text = wood.ToString();
+        workerText.text = workerNum.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_sliderController.gameObject.activeSelf)
-        {
-            //Debug.Log("aaaa");
-            if(SystemInfo.deviceType != DeviceType.Handheld)
-                _sliderController.transform.rotation = Quaternion.LookRotation(_sliderController.transform.position - Camera.main.transform.position, Vector3.up);
-            else
-                _sliderController.transform.rotation = Quaternion.LookRotation(_sliderController.transform.position - _arSessionOrigin.camera.transform.position, Vector3.up);
-
-        }
     }
 
     public Edge[] PathSolver(int fromX, int fromY, int toX, int toY)
@@ -93,14 +162,27 @@ public class GameManager : MonoBehaviour
 
     public void SetGraphBuilder(GraphBuilder graphBuilder)
     {
+        _peopleManager = FindObjectOfType<PeopleManager>();
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            _arSessionOrigin = FindObjectOfType<ARSessionOrigin>();
+            FindObjectOfType<LoadBuildings>().SetARSession(_arSessionOrigin);
+        }
+
         _graphBuilder = graphBuilder;
+        ui.SetActive(true);
     }
     
     public void OpenMenu()
     {
         buttonsMenu.gameObject.SetActive(true);
 
-        //mainCamera.transform.SetPositionAndRotation(menuTransform.position, menuTransform.rotation);
+    }
+    
+    public void CloseMenu()
+    {
+        buttonsMenu.gameObject.SetActive(false);
+
     }
 
     public void OpenDismantle()
@@ -128,17 +210,49 @@ public class GameManager : MonoBehaviour
 
         //mainCamera.transform.SetPositionAndRotation(menuTransform.position, menuTransform.rotation);
     }
-    
+
+    public PeopleManager GetPeopleManager()
+    {
+        return _peopleManager;
+    }
 
     public void SetCell(GameObject cell)
     {
-        selectedCell = cell;
+
+        if (dismantle.activeSelf || buttonsMenu.activeSelf || buildingMenu.activeSelf)
+        {
+            CloseMenu();
+            CloseDismantle();
+            return;
+        }
+
+        if (worker.Count == 0)
+        {
+            
+            return;
+        }
+        else
+        {
+            selectedCell = cell;
+            if (cell.layer == Constant.treeLayer)
+            {
+                Worker w = worker.Dequeue();
+                CutTree(w);
+            }
+            else if (cell.layer != 0)
+            {
+                OpenDismantle();
+            }
+            else
+            {
+                OpenMenu();
+            }
+        }
     }
 
-    private bool CheckNearStreet()
+    private bool CheckNearStreet(Worker w)
     {
-        var gridPos = selectedCell.GetComponent<Build>();
-        var w = worker.GetComponent<Worker>();
+        var gridPos = w.constructionCell.GetComponent<Build>();
         if (gridPos.x != 9 && _graphBuilder.matrix[gridPos.x + 1, gridPos.y].sceneObject.layer == Constant.streetLayer){
             w.SetTarget(new Vector2(gridPos.x + 1, gridPos.y));
             return true;
@@ -158,105 +272,78 @@ public class GameManager : MonoBehaviour
 
     public void SetBuilding(GameObject building, int layer)
     {
-        worker.SetInfo(layer, 1, building);
-        MoveWorker();
+        Worker w = worker.Dequeue();
+        w.constructionCell = selectedCell;
+        w.SetInfo(layer, 1, building);
+        MoveWorker(w);
     }
 
     public void SetStreet()
     {
-        worker.SetInfo(Constant.streetLayer, 1);
+        Worker w = worker.Dequeue();
+        w.constructionCell = selectedCell;
+        w.SetInfo(Constant.streetLayer, 1);
         buttonsMenu.SetActive(false);
-        MoveWorker();
+        MoveWorker(w);
     }
 
-    private void MoveWorker()
+    private void MoveWorker(Worker w)
     {
-        if (CheckNearStreet())
+        if (CheckNearStreet(w))
         {
             //Debug.Log(worker.GetComponent<Worker>().x + " " + worker.GetComponent<Worker>().y + "   " + goal.x + " " + goal.y);
+            w.constructionCell.GetComponent<Build>().SetInactive();
 
-            worker.Walk(_pathfindingSolver.Solve(_graphBuilder.g,
-                    _graphBuilder[worker.x, worker.y],
-                    _graphBuilder[worker.GetTarget().x, worker.GetTarget().y]));
+            w.Walk(_pathfindingSolver.Solve(_graphBuilder.g,
+                    _graphBuilder[w.x, w.y],
+                    _graphBuilder[w.GetTarget().x, w.GetTarget().y]));
         }
         else
         {
             Debug.Log("Devi costruire vicino ad una strada");
+            worker.Enqueue(w);
             buttonsMenu.SetActive(false);
         }
     }
 
-    public void CutTree()
+    public void CutTree(Worker w)
     {
-        worker.SetInfo(0, 1);
-        worker.tree = true;
-        MoveWorker();
+        w.SetInfo(0, 1);
+        w.constructionCell = selectedCell;
+        w.tree = true;
+        MoveWorker(w);
     }
 
-    private void DestroyTree()
+    public void DestroyTree(Worker w)
     {
         wood += 3;
-        woodText.text = wood.ToString();
-        selectedCell.layer = 0;
-        Destroy(selectedCell.transform.GetChild(0).gameObject);
-        worker.tree = false;
+
+        data.wood = wood;
+        
+        w.constructionCell.layer = 0;
+        Destroy(w.constructionCell.transform.GetChild(0).gameObject);
     }
 
-    public void Do(int layer, int time)
+    public void EndWork(Worker w)
     {
-        _sliderController.gameObject.SetActive(true);
-        var pos = selectedCell.transform.position;
-        _sliderController.transform.position = new Vector3(pos.x, pos.y + 0.1f, pos.z);
-        _sliderController.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-        _sliderController.slider.maxValue = time;
-
-        var rot = selectedCell.transform.position - worker.transform.position; 
-        worker.transform.rotation = Quaternion.LookRotation(rot, Vector3.up);
-
-        
-        StartCoroutine(Working(time, layer));
+        SetText();
+        worker.Enqueue(w);
+        w.constructionCell.GetComponent<Build>().SetActive();
     }
 
-    private IEnumerator Working(int t, int layer)
-    {
-        for(var i = 0; i <= t; i++)
-        {
-            yield return new WaitForSeconds(1);
-            _sliderController.UpdateProgress();
-        }
-        
-        if(layer == Constant.streetLayer)
-            CreateStreet();
-        else if (worker.tree)
-        {
-            DestroyTree();
-        }else if (layer == 0)
-        {
-            Dismantle();
-        }
-        else
-        {
-            CreateBuilding(worker.GetBuilding(), layer);
-        }
-        EndWork();
-    }
-
-    private void EndWork()
-    {
-        _sliderController.gameObject.SetActive(false);
-        _sliderController.Reset();
-    }
-
-    private void CreateBuilding(GameObject building, int layer)
+    public void CreateBuilding(Worker w, int layer)
     {
         
-        GameObject g = Instantiate(building, selectedCell.transform);
-        selectedCell.layer = layer;
+        GameObject g = Instantiate(w.GetBuilding(), w.constructionCell.transform);
         
-        var a = new Edge(_graphBuilder.matrix[worker.x, worker.y],
-            _graphBuilder.matrix[selectedCell.GetComponent<Build>().x, selectedCell.GetComponent<Build>().y]);
-        var b = new Edge(_graphBuilder.matrix[selectedCell.GetComponent<Build>().x, selectedCell.GetComponent<Build>().y],
-            _graphBuilder.matrix[worker.x, worker.y]);
+        g.GetComponent<Building>().SetI(w.GetBuilding().GetComponent<Building>().GetI());
+        
+        w.constructionCell.layer = layer;
+        
+        var a = new Edge(_graphBuilder.matrix[w.x, w.y],
+            _graphBuilder.matrix[w.constructionCell.GetComponent<Build>().x, w.constructionCell.GetComponent<Build>().y]);
+        var b = new Edge(_graphBuilder.matrix[w.constructionCell.GetComponent<Build>().x, w.constructionCell.GetComponent<Build>().y],
+            _graphBuilder.matrix[w.x, w.y]);
         _graphBuilder.g.AddEdge(a);
         _graphBuilder.g.AddEdge(b);
         
@@ -265,23 +352,23 @@ public class GameManager : MonoBehaviour
         {
             var h = g.GetComponent<House>();
             var newP = h.people;
-            h.x = selectedCell.GetComponent<Build>().x;
-            h.y = selectedCell.GetComponent<Build>().y;
+            h.x = w.constructionCell.GetComponent<Build>().x;
+            h.y = w.constructionCell.GetComponent<Build>().y;
             people += newP;
             wood -= h.woodNeed;
             jobs += newP;
             entertainment += newP;
-            _peopleManager.SpawnPeople(newP, h);
+            SpawnPeople(newP, h, w.constructionCell.transform.position);
         }
         else if(layer == Constant.jobLayer)
         {
             var j = g.GetComponent<Job>();
             
-            j.x = selectedCell.GetComponent<Build>().x;
-            j.y = selectedCell.GetComponent<Build>().y;
+            j.x = w.constructionCell.GetComponent<Build>().x;
+            j.y = w.constructionCell.GetComponent<Build>().y;
             
-            jobs -= building.GetComponent<Job>().jobsNum;
-            wood -= building.GetComponent<Job>().woodNeed;
+            jobs -= w.GetBuilding().GetComponent<Job>().jobsNum;
+            wood -= w.GetBuilding().GetComponent<Job>().woodNeed;
             _peopleManager.AddJobs(j);
 
 
@@ -289,35 +376,48 @@ public class GameManager : MonoBehaviour
         {
             var e = g.GetComponent<Entertainment>();
             
-            e.x = selectedCell.GetComponent<Build>().x;
-            e.y = selectedCell.GetComponent<Build>().y;
+            e.x = w.constructionCell.GetComponent<Build>().x;
+            e.y = w.constructionCell.GetComponent<Build>().y;
 
-            entertainment -= building.GetComponent<Entertainment>().peopleEntertained;
-            wood -= building.GetComponent<Entertainment>().woodNeed;
+            entertainment -= w.GetBuilding().GetComponent<Entertainment>().peopleEntertained;
+            wood -= w.GetBuilding().GetComponent<Entertainment>().woodNeed;
             _peopleManager.AddEntertainment(e);
         }
 
-        peopleText.text = people.ToString();
-        jobText.text = jobs.ToString();
-        entertainmentText.text = entertainment.ToString();
-        woodText.text = wood.ToString();
         //g.transform.localScale.Set(0.08f, 0.08f, 0.08f);
         g.transform.localPosition = new Vector3(0f, 0f, 0f);
-        var pos = _graphBuilder[worker.GetTarget().x, worker.GetTarget().y].sceneObject.transform.position;
-        g.transform.rotation = Quaternion.LookRotation(pos - selectedCell.transform.position, Vector3.up);
+        var pos = _graphBuilder[w.GetTarget().x, w.GetTarget().y].sceneObject.transform.position;
+        
+        if(w.GetTarget().x - w.constructionCell.GetComponent<Build>().x == -1)
+            g.GetComponent<Building>().SetRotation(0);
+        else if(w.GetTarget().x - w.constructionCell.GetComponent<Build>().x == 1)
+            g.GetComponent<Building>().SetRotation(2);
+        else if(w.GetTarget().y - w.constructionCell.GetComponent<Build>().y == 1)
+            g.GetComponent<Building>().SetRotation(1);
+        else if(w.GetTarget().y - w.constructionCell.GetComponent<Build>().y == -1)
+            g.GetComponent<Building>().SetRotation(3);
+        
+        g.transform.rotation = Quaternion.LookRotation(pos - w.constructionCell.transform.position, Vector3.up);
         g.GetComponent<RotateObject>().enabled = false;
         g.SetActive(true);
+
+        data.jobs = jobs;
+        data.entertainment = entertainment;
+        data.people = people;
+        data.wood = wood;
+        
+        if(people == 12 || people == 32 || people == 60 || people == 100)
+            SpawnWorker(_graphBuilder[0, 0].sceneObject.transform);
     }
 
-    public void CreateStreet()
+    public void CreateStreet(Worker w)
     {
-        if (selectedCell.layer == 0)
+        if (w.constructionCell.layer == 0)
         {
-            selectedCell.GetComponent<MeshRenderer>().material = streetMat;
-            selectedCell.layer = Constant.streetLayer;
+            w.constructionCell.GetComponent<MeshRenderer>().material = streetMat;
+            w.constructionCell.layer = Constant.streetLayer;
             buttonsMenu.gameObject.SetActive(false);
-            var gridPos = selectedCell.GetComponent<Build>();
-
+            var gridPos = w.constructionCell.GetComponent<Build>();
             if (gridPos.x != 9 && _graphBuilder.matrix[gridPos.x + 1, gridPos.y].sceneObject.layer ==
                 Constant.streetLayer)
             {
@@ -327,7 +427,7 @@ public class GameManager : MonoBehaviour
                     _graphBuilder.matrix[gridPos.x + 1, gridPos.y]);
                 _graphBuilder.g.AddEdge(a);
                 _graphBuilder.g.AddEdge(b);
-
+                data.street[gridPos.y * 10 + gridPos.x, 1] = true;
             }
 
             if (gridPos.x != 0 && _graphBuilder.matrix[gridPos.x - 1, gridPos.y].sceneObject.layer ==
@@ -339,6 +439,7 @@ public class GameManager : MonoBehaviour
                     _graphBuilder.matrix[gridPos.x - 1, gridPos.y]);
                 _graphBuilder.g.AddEdge(c);
                 _graphBuilder.g.AddEdge(d);
+                data.street[gridPos.y * 10 + gridPos.x, 3] = true;
 
             }
 
@@ -351,7 +452,7 @@ public class GameManager : MonoBehaviour
                     _graphBuilder.matrix[gridPos.x, gridPos.y + 1]);
                 _graphBuilder.g.AddEdge(e);
                 _graphBuilder.g.AddEdge(f);
-
+                data.street[gridPos.y * 10 + gridPos.x, 0] = true;
             }
 
             if (gridPos.y != 0 && _graphBuilder.matrix[gridPos.x, gridPos.y - 1].sceneObject.layer ==
@@ -363,34 +464,58 @@ public class GameManager : MonoBehaviour
                     _graphBuilder.matrix[gridPos.x, gridPos.y - 1]);
                 _graphBuilder.g.AddEdge(g);
                 _graphBuilder.g.AddEdge(h);
-
+                data.street[gridPos.y * 10 + gridPos.x, 2] = true;
             }
         }
     }
 
+    public void SpawnPeople(int newP, House h, Vector3 pos)
+    {
+        _peopleManager.SpawnPeople(newP, h, pos);
+    }
+
     public void SpawnWorker(Transform cell)
     {
-        var pos = cell.position;
-        var w = Instantiate(workerPrefab);
-        w.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-        w.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
-        worker = w.GetComponent<Worker>();
-        workerNum++;
-        workerText.text = workerNum.ToString();
+        if (workerNum < 5)
+        {
+            var pos = cell.position;
+            var w = Instantiate(workerPrefab);
+            w.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+            w.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
+            worker.Enqueue(w.GetComponent<Worker>());
+            workerNum++;
+
+            data.workerNum = workerNum;
+            
+        }
     }
 
     public void StartDismantle()
     {
+        Worker w = worker.Dequeue();
         buttonsMenu.gameObject.SetActive(false);
-        worker.SetInfo(0, 1);
-        MoveWorker();
+        w.constructionCell = selectedCell;
+        w.SetInfo(0, 1);
+        MoveWorker(w);
         dismantle.SetActive(false);
     }
 
-    public void Dismantle()
+    public void Dismantle(Worker w)
     {
-        Destroy(selectedCell.transform.GetChild(0).gameObject);
-        selectedCell.layer = 0;
+        var b = w.constructionCell.transform.GetChild(0);
+        if (w.constructionCell.layer == Constant.houseLayer)
+        {
+            people -= b.GetComponent<House>().people;
+            _peopleManager.RemovePeople(b.GetComponent<House>());
+        }
+        else if (w.constructionCell.layer == Constant.entertainmentLayer)
+            entertainment -= b.GetComponent<Entertainment>().peopleEntertained;
+        else if(w.constructionCell.layer == Constant.jobLayer)
+            jobs -= b.GetComponent<Job>().jobsNum;
+        
+        wood += b.GetComponent<Building>().woodNeed;
+        Destroy(b.gameObject);
+        w.constructionCell.layer = 0;
     }
 
 }

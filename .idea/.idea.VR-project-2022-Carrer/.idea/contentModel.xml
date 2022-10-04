@@ -15,9 +15,16 @@
             <e p="FeatheredPlaneShader.shader" t="Include" />
           </e>
         </e>
+        <e p="Material" t="Include">
+          <e p="FeatheredPlaneShader.shader" t="Include" />
+        </e>
         <e p="Script" t="Include">
-          <e p="Building.cs" t="Include" />
-          <e p="Entertainment.cs" t="Include" />
+          <e p="Building" t="Include">
+            <e p="Building.cs" t="Include" />
+            <e p="Entertainment.cs" t="Include" />
+            <e p="House.cs" t="Include" />
+            <e p="Job.cs" t="Include" />
+          </e>
           <e p="General" t="Include">
             <e p="Build.cs" t="Include" />
             <e p="Constant.cs" t="Include" />
@@ -35,11 +42,16 @@
             <e p="PathfindingSolver.cs" t="Include" />
             <e p="TileGraph.cs" t="Include" />
           </e>
-          <e p="House.cs" t="Include" />
-          <e p="Job.cs" t="Include" />
+          <e p="Gridprova.cs" t="Include" />
+          <e p="MainMenu.cs" t="Include" />
           <e p="People" t="Include">
             <e p="People.cs" t="Include" />
             <e p="PeopleManager.cs" t="Include" />
+          </e>
+          <e p="Save" t="Include">
+            <e p="Data.cs" t="Include" />
+            <e p="Save.cs" t="Include" />
+            <e p="SaveCity.cs" t="Include" />
           </e>
           <e p="Shop" t="Include">
             <e p="ButtonDown.cs" t="Include" />

@@ -12,7 +12,6 @@ public class RotateObject : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("touch: " + Input.touchCount);
         if(Input.touchCount > 0)
         {
             float rotateSpeed = 0.09f;

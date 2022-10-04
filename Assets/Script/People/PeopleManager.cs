@@ -13,18 +13,23 @@ public class PeopleManager : MonoBehaviour
     private List<Entertainment> entertainment = new List<Entertainment>();
     private List<Job> jobsRemain = new List<Job>();
 
-    public void SpawnPeople(int num, House cell)
+    public void SpawnPeople(int num, House cell, Vector3 pos)
     {
         var max = peoples.Count;
-        var pos = GameManager.GM()._graphBuilder[0, 0].sceneObject.transform.position;
         for (var i = 0; i < num; i++)
         {
             var p = Random.Range(0, max);
             var citizen = Instantiate(peoples[p]);
+            cell.peoples.Add(citizen.GetComponent<People>());
             citizen.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             citizen.transform.localPosition = new Vector3(pos.x, pos.y + 0.01f, pos.z);
             citizen.GetComponent<People>().SetHouse(cell);
-            citizen.GetComponent<People>().StartMove(cell.x, cell.y);
+            if(GameManager.GM().load)
+                citizen.GetComponent<People>().StartMove(cell.x, cell.y,cell.x, cell.y);
+            else
+            {
+                citizen.GetComponent<People>().StartMove(0, 0,cell.x, cell.y);
+            }
             citizens.Add(citizen.GetComponent<People>());
             citizen.GetComponent<People>()._buildings.AddRange(entertainment);
             if (jobsRemain.Count > 0)
@@ -37,6 +42,16 @@ public class PeopleManager : MonoBehaviour
             }
 
         }
+    }
+
+    public void RemovePeople(House h)
+    {
+        Debug.Log(h.peoples.Count);
+        foreach (var p in h.peoples)
+        {
+            Destroy(p.gameObject);
+        }
+        h.peoples.RemoveAll(x => x);
     }
 
     public void AddEntertainment(Entertainment cell)

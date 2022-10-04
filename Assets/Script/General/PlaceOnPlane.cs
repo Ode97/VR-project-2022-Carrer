@@ -57,6 +57,7 @@ public class PlaceOnPlane : PressInputBase
                 {
                     plane.gameObject.SetActive(false);
                 }
+                spawnedObject.GetComponent<GraphBuilder>().Create();
             }
         }
     }

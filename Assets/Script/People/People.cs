@@ -87,17 +87,27 @@ public class People : MonoBehaviour
     public IEnumerator Move(int toX, int toY)
     {
         path = GameManager.GM().PathSolver(x, y, toX, toY);
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         i = 0;
         busy = true;
     }
 
-    public void StartMove(int toX, int toY)
+    public void StartMove(int fromX, int fromY, int toX, int toY)
     {
-        path = GameManager.GM().PathSolver(x, y, toX, toY);
-        busy = true;
+        x = fromX;
+        y = fromY;
+        if (!GameManager.GM().load)
+        {
+            path = GameManager.GM().PathSolver(x, y, toX, toY);
+            busy = true;
+        }
+        else
+        {
+            path = new Edge[0];
+            busy = true;
+        }
     }
-    
+
     private void GetSteering()
     {
         var transform1 = transform;

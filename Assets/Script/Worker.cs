@@ -9,15 +9,18 @@ public class Worker : MonoBehaviour
     private int layer;
     private GameObject building;
     private Edge[] path;
-    private bool busy = false;
     public int x = 0;
     public int y = 0;
     private int i = 0;
+    public GameObject constructionCell;
     private Vector2 gridTarget;
     private Vector3 target;
     private float orientation;
     private int time;
     public bool tree;
+    private bool stop = true;
+    private SliderController _sliderController;
+    private bool work = false;
     void Start()
     {
 
@@ -26,9 +29,9 @@ public class Worker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (busy)
+        if (!stop)
         {
-            var stop = false;
+            //var stop = false;
             if (i == path.Length)
             {
                 if (path.Length != 0)
@@ -38,8 +41,9 @@ public class Worker : MonoBehaviour
                     y = actualPos.y;
                 }
 
-                GameManager.GM().Do(layer, time);
-                busy = false;
+                
+                Do();
+                //busy = false;
                 stop = true;
             }
 
@@ -59,6 +63,15 @@ public class Worker : MonoBehaviour
             }
         }
 
+        if (work && _sliderController.gameObject.activeSelf)
+        {
+            //Debug.Log("aaaa");
+            if(SystemInfo.deviceType != DeviceType.Handheld)
+                _sliderController.transform.rotation = Quaternion.LookRotation(_sliderController.transform.position - Camera.main.transform.position, Vector3.up);
+            else
+                _sliderController.transform.rotation = Quaternion.LookRotation(_sliderController.transform.position - GameManager.GM()._arSessionOrigin.camera.transform.position, Vector3.up);
+            
+        }
     }
 
     public void SetTarget(Vector2 g)
@@ -75,7 +88,7 @@ public class Worker : MonoBehaviour
     {
         i = 0;
         path = p;
-        busy = true;
+        stop = false;
     }
 
     private void GetSteering()
@@ -106,5 +119,51 @@ public class Worker : MonoBehaviour
     public GameObject GetBuilding()
     {
         return building;
+    }
+    
+    public void Do()
+    {
+        _sliderController = Instantiate(GameManager.GM()._sliderController, GameManager.GM().worldCanvas.transform);
+        _sliderController.Reset();
+        _sliderController.gameObject.SetActive(true);
+        var pos = constructionCell.transform.position;
+        _sliderController.transform.position = new Vector3(pos.x, pos.y + 0.1f, pos.z);
+        _sliderController.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+        _sliderController.slider.maxValue = time;
+
+        var rot = constructionCell.transform.position - transform.position; 
+        transform.rotation = Quaternion.LookRotation(rot, Vector3.up);
+
+        
+        StartCoroutine(Working());
+    }
+    
+    private IEnumerator Working()
+    {
+        work = true;
+        for(var i = 0; i < time; i++)
+        {
+            yield return new WaitForSeconds(1);
+            _sliderController.UpdateProgress();
+        }
+
+        work = false;
+        Destroy(_sliderController.gameObject);
+
+        if(layer == Constant.streetLayer)
+            GameManager.GM().CreateStreet(this);
+        else if (tree)
+        {
+            GameManager.GM().DestroyTree(this);
+            tree = false;
+        }else if (layer == 0)
+        {
+            GameManager.GM().Dismantle(this);
+        }
+        else
+        {
+            GameManager.GM().CreateBuilding(this, layer);
+        }
+        GameManager.GM().EndWork(this);
     }
 }

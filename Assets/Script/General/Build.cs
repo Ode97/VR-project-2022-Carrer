@@ -19,16 +19,16 @@ public class Build : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
         gameManager.SetCell(gameObject);
-        
-        if(gameObject.layer == Constant.treeLayer)
-            gameManager.CutTree();
-        else if(gameObject.layer != 0)
-            gameManager.OpenDismantle();
-        else
-        {
-            gameManager.OpenMenu();
-        }
-        
         //this.GetComponentInParent<GraphBuilder>().gameObject.SetActive(false);
+    }
+
+    public void SetActive()
+    {
+        enabled = true;
+    }
+    
+    public void SetInactive()
+    {
+        enabled = false;
     }
 }
