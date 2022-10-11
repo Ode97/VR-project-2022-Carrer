@@ -13,7 +13,7 @@ public class Settings : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject backToMenu;
     [SerializeField] private GameObject cityInfo;
-    
+
 
     public void OpenSettings()
     {
@@ -34,6 +34,7 @@ public class Settings : MonoBehaviour
         mainMenu.SetActive(true);
         GetComponent<Image>().enabled = true;
         cityInfo.SetActive(false);
+        backToMenu.SetActive(false);
     }
 
     public void Back()

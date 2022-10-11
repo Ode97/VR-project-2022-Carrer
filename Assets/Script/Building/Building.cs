@@ -8,9 +8,10 @@ public class Building : MonoBehaviour
     public int woodNeed;
     public int x;
     public int y;
+    public int constructionTime;
     private int i;
     private int rotation;
-    public List<People> _peoples = new List<People>();
+    protected List<People> _peoples = new List<People>();
     
     public bool CheckWood()
     {
@@ -51,5 +52,15 @@ public class Building : MonoBehaviour
     public int GetI()
     {
         return i;
+    }
+
+    public void AddPeople(People p)
+    {
+        _peoples.Add(p);
+    }
+
+    public List<People> GetPeople()
+    {
+        return _peoples;
     }
 }

@@ -16,6 +16,7 @@ public class LoadBuildings : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private TextMeshProUGUI woodText;
     [SerializeField] private TextMeshProUGUI peopleText;
+    [SerializeField] private TextMeshProUGUI timeText;
     private string building;
     private Transform actual = null;
     private int layer;
@@ -37,6 +38,7 @@ public class LoadBuildings : MonoBehaviour
     {
         woodText.text = "";
         peopleText.text = "";
+        timeText.text = "";
         text.text = "";
         DontDestroyOnLoad(gameObject);
         
@@ -53,7 +55,9 @@ public class LoadBuildings : MonoBehaviour
         {
             itemJobs.GetChild(i).GetComponent<Building>().SetI(i);
         }
-        
+
+        //LoadHouses();
+
     }
 
     public void SetARSession(ARSessionOrigin a)
@@ -93,7 +97,7 @@ public class LoadBuildings : MonoBehaviour
 
         i = 0;
         item = itemEntertainments;
-        peopleText.text = "People Entertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
+        peopleText.text = "People\nEntertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
         building = "Entertainments ";
         layer = Constant.entertainmentLayer;
         ShowObject();
@@ -129,7 +133,7 @@ public class LoadBuildings : MonoBehaviour
         if(house)
             peopleText.text = "People: " + item.GetChild(i).GetComponent<House>().people.ToString();
         else if(ent)
-            peopleText.text = "People Entertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
+            peopleText.text = "People\nEntertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
         else if(job)
             peopleText.text = "Jobs: " + item.GetChild(i).GetComponent<Job>().jobsNum.ToString();
         
@@ -138,9 +142,11 @@ public class LoadBuildings : MonoBehaviour
 
     public void Select()
     {
+        if(!actual)
+            return;
+        
         if (actual.GetComponent<Building>().CheckWood())
         {
-            Destroy(actual.gameObject);
             GameManager.GM().SetBuilding(item.GetChild(i).gameObject, layer);
             GameManager.GM().CloseShop();
         }
@@ -149,12 +155,33 @@ public class LoadBuildings : MonoBehaviour
             Debug.Log("ti serve più legna");
             GameManager.GM().CloseShop();
         }
+        
+        Destroy(actual.gameObject);
+        Reset();
+    }
+
+    public void Close()
+    {
+        if(actual)
+            Destroy(actual.gameObject);
+        
+        Reset();
+        GameManager.GM().CloseShop();
+    }
+
+    private void Reset()
+    {
+        woodText.text = "";
+        peopleText.text = "";
+        text.text = "";
+        timeText.text = "";
     }
 
     private void ShowObject()
     {
         woodText.text = "Wood: " + item.GetChild(i).GetComponent<Building>().woodNeed.ToString();
         text.text = building + (i + 1) + "/" + item.childCount;
+        timeText.text = "Time: " + item.GetChild(i).GetComponent<Building>().constructionTime.ToString();
         actual = item.GetChild(i);
         if (SystemInfo.deviceType == DeviceType.Handheld){
             actual = Instantiate(item.GetChild(i), _arSessionOrigin.camera.transform);

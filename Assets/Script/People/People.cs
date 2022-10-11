@@ -113,7 +113,8 @@ public class People : MonoBehaviour
                     {
                         work = false;
                         building = _buildings.Find(b => b.GetType() == typeof(Food));
-                        eat = true;
+                        if(building)
+                            eat = true;
                     }
                     else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
                     {

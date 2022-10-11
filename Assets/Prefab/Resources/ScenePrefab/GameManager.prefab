@@ -47,9 +47,6 @@ MonoBehaviour:
   buildingMenu: {fileID: 0}
   buttonsMenu: {fileID: 0}
   dismantle: {fileID: 0}
-  ui: {fileID: 0}
-  _sliderController: {fileID: 0}
-  worldCanvas: {fileID: 0}
   _graphBuilder: {fileID: 5678901253280815183, guid: 0fbdbfd07fc67b64f9e637f890617acb,
     type: 3}
   streetMat: {fileID: 2100000, guid: 2e6c93c3456a248c391f70016879337f, type: 2}
@@ -57,7 +54,7 @@ MonoBehaviour:
     type: 3}
   _arSessionOrigin: {fileID: 0}
   _peopleManager: {fileID: 0}
-  wood: 30
+  wood: 10
   woodText: {fileID: 0}
   peopleText: {fileID: 0}
   jobText: {fileID: 0}

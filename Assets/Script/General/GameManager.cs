@@ -73,7 +73,8 @@ public class GameManager : MonoBehaviour
         return gm;
     }
     
-    void Awake()
+    
+    void Start()
     {
         if (gm==null)
             gm=this;
@@ -81,17 +82,14 @@ public class GameManager : MonoBehaviour
             Destroy (gameObject);
 
         DontDestroyOnLoad (gameObject);
-    }
-    
-    void Start()
-    {
+        
         _pathfindingSolver = GetComponent<PathfindingSolver>();
         buildingMenu.gameObject.SetActive(false);
         peopleText.text = "0";
         jobText.text = "0";
         entertainmentText.text = "0";
-        woodText.text = "0";
-        workerText.text = "0";
+        woodText.text = wood.ToString();
+        workerText.text = "1";
         foodText.text = "0";
 
         var r = FindObjectOfType<LoadBuildings>();
@@ -300,7 +298,7 @@ public class GameManager : MonoBehaviour
     {
         Worker w = worker.Dequeue();
         w.constructionCell = selectedCell;
-        w.SetInfo(layer, 1, building);
+        w.SetInfo(layer, building.GetComponent<Building>().constructionTime, building);
         MoveWorker(w);
     }
 
@@ -308,7 +306,7 @@ public class GameManager : MonoBehaviour
     {
         Worker w = worker.Dequeue();
         w.constructionCell = selectedCell;
-        w.SetInfo(Constant.streetLayer, 1);
+        w.SetInfo(Constant.streetLayer, 4);
         buttonsMenu.SetActive(false);
         MoveWorker(w);
     }
@@ -334,7 +332,7 @@ public class GameManager : MonoBehaviour
 
     public void CutTree(Worker w)
     {
-        w.SetInfo(0, 1);
+        w.SetInfo(0, 3);
         w.constructionCell = selectedCell;
         w.tree = true;
         MoveWorker(w);
@@ -342,7 +340,7 @@ public class GameManager : MonoBehaviour
 
     public void DestroyTree(Worker w)
     {
-        wood += 3;
+        wood += 5;
 
         data.wood = wood;
         
@@ -361,14 +359,19 @@ public class GameManager : MonoBehaviour
     {
         
         GameObject g = Instantiate(w.GetBuilding(), w.constructionCell.transform);
+
+        var building = g.GetComponent<Building>();
         
-        g.GetComponent<Building>().SetI(w.GetBuilding().GetComponent<Building>().GetI());
+        building.SetI(w.GetBuilding().GetComponent<Building>().GetI());
+        
+        
+        var buildingCell = w.constructionCell.GetComponent<Build>();
         
         w.constructionCell.layer = layer;
         
         var a = new Edge(_graphBuilder.matrix[w.x, w.y],
-            _graphBuilder.matrix[w.constructionCell.GetComponent<Build>().x, w.constructionCell.GetComponent<Build>().y]);
-        var b = new Edge(_graphBuilder.matrix[w.constructionCell.GetComponent<Build>().x, w.constructionCell.GetComponent<Build>().y],
+            _graphBuilder.matrix[buildingCell.x, buildingCell.y]);
+        var b = new Edge(_graphBuilder.matrix[buildingCell.x, buildingCell.y],
             _graphBuilder.matrix[w.x, w.y]);
         _graphBuilder.g.AddEdge(a);
         _graphBuilder.g.AddEdge(b);
@@ -378,8 +381,8 @@ public class GameManager : MonoBehaviour
         {
             var h = g.GetComponent<House>();
             var newP = h.people;
-            h.x = w.constructionCell.GetComponent<Build>().x;
-            h.y = w.constructionCell.GetComponent<Build>().y;
+            h.x = buildingCell.x;
+            h.y = buildingCell.y;
             people += newP;
             wood -= h.woodNeed;
             jobs += newP;
@@ -390,37 +393,43 @@ public class GameManager : MonoBehaviour
         {
             var j = g.GetComponent<Job>();
             
-            j.x = w.constructionCell.GetComponent<Build>().x;
-            j.y = w.constructionCell.GetComponent<Build>().y;
+            j.x = buildingCell.x;
+            j.y = buildingCell.y;
+
+            var job = w.GetBuilding().GetComponent<Job>();
             
-            jobs -= w.GetBuilding().GetComponent<Job>().jobsNum;
-            wood -= w.GetBuilding().GetComponent<Job>().woodNeed;
+            jobs -= job.jobsNum;
+            wood -= job.woodNeed;
             _peopleManager.AddJobs(j);
             
         }else if (layer == Constant.entertainmentLayer)
         {
             var e = g.GetComponent<Entertainment>();
             
-            e.x = w.constructionCell.GetComponent<Build>().x;
-            e.y = w.constructionCell.GetComponent<Build>().y;
+            e.x = buildingCell.x;
+            e.y = buildingCell.y;
 
-            entertainment -= w.GetBuilding().GetComponent<Entertainment>().peopleEntertained;
-            wood -= w.GetBuilding().GetComponent<Entertainment>().woodNeed;
+            var ent = w.GetBuilding().GetComponent<Entertainment>();
+            
+            entertainment -= ent.peopleEntertained;
+            wood -= ent.woodNeed;
             _peopleManager.AddEntertainment(e);
         }
 
         //g.transform.localScale.Set(0.08f, 0.08f, 0.08f);
         g.transform.localPosition = new Vector3(0f, 0f, 0f);
         var pos = _graphBuilder[w.GetTarget().x, w.GetTarget().y].sceneObject.transform.position;
+        var target = w.GetTarget();
         
-        if(w.GetTarget().x - w.constructionCell.GetComponent<Build>().x == -1)
-            g.GetComponent<Building>().SetRotation(0);
-        else if(w.GetTarget().x - w.constructionCell.GetComponent<Build>().x == 1)
-            g.GetComponent<Building>().SetRotation(2);
-        else if(w.GetTarget().y - w.constructionCell.GetComponent<Build>().y == 1)
-            g.GetComponent<Building>().SetRotation(1);
-        else if(w.GetTarget().y - w.constructionCell.GetComponent<Build>().y == -1)
-            g.GetComponent<Building>().SetRotation(3);
+        
+        if(target.x - buildingCell.x == -1)
+            building.SetRotation(0);
+        else if(target.x - buildingCell.x == 1)
+            building.SetRotation(2);
+        else if(target.y - buildingCell.y == 1)
+            building.SetRotation(1);
+        else if(target.y - buildingCell.y == -1)
+            building.SetRotation(3);
         
         g.transform.rotation = Quaternion.LookRotation(pos - w.constructionCell.transform.position, Vector3.up);
         g.GetComponent<RotateObject>().enabled = false;
@@ -431,7 +440,7 @@ public class GameManager : MonoBehaviour
         data.people = people;
         data.wood = wood;
         
-        if(people == 12 || people == 32 || people == 60 || people == 100)
+        if((people >= 12 && workerNum == 1) || (people >= 32 && workerNum == 2) || (people >= 60 && workerNum == 3)|| (people >= 100 && workerNum == 4))
             SpawnWorker(_graphBuilder[0, 0].sceneObject.transform);
     }
 
@@ -520,7 +529,8 @@ public class GameManager : MonoBehaviour
         Worker w = worker.Dequeue();
         buttonsMenu.gameObject.SetActive(false);
         w.constructionCell = selectedCell;
-        w.SetInfo(0, 1);
+        //var t = w.constructionCell.transform.GetChild(0).GetComponent<Building>().constructionTime;
+        w.SetInfo(0, 10);
         MoveWorker(w);
         dismantle.SetActive(false);
     }

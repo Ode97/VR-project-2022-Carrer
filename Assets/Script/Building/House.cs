@@ -6,5 +6,4 @@ public class House : Building
 {
 
     public int people;
-    public List<People> peoples = new List<People>();
 }

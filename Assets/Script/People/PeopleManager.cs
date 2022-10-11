@@ -22,7 +22,7 @@ public class PeopleManager : MonoBehaviour
             var p = Random.Range(0, max);
             var citizen = Instantiate(peoples[p]);
             var c = citizen.GetComponent<People>();
-            cell.peoples.Add(c);
+            cell.AddPeople(c);
             citizen.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             citizen.transform.localPosition = new Vector3(pos.x, pos.y + 0.01f, pos.z);
             c.SetHouse(cell);
@@ -51,7 +51,6 @@ public class PeopleManager : MonoBehaviour
     {
         var l = int.MaxValue;
         Food foodBuilding = null;
-        Debug.Log(foodBuildings.Count);
         
         foreach (var f in foodBuildings)
         {
@@ -64,11 +63,11 @@ public class PeopleManager : MonoBehaviour
 
     public void RemovePeople(House h)
     {
-        foreach (var p in h.peoples)
+        foreach (var p in h.GetPeople())
         {
             Destroy(p.gameObject);
         }
-        h.peoples.RemoveAll(x => x);
+        h.GetPeople().RemoveAll(x => x);
     }
 
     public void AddEntertainment(Entertainment cell)

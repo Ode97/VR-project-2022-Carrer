@@ -6,7 +6,6 @@
     <e p="E:\unity\VR-project-2022-Carrer" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="AudioManager.cs" t="Include" />
         <e p="ExampleAssets" t="Include">
           <e p="Scripts" t="Include">
             <e p="AnchorCreator.cs" t="Include" />
@@ -37,6 +36,7 @@
             <e p="Job.cs" t="Include" />
           </e>
           <e p="General" t="Include">
+            <e p="AudioManager.cs" t="Include" />
             <e p="Build.cs" t="Include" />
             <e p="Constant.cs" t="Include" />
             <e p="DayManager.cs" t="Include" />
@@ -44,6 +44,7 @@
             <e p="Menu.cs" t="Include" />
             <e p="PlaceOnPlane.cs" t="Include" />
             <e p="PressInputBase.cs" t="Include" />
+            <e p="Settings.cs" t="Include" />
             <e p="SliderController.cs" t="Include" />
           </e>
           <e p="Graph" t="Include">
@@ -58,6 +59,7 @@
           <e p="People" t="Include">
             <e p="People.cs" t="Include" />
             <e p="PeopleManager.cs" t="Include" />
+            <e p="Worker.cs" t="Include" />
           </e>
           <e p="Save" t="Include">
             <e p="Data.cs" t="Include" />
@@ -69,9 +71,7 @@
             <e p="LoadBuildings.cs" t="Include" />
             <e p="RotateObject.cs" t="Include" />
           </e>
-          <e p="Worker.cs" t="Include" />
         </e>
-        <e p="Settings.cs" t="Include" />
         <e p="Starter Package" t="Include">
           <e p="CarBehaviour.cs" t="Include" />
           <e p="CarManager.cs" t="Include" />
