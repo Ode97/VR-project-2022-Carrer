@@ -12,6 +12,7 @@ public class PeopleManager : MonoBehaviour
 
     private List<Entertainment> entertainment = new List<Entertainment>();
     private List<Job> jobsRemain = new List<Job>();
+    private List<Food> foodBuildings = new List<Food>();
 
     public void SpawnPeople(int num, House cell, Vector3 pos)
     {
@@ -20,23 +21,25 @@ public class PeopleManager : MonoBehaviour
         {
             var p = Random.Range(0, max);
             var citizen = Instantiate(peoples[p]);
-            cell.peoples.Add(citizen.GetComponent<People>());
+            var c = citizen.GetComponent<People>();
+            cell.peoples.Add(c);
             citizen.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             citizen.transform.localPosition = new Vector3(pos.x, pos.y + 0.01f, pos.z);
-            citizen.GetComponent<People>().SetHouse(cell);
-            if(GameManager.GM().load)
-                citizen.GetComponent<People>().StartMove(cell.x, cell.y,cell.x, cell.y);
-            else
-            {
-                citizen.GetComponent<People>().StartMove(0, 0,cell.x, cell.y);
-            }
+            c.SetHouse(cell);
+            
+            //citizen.GetComponent<People>().StartMove(cell.x, cell.y,cell.x, cell.y);
+            
             citizens.Add(citizen.GetComponent<People>());
-            citizen.GetComponent<People>()._buildings.AddRange(entertainment);
+            c._buildings.AddRange(entertainment);
+            var food = FoodBuildingChoice(cell);
+            if (food)
+                c._buildings.Add(food);
+            
             if (jobsRemain.Count > 0)
             {
-                if (jobsRemain[0].CheckJob())
+                if (jobsRemain[0].CheckJob(c))
                 {
-                    citizen.GetComponent<People>()._buildings.Add(jobsRemain[0]);
+                    c._buildings.Add(jobsRemain[0]);
                 }else
                     jobsRemain.Remove(jobsRemain[0]);
             }
@@ -44,9 +47,23 @@ public class PeopleManager : MonoBehaviour
         }
     }
 
+    private Food FoodBuildingChoice(House h)
+    {
+        var l = int.MaxValue;
+        Food foodBuilding = null;
+        Debug.Log(foodBuildings.Count);
+        
+        foreach (var f in foodBuildings)
+        {
+            var d = GameManager.GM().PathSolver(h.x, h.y, f.x, f.y);
+            if (d.Length < l)
+                foodBuilding = f;
+        }
+        return foodBuilding;
+    }
+
     public void RemovePeople(House h)
     {
-        Debug.Log(h.peoples.Count);
         foreach (var p in h.peoples)
         {
             Destroy(p.gameObject);
@@ -65,12 +82,21 @@ public class PeopleManager : MonoBehaviour
 
     public void AddJobs(Job cell)
     {
+        Food f;
+        if (cell.gameObject.TryGetComponent<Food>(out f))
+        {
+            foodBuildings.Add(f);
+            foreach (var c in citizens)
+            {
+                c._buildings.Add(f);
+            }
+        }
         jobsRemain.Add(cell);
         foreach (var c in citizens.Where(c => !c.jobFound))
         {
-            if (cell.CheckJob())
+            if (cell.CheckJob(c))
             {
-                c._buildings.Add(cell);
+                c.SetJob(cell);
                 c.jobFound = true;
             }
             else

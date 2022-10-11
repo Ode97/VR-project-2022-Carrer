@@ -41,7 +41,7 @@ public class Save : MonoBehaviour {
         
         file.Close();
 
-        GameManager.GM().SetLoad(data.wood, data.people, data.jobs, data.entertainment, data.workerNum);
+        GameManager.GM().SetLoad(data.wood, data.people, data.jobs, data.entertainment, data.workerNum, data.food);
         GameManager.GM().data = data;
         return data;        
     }

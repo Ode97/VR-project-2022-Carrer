@@ -46,7 +46,7 @@ MonoBehaviour:
   x: 10
   y: 10
   gap: 0.1
-  firstMaterial: {fileID: 2100000, guid: c852af001dae0064e9acaa832f1dadb7, type: 2}
+  firstMaterial: {fileID: 2100000, guid: 8ae6d47cf7239e74a9bd84b53ea6d968, type: 2}
   streetMaterial: {fileID: 2100000, guid: 2e6c93c3456a248c391f70016879337f, type: 2}
   trees:
   - {fileID: 192044, guid: 19682540d8a014522a319b1cf788aee2, type: 3}

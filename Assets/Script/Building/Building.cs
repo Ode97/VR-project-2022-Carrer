@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    
     public int woodNeed;
     public int x;
     public int y;
     private int i;
     private int rotation;
+    public List<People> _peoples = new List<People>();
     
     public bool CheckWood()
     {
@@ -20,6 +22,14 @@ public class Building : MonoBehaviour
         {
 
             return false;
+        }
+    }
+
+    public void Dismantle()
+    {
+        foreach (var p in _peoples)
+        {
+            p.RemoveBuilding(this);   
         }
     }
 

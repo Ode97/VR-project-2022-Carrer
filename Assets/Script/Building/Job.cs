@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
 public class Job : Building
 {
     public int jobsNum;
-    private int peopleWorking = 0;
 
-    public bool CheckJob()
+    public bool CheckJob(People p)
     {
-        if (jobsNum - peopleWorking > 0)
+        if (jobsNum - _peoples.Count > 0)
         {
-            peopleWorking++;
+            _peoples.Add(p);
             return true;
         }
         else
             return false;
+    }
+
+    public virtual void Produce()
+    {
+        
     }
 }

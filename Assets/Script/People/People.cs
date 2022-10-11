@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Linq;
 using UnityEngine;
 
 public class People : MonoBehaviour
@@ -9,6 +10,7 @@ public class People : MonoBehaviour
 
     private int y;
 
+    private Job job;
     private House house;
 
     private bool busy = false;
@@ -20,13 +22,21 @@ public class People : MonoBehaviour
     private Vector3 target;
 
     public List<Building> _buildings = new List<Building>();
+
+    private GameObject current;
     
     public bool jobFound = false;
-    
+    private bool eat = false;
+    private bool work = false;
+    private bool stillWorking = false;
+    private bool justEat = false;
+
+    private List<MeshRenderer> _meshRenderer;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _meshRenderer = gameObject.GetComponentsInChildren<MeshRenderer>().ToList();
+        StartMove(house.x, house.y);
     }
 
     void Update()
@@ -37,12 +47,33 @@ public class People : MonoBehaviour
             if (i == path.Length)
             {
                 if (path.Length != 0)
-                {
+                { 
                     var actualPos = path[i - 1].to.sceneObject.GetComponent<Build>();
                     x = actualPos.x;
                     y = actualPos.y;
                 }
-                
+
+                if (current)
+                {
+                    if (eat)
+                    {
+                        if (!justEat)
+                        {
+                            current.GetComponent<Food>().Eat();
+                            justEat = true;
+                        }
+
+                        //justEat = true;
+                    }
+                    else if (work)
+                    {
+                        if (!stillWorking)
+                        {
+                            StartCoroutine(Produce());
+                        }
+                    }
+                }
+
                 busy = false;
                 stop = true;
             }
@@ -69,13 +100,57 @@ public class People : MonoBehaviour
                 
                 if (_buildings.Count > 1)
                 {
-                    var b = _buildings[Random.Range(0, _buildings.Count)];
-                    toX = b.x;
-                    toY = b.y;
+                    Building building = _buildings[0];
+                    if (DayManager.D.dayTime == DayTime.Morning)
+                    {
+                        if (jobFound)
+                        {
+                            work = true;
+                            building = job;
+                        }
+                    }
+                    else if (!eat && DayManager.D.dayTime == DayTime.Afternoon)
+                    {
+                        work = false;
+                        building = _buildings.Find(b => b.GetType() == typeof(Food));
+                        eat = true;
+                    }
+                    else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
+                    {
+                        eat = false;
+                        var r = Random.Range(0, _buildings.Count);
+                        building = _buildings[r];
+                    }
+                    else if (DayManager.D.dayTime == DayTime.Night)
+                    {
+                        justEat = false;
+                        building = house;
+                    }
+
+                    if (building)
+                    {
+                        current = building.gameObject;
+                        toX = building.x;
+                        toY = building.y;
+                    }
+                    else 
+                    {
+                        toX = x;
+                        toY = y;
+                    }
+                    
                 }
                 StartCoroutine(Move(toX, toY));
             }
         }
+    }
+
+    private IEnumerator Produce()
+    {
+        stillWorking = true;
+        yield return new WaitForSeconds(2);
+        job.Produce();
+        stillWorking = false;
     }
 
     public void SetHouse(House h)
@@ -83,29 +158,51 @@ public class People : MonoBehaviour
         house = h;
         _buildings.Add(h);
     }
+    
+    public void SetJob(Job j)
+    {
+        job = j;
+        _buildings.Add(j);
+    }
 
     public IEnumerator Move(int toX, int toY)
     {
         path = GameManager.GM().PathSolver(x, y, toX, toY);
-        yield return new WaitForSeconds(3);
+        
+        foreach (var mesh in _meshRenderer)
+        {
+            mesh.enabled = false;
+        }
+        
+        yield return new WaitForSeconds(1);
+        
+        if(path.Length > 0)
+            foreach (var mesh in _meshRenderer)
+            {
+                mesh.enabled = true;
+            }
+        
         i = 0;
         busy = true;
     }
 
-    public void StartMove(int fromX, int fromY, int toX, int toY)
+    public void StartMove(int fromX, int fromY)
     {
         x = fromX;
         y = fromY;
-        if (!GameManager.GM().load)
+        foreach (var mesh in _meshRenderer)
         {
-            path = GameManager.GM().PathSolver(x, y, toX, toY);
-            busy = true;
+            mesh.enabled = false;
         }
-        else
-        {
-            path = new Edge[0];
-            busy = true;
-        }
+        
+        path = new Edge[0];
+        busy = true;
+        
+    }
+
+    public void RemoveBuilding(Building b)
+    {
+        _buildings.Remove(b);
     }
 
     private void GetSteering()
@@ -118,6 +215,4 @@ public class People : MonoBehaviour
         if(r.magnitude != 0)
             transform.rotation = Quaternion.Lerp(rot, Quaternion.LookRotation(r, Vector3.up), 0.2f);
     }
-    
-    
 }

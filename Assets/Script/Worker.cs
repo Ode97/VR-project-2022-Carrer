@@ -20,10 +20,11 @@ public class Worker : MonoBehaviour
     public bool tree;
     private bool stop = true;
     private SliderController _sliderController;
+    private GameObject sliderPrefab;
     private bool work = false;
     void Start()
     {
-
+        sliderPrefab = Resources.Load<GameObject>("ScenePrefab/SliderCanvas");
     }
 
     // Update is called once per frame
@@ -123,7 +124,8 @@ public class Worker : MonoBehaviour
     
     public void Do()
     {
-        _sliderController = Instantiate(GameManager.GM()._sliderController, GameManager.GM().worldCanvas.transform);
+        _sliderController = Instantiate(sliderPrefab.GetComponent<SliderController>());
+        
         _sliderController.Reset();
         _sliderController.gameObject.SetActive(true);
         var pos = constructionCell.transform.position;

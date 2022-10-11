@@ -20,10 +20,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject buildingMenu;
     [SerializeField] private GameObject buttonsMenu;
     [SerializeField] private GameObject dismantle;
-    [SerializeField]
-    private GameObject ui;
-    public SliderController _sliderController;
-    public Canvas worldCanvas;
     private static GameManager gm;
 
     private GameObject selectedCell;
@@ -59,6 +55,10 @@ public class GameManager : MonoBehaviour
     private int workerNum = 0;
     [SerializeField]
     private TextMeshProUGUI workerText;
+    
+    private int food = 0;
+    [SerializeField]
+    private TextMeshProUGUI foodText;
 
     public Data data = new Data();
     public bool load = false;
@@ -72,11 +72,19 @@ public class GameManager : MonoBehaviour
     {
         return gm;
     }
+    
+    void Awake()
+    {
+        if (gm==null)
+            gm=this;
+        else if (gm !=this)
+            Destroy (gameObject);
+
+        DontDestroyOnLoad (gameObject);
+    }
+    
     void Start()
     {
-        DontDestroyOnLoad(this);
-        DontDestroyOnLoad(worldCanvas);
-        gm = this;
         _pathfindingSolver = GetComponent<PathfindingSolver>();
         buildingMenu.gameObject.SetActive(false);
         peopleText.text = "0";
@@ -84,6 +92,7 @@ public class GameManager : MonoBehaviour
         entertainmentText.text = "0";
         woodText.text = "0";
         workerText.text = "0";
+        foodText.text = "0";
 
         var r = FindObjectOfType<LoadBuildings>();
         
@@ -127,13 +136,14 @@ public class GameManager : MonoBehaviour
         return _jobs;
     }
 
-    public void SetLoad(int wood, int people, int jobs, int ents, int workers)
+    public void SetLoad(int wood, int people, int jobs, int ents, int workers, int food)
     {
         this.wood = wood;
         this.people = people;
         this.jobs = jobs;
         this.entertainment = ents;
         this.workerNum = workers;
+        this.food = food;
         load = true;
         SetText();
 
@@ -146,6 +156,7 @@ public class GameManager : MonoBehaviour
         entertainmentText.text = entertainment.ToString();
         woodText.text = wood.ToString();
         workerText.text = workerNum.ToString();
+        foodText.text = food.ToString();
     }
 
     // Update is called once per frame
@@ -170,7 +181,7 @@ public class GameManager : MonoBehaviour
         }
 
         _graphBuilder = graphBuilder;
-        ui.SetActive(true);
+        FindObjectOfType<DayManager>().StartTime();
     }
     
     public void OpenMenu()
@@ -248,6 +259,21 @@ public class GameManager : MonoBehaviour
                 OpenMenu();
             }
         }
+    }
+
+    public int GetFood()
+    {
+        return food;
+    }
+
+    public void AddFood()
+    {
+        food++;
+    }
+
+    public void Eat()
+    {
+        food--;
     }
 
     private bool CheckNearStreet(Worker w)
@@ -370,8 +396,7 @@ public class GameManager : MonoBehaviour
             jobs -= w.GetBuilding().GetComponent<Job>().jobsNum;
             wood -= w.GetBuilding().GetComponent<Job>().woodNeed;
             _peopleManager.AddJobs(j);
-
-
+            
         }else if (layer == Constant.entertainmentLayer)
         {
             var e = g.GetComponent<Entertainment>();
@@ -502,20 +527,32 @@ public class GameManager : MonoBehaviour
 
     public void Dismantle(Worker w)
     {
-        var b = w.constructionCell.transform.GetChild(0);
-        if (w.constructionCell.layer == Constant.houseLayer)
+        var c = w.constructionCell;
+        if (c.transform.childCount > 0)
         {
-            people -= b.GetComponent<House>().people;
-            _peopleManager.RemovePeople(b.GetComponent<House>());
+
+            var b = c.transform.GetChild(0);
+            if (c.layer == Constant.houseLayer)
+            {
+                var h = b.GetComponent<House>();
+                people -= h.people;
+                entertainment -= h.people;
+                jobs -= h.people;
+                _peopleManager.RemovePeople(h);
+            }
+            else if (c.layer == Constant.entertainmentLayer)
+                entertainment += b.GetComponent<Entertainment>().peopleEntertained;
+            else if (c.layer == Constant.jobLayer)
+                jobs += b.GetComponent<Job>().jobsNum;
+
+            wood += b.GetComponent<Building>().woodNeed;
+
+            Destroy(b.gameObject);
         }
-        else if (w.constructionCell.layer == Constant.entertainmentLayer)
-            entertainment -= b.GetComponent<Entertainment>().peopleEntertained;
-        else if(w.constructionCell.layer == Constant.jobLayer)
-            jobs -= b.GetComponent<Job>().jobsNum;
-        
-        wood += b.GetComponent<Building>().woodNeed;
-        Destroy(b.gameObject);
-        w.constructionCell.layer = 0;
+        else
+            c.GetComponent<MeshRenderer>().material = _graphBuilder.firstMaterial;
+
+        c.layer = 0;
     }
 
 }

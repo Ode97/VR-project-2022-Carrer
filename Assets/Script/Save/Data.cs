@@ -16,6 +16,8 @@ public class Data
 
     public int workerNum = 0;
 
+    public int food = 0;
+
     public bool[,] street = new bool[100, 4];
 
     public int[] layers = new int[100];
@@ -29,13 +31,14 @@ public class Data
         
     }
     
-    public Data(int wood, int people, int jobs, int entertainment, int workerNum, bool[,] streets, int[] layers, int[] buildings, int[] rot)
+    public Data(int wood, int people, int jobs, int entertainment, int workerNum, int food, bool[,] streets, int[] layers, int[] buildings, int[] rot)
     {
         this.wood = wood;
         this.people = people;
         this.jobs = jobs;
         this.entertainment = entertainment;
         this.workerNum = workerNum;
+        this.food = food;
         this.street = streets;
         this.layers = layers;
         this.buildings = buildings;

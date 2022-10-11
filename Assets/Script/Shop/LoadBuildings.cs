@@ -14,15 +14,30 @@ public class LoadBuildings : MonoBehaviour
     public Transform itemJobs;
     private Transform item;
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI woodText;
+    [SerializeField] private TextMeshProUGUI peopleText;
     private string building;
     private Transform actual = null;
     private int layer;
     private ARSessionOrigin _arSessionOrigin;
     private int i = 0;
+    private bool house;
+    private bool ent;
+    private bool job;
 
+    void Awake()
+    {
+        if (GameManager.GM())
+            Destroy (gameObject);
+
+        DontDestroyOnLoad (gameObject);
+    }
 
     private void Start()
     {
+        woodText.text = "";
+        peopleText.text = "";
+        text.text = "";
         DontDestroyOnLoad(gameObject);
         
         for (int i = 0; i < itemHouses.childCount; i++)
@@ -48,6 +63,9 @@ public class LoadBuildings : MonoBehaviour
 
     public void LoadHouses()
     {
+        house = true;
+        job = false;
+        ent = false;
         
         if (actual)
         {
@@ -56,13 +74,18 @@ public class LoadBuildings : MonoBehaviour
 
         i = 0;
         item = itemHouses;
-        building = "Houses ";
+        peopleText.text = "People: " + item.GetChild(i).GetComponent<House>().people.ToString();
+        building = "Houses "; 
         layer = Constant.houseLayer;
         ShowObject();
     }
     
     public void LoadEntertainments()
     {
+        house = false;
+        job = false;
+        ent = true;
+        
         if (actual)
         {
             Destroy(actual.gameObject);
@@ -70,6 +93,7 @@ public class LoadBuildings : MonoBehaviour
 
         i = 0;
         item = itemEntertainments;
+        peopleText.text = "People Entertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
         building = "Entertainments ";
         layer = Constant.entertainmentLayer;
         ShowObject();
@@ -77,6 +101,11 @@ public class LoadBuildings : MonoBehaviour
     
     public void LoadJobs()
     {
+        house = false;
+        job = true;
+        ent = false;
+        
+        
         if (actual)
         {
             Destroy(actual.gameObject);
@@ -84,6 +113,7 @@ public class LoadBuildings : MonoBehaviour
 
         i = 0;
         item = itemJobs;
+        peopleText.text = "Jobs: " + item.GetChild(i).GetComponent<Job>().jobsNum.ToString();
         building = "Jobs ";
         layer = Constant.jobLayer;
         ShowObject();
@@ -95,6 +125,14 @@ public class LoadBuildings : MonoBehaviour
         i++;
         if (i == item.childCount)
             i = 0;
+
+        if(house)
+            peopleText.text = "People: " + item.GetChild(i).GetComponent<House>().people.ToString();
+        else if(ent)
+            peopleText.text = "People Entertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
+        else if(job)
+            peopleText.text = "Jobs: " + item.GetChild(i).GetComponent<Job>().jobsNum.ToString();
+        
         ShowObject();
     }
 
@@ -115,6 +153,7 @@ public class LoadBuildings : MonoBehaviour
 
     private void ShowObject()
     {
+        woodText.text = "Wood: " + item.GetChild(i).GetComponent<Building>().woodNeed.ToString();
         text.text = building + (i + 1) + "/" + item.childCount;
         actual = item.GetChild(i);
         if (SystemInfo.deviceType == DeviceType.Handheld){
@@ -122,11 +161,9 @@ public class LoadBuildings : MonoBehaviour
         }else{
             actual = Instantiate(item.GetChild(i), Camera.main.transform);
         }
-        //actual.SetParent(_arSessionOrigin.camera.transform);
-        //actual.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        //actual.transform.localScale.Set(0.1f, 0.1f, 0.1f);
-        //actual.transform.rotation = Quaternion.identity;
-        actual.localPosition = new Vector3(0, 0, 20);
+        
+        actual.localPosition = new Vector3(0, -3, 20);
+        actual.localRotation = new Quaternion(0, 180, 0, 0);
         actual.gameObject.SetActive(true);
     }
 }

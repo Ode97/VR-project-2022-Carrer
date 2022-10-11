@@ -10,7 +10,7 @@ public class SliderController : MonoBehaviour
     public Text valueText;
     public Slider slider;
     private int progress = 0;
-
+    
     private void Start()
     {
         valueText.text = "0";
