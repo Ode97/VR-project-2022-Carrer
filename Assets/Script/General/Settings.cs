@@ -35,6 +35,7 @@ public class Settings : MonoBehaviour
         GetComponent<Image>().enabled = true;
         cityInfo.SetActive(false);
         backToMenu.SetActive(false);
+        GameManager.GM().load = false;
     }
 
     public void Back()

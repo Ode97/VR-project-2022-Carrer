@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PeopleManager _peopleManager;
 
+    [SerializeField] private TextMeshProUGUI warningText;
+    
     public int wood = 0;
     [SerializeField]
     private TextMeshProUGUI woodText;
@@ -117,6 +119,14 @@ public class GameManager : MonoBehaviour
 
         load = false;
         
+    }
+    
+    public IEnumerator WarningText(string t)
+    {
+        warningText.text = t;
+        warningText.enabled = true;
+        yield return new WaitForSeconds(2);
+        warningText.enabled = false;
     }
 
     public GameObject[] GetHouses()
@@ -237,7 +247,7 @@ public class GameManager : MonoBehaviour
 
         if (worker.Count == 0)
         {
-            
+            StartCoroutine(WarningText("All workers are busy"));
             return;
         }
         else
@@ -315,18 +325,22 @@ public class GameManager : MonoBehaviour
     {
         if (CheckNearStreet(w))
         {
-            //Debug.Log(worker.GetComponent<Worker>().x + " " + worker.GetComponent<Worker>().y + "   " + goal.x + " " + goal.y);
             w.constructionCell.GetComponent<Build>().SetInactive();
 
-            w.Walk(_pathfindingSolver.Solve(_graphBuilder.g,
-                    _graphBuilder[w.x, w.y],
-                    _graphBuilder[w.GetTarget().x, w.GetTarget().y]));
+            var path = _pathfindingSolver.Solve(_graphBuilder.g,
+                _graphBuilder[w.x, w.y],
+                _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
+            
+            
+            w.Walk(path);
+            
         }
         else
         {
-            Debug.Log("Devi costruire vicino ad una strada");
+            StartCoroutine(WarningText("You must build near a street"));
             worker.Enqueue(w);
             buttonsMenu.SetActive(false);
+            w.constructionCell.GetComponent<Build>().SetActive();
         }
     }
 
@@ -513,8 +527,8 @@ public class GameManager : MonoBehaviour
         if (workerNum < 5)
         {
             var pos = cell.position;
-            var w = Instantiate(workerPrefab);
-            w.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+            var w = Instantiate(workerPrefab, _graphBuilder.parent.transform);
+            w.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             w.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
             worker.Enqueue(w.GetComponent<Worker>());
             workerNum++;

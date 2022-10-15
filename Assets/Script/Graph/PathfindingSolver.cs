@@ -34,7 +34,7 @@ public class PathfindingSolver : MonoBehaviour {
 		foreach (Node n in unvisited) {
 			NodeExtension ne = new NodeExtension();
 			ne.distance = ( n == start ? 0f : float.MaxValue ); // infinite
-			ne.estimate = ( n == start ? BisectorEstimator(start, goal) : float.MaxValue );
+			ne.estimate = ( n == start ? ManhattanEstimator(start, goal) : float.MaxValue );
 			status [n] = ne;
 		}
 

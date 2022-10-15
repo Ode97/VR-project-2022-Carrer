@@ -20,11 +20,12 @@ public class PeopleManager : MonoBehaviour
         for (var i = 0; i < num; i++)
         {
             var p = Random.Range(0, max);
-            var citizen = Instantiate(peoples[p]);
+            var r = Random.insideUnitCircle * 0.025f;
+            var citizen = Instantiate(peoples[p], GameManager.GM()._graphBuilder.parent.transform);
             var c = citizen.GetComponent<People>();
             cell.AddPeople(c);
-            citizen.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-            citizen.transform.localPosition = new Vector3(pos.x, pos.y + 0.01f, pos.z);
+            citizen.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            citizen.transform.position = new Vector3(pos.x + r.x, pos.y + 0.01f, pos.z + r.y);
             c.SetHouse(cell);
             
             //citizen.GetComponent<People>().StartMove(cell.x, cell.y,cell.x, cell.y);

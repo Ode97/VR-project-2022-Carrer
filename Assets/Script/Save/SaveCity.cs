@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class SaveCity : MonoBehaviour
 {
+    public TextMeshProUGUI saveText;
     public void SaveState()
     {
         var cells = FindObjectsOfType<Build>();
@@ -36,5 +38,14 @@ public class SaveCity : MonoBehaviour
         GameManager.GM().data.buildings = building;
         GameManager.GM().data.rotation = rotations;
         Save.saveData(GameManager.GM().data);
+        StartCoroutine(SaveText());
+    }
+
+    public IEnumerator SaveText()
+    {
+        saveText.text = "Game Saved";
+        saveText.enabled = true;
+        yield return new WaitForSeconds(2);
+        saveText.enabled = false;
     }
 }

@@ -97,6 +97,14 @@ public class Worker : MonoBehaviour
         var transform1 = transform;
         var pos = transform1.position;
         var rot = transform1.rotation;
+
+        /*RaycastHit hit;
+        if(Physics.Raycast(transform1.position, Vector3.forward, out hit, 0.025f, 1 << 11)){
+       
+            var t = hit.point + hit.normal * 0.1f;
+            target = new Vector3(t.x, transform1.position.y, t.z);
+        }*/
+        
         transform.position = Vector3.MoveTowards(pos, target, Time.deltaTime * 0.1f);
         var r = target - pos;
         if(r.magnitude != 0)

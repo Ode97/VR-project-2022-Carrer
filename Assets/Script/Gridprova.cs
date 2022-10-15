@@ -13,7 +13,7 @@ public class Gridprova : MonoBehaviour
         
         var a = Instantiate(grid);
         a.transform.position = new Vector3(0, 0, 0);
-        grid.GetComponent<GraphBuilder>().Create();
+        grid.GetComponent<GraphBuilder>().Create(a);
         
     }
 }

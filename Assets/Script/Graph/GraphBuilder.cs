@@ -22,15 +22,16 @@ public class GraphBuilder : MonoBehaviour {
 	public Node[,] matrix;
 	protected Dictionary<Node, float[]> map;
 	public Graph g;
+	public GameObject parent;
 	
 	void Start ()
 	{
 		
 	}
 
-	public void Create()
+	public void Create(GameObject sGameObject)
 	{
-
+		parent = sGameObject;
 		if (sceneObject != null)
 		{
 			GameManager.GM().SetGraphBuilder(this);
@@ -40,7 +41,8 @@ public class GraphBuilder : MonoBehaviour {
 				matrix = CreateGrid(sceneObject, x, y, gap, firstMaterial, streetMaterial);
 			else
 			{
-				matrix = CreateLoadGrid(x, y, firstMaterial, streetMaterial, gap);
+				matrix = CreateLoadGrid(x, y, firstMaterial, gap);
+				LoadBuilding(streetMaterial);
 			}
 		}
 	}
@@ -52,7 +54,8 @@ public class GraphBuilder : MonoBehaviour {
 		for (int i = 0; i < matrix.GetLength(0); i += 1) {
 			for (int j = 0; j < matrix.GetLength(1); j += 1)
 			{
-				GameObject p = Instantiate(o);
+				GameObject p = Instantiate(o, parent.transform);
+				
 				p.GetComponent<Build>().x = i;
 				p.GetComponent<Build>().y = j;
 				matrix[i, j] = new Node("" + i + "," + j, p);
@@ -84,22 +87,24 @@ public class GraphBuilder : MonoBehaviour {
 		return matrix;
 	
 	}
-	
-	protected Node[,] CreateLoadGrid(int x, int y, Material fm, Material sm, float gap) {
-		Node[,] matrix = new Node[x,y];
 
-		for (int i = 0; i < matrix.GetLength(0); i += 1) {
+	protected Node[,] CreateLoadGrid(int x, int y, Material fm, float gap)
+	{
+		Node[,] matrix = new Node[x, y];
+
+		for (int i = 0; i < matrix.GetLength(0); i += 1)
+		{
 			for (int j = 0; j < matrix.GetLength(1); j += 1)
 			{
-				GameObject p = Instantiate(sceneObject);
-				
+				GameObject p = Instantiate(sceneObject, parent.transform);
+
 				p.GetComponent<MeshRenderer>().material = fm;
-				
+
 				p.GetComponent<Build>().x = i;
 				p.GetComponent<Build>().y = j;
 				matrix[i, j] = new Node("" + i + "," + j, p);
 				matrix[i, j].sceneObject.name = sceneObject.name + " " + i + " " + j;
-				
+
 				matrix[i, j].sceneObject.transform.position =
 					transform.position +
 					transform.right * gap * (i - ((x - 1) / 2f)) +
@@ -108,6 +113,10 @@ public class GraphBuilder : MonoBehaviour {
 			}
 		}
 
+		return matrix;
+	}
+
+	protected void LoadBuilding(Material sm){
 		var houses = GameManager.GM().GetHouses();
 		var jobs = GameManager.GM().GetJobs();
 		var ents = GameManager.GM().GetEntertainments();
@@ -123,7 +132,9 @@ public class GraphBuilder : MonoBehaviour {
 			{ 
 				GameObject h = Instantiate(houses[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
 				h.SetActive(true);
+				h.GetComponent<Building>().SetI(GameManager.GM().data.buildings[k]);
 				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
+				h.GetComponent<Building>().SetRotation(GameManager.GM().data.rotation[k]);
 				h.GetComponent<House>().x = c;
 				h.GetComponent<House>().y = d;
 				GameManager.GM().SpawnPeople(h.GetComponent<House>().people, h.GetComponent<House>(), matrix[c, d].sceneObject.transform.position);
@@ -131,7 +142,9 @@ public class GraphBuilder : MonoBehaviour {
 			{
 				GameObject h = Instantiate(ents[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
 				h.SetActive(true);
+				h.GetComponent<Building>().SetI(GameManager.GM().data.buildings[k]);
 				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
+				h.GetComponent<Building>().SetRotation(GameManager.GM().data.rotation[k]);
 				h.GetComponent<Entertainment>().x = c;
 				h.GetComponent<Entertainment>().y = d;
 				GameManager.GM().GetPeopleManager().AddEntertainment(h.GetComponent<Entertainment>());
@@ -139,7 +152,9 @@ public class GraphBuilder : MonoBehaviour {
 			{
 				GameObject h = Instantiate(jobs[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
 				h.SetActive(true);
+				h.GetComponent<Building>().SetI(GameManager.GM().data.buildings[k]);
 				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
+				h.GetComponent<Building>().SetRotation(GameManager.GM().data.rotation[k]);
 				h.GetComponent<Job>().x = c;
 				h.GetComponent<Job>().y = d;
 				GameManager.GM().GetPeopleManager().AddJobs(h.GetComponent<Job>());
@@ -193,11 +208,10 @@ public class GraphBuilder : MonoBehaviour {
 			}
 		}
 		
-		GameManager.GM().SpawnWorker(matrix[0, 0].sceneObject.transform);
+		for(int i = 0; i < GameManager.GM().data.workerNum; i++)
+			GameManager.GM().SpawnWorker(matrix[0, 0].sceneObject.transform);
 
 		GameManager.GM().load = false;
-		
-		return matrix;
 	}
 
 
@@ -268,7 +282,7 @@ public class GraphBuilder : MonoBehaviour {
 	}
 
 	// quantization
-	public Node this [float x, float y] =>
+	public Node this[float x, float y] =>
 		
 		matrix[
 			(int) Math.Floor (x / 1), 

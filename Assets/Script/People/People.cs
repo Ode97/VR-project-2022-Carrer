@@ -30,6 +30,7 @@ public class People : MonoBehaviour
     private bool work = false;
     private bool stillWorking = false;
     private bool justEat = false;
+    private bool obstAvoid = false;
 
     private List<MeshRenderer> _meshRenderer;
     // Start is called before the first frame update
@@ -80,18 +81,27 @@ public class People : MonoBehaviour
 
             if (i < path.Length)
             {
+                
+                    
                 var g = path[i].to.sceneObject.transform.position;
-                target = new Vector3(g.x, g.y + 0.02f, g.z);
-                GetSteering();
+                    
+                target = new Vector3(g.x, g.y + 0.01f, g.z);
+                    
+            }
+
+            //Debug.Log(path.Length + " " + i + " " + Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position));
+            if (!stop && Vector3.Distance(target, transform.position) < 0.025f)
+            {
+
+                if(!obstAvoid)
+                    i++;
+                else
+                {
+                    obstAvoid = false;
+                }
             }
             
-            //Debug.Log(path.Length + " " + i + " " + Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position));
-            if (!stop && Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position) < 0.025f)
-            {
-                if(i < path.Length)
-                    i++;
-        
-            }
+            GetSteering();
 
             if (stop)
             {
@@ -112,7 +122,17 @@ public class People : MonoBehaviour
                     else if (!eat && DayManager.D.dayTime == DayTime.Afternoon)
                     {
                         work = false;
-                        building = _buildings.Find(b => b.GetType() == typeof(Food));
+                        var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
+
+                        Debug.Log(buildings.Count);
+                        int l = 0;
+                        foreach (var b in buildings)
+                        {
+                            int lb = GameManager.GM().PathSolver(x, y, b.x, b.y).Length;
+                            if (lb > l)
+                                building = b;
+                        }
+
                         if(building)
                             eat = true;
                     }
@@ -149,7 +169,7 @@ public class People : MonoBehaviour
     private IEnumerator Produce()
     {
         stillWorking = true;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
         job.Produce();
         stillWorking = false;
     }
@@ -175,7 +195,7 @@ public class People : MonoBehaviour
             mesh.enabled = false;
         }
         
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
         
         if(path.Length > 0)
             foreach (var mesh in _meshRenderer)
@@ -211,9 +231,40 @@ public class People : MonoBehaviour
         var transform1 = transform;
         var pos = transform1.position;
         var rot = transform1.rotation;
+
+        /*RaycastHit hit;
+        if(path.Length > 0 && Physics.Raycast(transform1.position, Vector3.forward, out hit, 0.03f, 1 << 11) && hit.transform != gameObject.transform)
+        {
+            Vector3 t;
+            var p = path[i - 1].to.sceneObject.GetComponent<Build>();
+            if(Mathf.Abs(p.x - x) > Mathf.Abs(p.y - y))
+                t = hit.point + Vector3.forward * 0.01f;
+            else
+            {
+                t = hit.point + Vector3.right * 0.01f;
+            }
+            
+            target = new Vector3(t.x, pos.y, t.z);
+
+            obstAvoid = true;
+            
+            Debug.Log(Vector3.Distance(pos, target));
+        }
+        else
+        {
+            if (target == Vector3.zero)
+                target = new Vector3(pos.x, pos.y, pos.z);
+            
+        }*/
+
+        if (target == Vector3.zero)
+            target = new Vector3(pos.x, pos.y, pos.z);
+        
         transform.position = Vector3.MoveTowards(pos, target, Time.deltaTime * 0.1f);
         var r = target - pos;
-        if(r.magnitude != 0)
+        if (r.magnitude != 0)
+        {
             transform.rotation = Quaternion.Lerp(rot, Quaternion.LookRotation(r, Vector3.up), 0.2f);
+        }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARFoundation.Samples;
 using UnityEngine.XR.ARSubsystems;
+using TouchPhase = UnityEngine.TouchPhase;
 
 [RequireComponent(typeof(ARRaycastManager))]
 public class PlaceOnPlane : PressInputBase
@@ -52,12 +53,25 @@ public class PlaceOnPlane : PressInputBase
             if (spawnedObject == null)
             {
                 spawnedObject = Instantiate(m_PlacedPrefab, hitPose.position, hitPose.rotation);
-                GetComponent<ARPlaneManager>().enabled = false;
+                
                 foreach (var plane in GetComponent<ARPlaneManager>().trackables)
                 {
                     plane.gameObject.SetActive(false);
                 }
-                spawnedObject.GetComponent<GraphBuilder>().Create();
+                var points =  GetComponent<ARSessionOrigin>().GetComponent<ARPointCloudManager>().trackables;
+                foreach(var pts in points)
+                {
+                    pts.gameObject.SetActive(false);
+                }
+                GetComponent<ARSessionOrigin>().GetComponent<ARPointCloudManager>().enabled = false;
+                GetComponent<ARPlaneManager>().enabled = false;
+                
+                spawnedObject.GetComponent<GraphBuilder>().Create(spawnedObject);
+            }else if (Input.touchCount == 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                var r = spawnedObject.transform.rotation;
+                spawnedObject.transform.rotation = new Quaternion(r.x, hitPose.rotation.y, r.z, r.w);
+                spawnedObject.transform.position = hitPose.position;
             }
         }
     }

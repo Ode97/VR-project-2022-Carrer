@@ -13,6 +13,7 @@ public class LoadBuildings : MonoBehaviour
     public Transform itemEntertainments;
     public Transform itemJobs;
     private Transform item;
+    [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private TextMeshProUGUI woodText;
     [SerializeField] private TextMeshProUGUI peopleText;
@@ -40,6 +41,7 @@ public class LoadBuildings : MonoBehaviour
         peopleText.text = "";
         timeText.text = "";
         text.text = "";
+        nameText.text = "";
         DontDestroyOnLoad(gameObject);
         
         for (int i = 0; i < itemHouses.childCount; i++)
@@ -152,7 +154,7 @@ public class LoadBuildings : MonoBehaviour
         }
         else
         {
-            Debug.Log("ti serve più legna");
+            StartCoroutine(GameManager.GM().WarningText("You need more woods"));
             GameManager.GM().CloseShop();
         }
         
@@ -179,14 +181,16 @@ public class LoadBuildings : MonoBehaviour
 
     private void ShowObject()
     {
-        woodText.text = "Wood: " + item.GetChild(i).GetComponent<Building>().woodNeed.ToString();
+        var b = item.GetChild(i).GetComponent<Building>();
+        nameText.text = b.name;
+        woodText.text = "Wood: " + b.woodNeed.ToString();
         text.text = building + (i + 1) + "/" + item.childCount;
-        timeText.text = "Time: " + item.GetChild(i).GetComponent<Building>().constructionTime.ToString();
-        actual = item.GetChild(i);
+        timeText.text = "Time: " + b.constructionTime.ToString();
+        //actual = item.GetChild(i);
         if (SystemInfo.deviceType == DeviceType.Handheld){
-            actual = Instantiate(item.GetChild(i), _arSessionOrigin.camera.transform);
+            actual = Instantiate(b.transform, _arSessionOrigin.camera.transform);
         }else{
-            actual = Instantiate(item.GetChild(i), Camera.main.transform);
+            actual = Instantiate(b.transform, Camera.main.transform);
         }
         
         actual.localPosition = new Vector3(0, -3, 20);
