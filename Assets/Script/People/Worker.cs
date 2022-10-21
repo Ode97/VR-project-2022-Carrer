@@ -66,7 +66,6 @@ public class Worker : MonoBehaviour
 
         if (work && _sliderController.gameObject.activeSelf)
         {
-            //Debug.Log("aaaa");
             if(SystemInfo.deviceType != DeviceType.Handheld)
                 _sliderController.transform.rotation = Quaternion.LookRotation(_sliderController.transform.position - Camera.main.transform.position, Vector3.up);
             else
@@ -153,12 +152,11 @@ public class Worker : MonoBehaviour
         work = true;
         for(var i = 0; i < time; i++)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
             _sliderController.UpdateProgress();
         }
 
         work = false;
-        Destroy(_sliderController.gameObject);
 
         if(layer == Constant.streetLayer)
             GameManager.GM().CreateStreet(this);
@@ -174,6 +172,12 @@ public class Worker : MonoBehaviour
         {
             GameManager.GM().CreateBuilding(this, layer);
         }
+        
+        yield return new WaitForSeconds(0.2f);
+        
+        Destroy(_sliderController.gameObject);
         GameManager.GM().EndWork(this);
+        
+        
     }
 }

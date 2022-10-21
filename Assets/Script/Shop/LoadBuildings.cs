@@ -18,6 +18,7 @@ public class LoadBuildings : MonoBehaviour
     [SerializeField] private TextMeshProUGUI woodText;
     [SerializeField] private TextMeshProUGUI peopleText;
     [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TextMeshProUGUI description;
     private string building;
     private Transform actual = null;
     private int layer;
@@ -37,11 +38,7 @@ public class LoadBuildings : MonoBehaviour
 
     private void Start()
     {
-        woodText.text = "";
-        peopleText.text = "";
-        timeText.text = "";
-        text.text = "";
-        nameText.text = "";
+        
         DontDestroyOnLoad(gameObject);
         
         for (int i = 0; i < itemHouses.childCount; i++)
@@ -157,7 +154,7 @@ public class LoadBuildings : MonoBehaviour
             StartCoroutine(GameManager.GM().WarningText("You need more woods"));
             GameManager.GM().CloseShop();
         }
-        
+
         Destroy(actual.gameObject);
         Reset();
     }
@@ -175,17 +172,20 @@ public class LoadBuildings : MonoBehaviour
     {
         woodText.text = "";
         peopleText.text = "";
-        text.text = "";
         timeText.text = "";
+        text.text = "";
+        nameText.text = "";
+        description.text = "";
     }
 
     private void ShowObject()
     {
         var b = item.GetChild(i).GetComponent<Building>();
+        description.text = b.description;
         nameText.text = b.name;
         woodText.text = "Wood: " + b.woodNeed.ToString();
         text.text = building + (i + 1) + "/" + item.childCount;
-        timeText.text = "Time: " + b.constructionTime.ToString();
+        timeText.text = "Time: " + b.constructionTimeInHour + "h";
         //actual = item.GetChild(i);
         if (SystemInfo.deviceType == DeviceType.Handheld){
             actual = Instantiate(b.transform, _arSessionOrigin.camera.transform);

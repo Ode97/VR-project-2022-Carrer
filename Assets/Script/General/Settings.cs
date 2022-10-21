@@ -13,6 +13,8 @@ public class Settings : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject backToMenu;
     [SerializeField] private GameObject cityInfo;
+    [SerializeField] private GameObject credits;
+    [SerializeField] private GameObject tutorial;
 
 
     public void OpenSettings()
@@ -24,7 +26,7 @@ public class Settings : MonoBehaviour
         if(!SceneManager.GetSceneByName("MenuScene").isLoaded)
             backToMenu.SetActive(true);
         
-
+        GameManager.GM().audioManager.Move();
     }
 
     public void BackToMenu()
@@ -36,6 +38,7 @@ public class Settings : MonoBehaviour
         cityInfo.SetActive(false);
         backToMenu.SetActive(false);
         GameManager.GM().load = false;
+        GameManager.GM().audioManager.Move();
     }
 
     public void Back()
@@ -49,7 +52,17 @@ public class Settings : MonoBehaviour
         audioSlider.SetActive(false);
         settingButtons.SetActive(true);
         backToMenu.SetActive(false);
+        credits.SetActive(false);
         GetComponent<Image>().enabled = true;
+        GameManager.GM().audioManager.Move();
+    }
+
+    public void Credits()
+    {
+        settingButtons.SetActive(false);
+        credits.SetActive(true);
+        GetComponent<Image>().enabled = false;
+        GameManager.GM().audioManager.Move();
     }
 
     public void Exit()
@@ -61,11 +74,13 @@ public class Settings : MonoBehaviour
     {
         settingButtons.SetActive(false);
         audioSlider.SetActive(true);
-        
+        GameManager.GM().audioManager.Move();
     }
     
     public void StartGame()
     {
+        GameManager.GM().data = new Data();
+        
         if(SystemInfo.deviceType == DeviceType.Handheld)
             SceneManager.LoadScene("BlankAR");
         else
@@ -73,12 +88,16 @@ public class Settings : MonoBehaviour
             SceneManager.LoadScene("New Scene");
         }
         
+        GameManager.GM().SetNewGame();
         cityInfo.SetActive(true);
         mainMenu.SetActive(false);
+        GameManager.GM().audioManager.Confirm();
+        tutorial.SetActive(true);
     }
     
     public void LoadGame()
     {
+        GameManager.GM().data = new Data();
         var data = Save.loadData();
         if (data != null)
         {
@@ -91,9 +110,10 @@ public class Settings : MonoBehaviour
         }
         else
         {
-            Debug.Log("Nessun salvataggio");
+            StartCoroutine(GameManager.GM().WarningText("Nessun Salvataggio"));
         }
         cityInfo.SetActive(true);
         mainMenu.SetActive(false);
+        GameManager.GM().audioManager.Confirm();
     }
 }

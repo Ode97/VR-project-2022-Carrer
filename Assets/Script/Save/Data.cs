@@ -26,9 +26,32 @@ public class Data
 
     public int[] rotation = new int[100];
 
+    public float time = 0;
+    
+    public int[,] type;
+    public int[,] toX;
+    public int[,] toY;
+    public int[,] happiness;
+    public bool[,] jobFound;
+    public bool[,] eat;
+    public bool[,] work;
+    public bool[,] stillWork;
+    public bool[,] justEat;
+    public int[,,] hj;
+
+
     public Data()
     {
-        
+        type = new int[100, 30];
+        toX = new int[100, 30];
+        toY = new int[100, 30];
+        happiness = new int [100, 30];
+        jobFound = new bool[100, 30];
+        eat = new bool[100, 30];
+        work = new bool[100, 30];
+        stillWork = new bool[100, 30];
+        justEat = new bool[100, 30];
+        hj = new int[100, 30, 2];
     }
     
     public Data(int wood, int people, int jobs, int entertainment, int workerNum, int food, bool[,] streets, int[] layers, int[] buildings, int[] rot)

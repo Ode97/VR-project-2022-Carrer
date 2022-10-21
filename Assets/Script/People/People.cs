@@ -6,33 +6,28 @@ using UnityEngine;
 
 public class People : MonoBehaviour
 {
-    private int x;
-
-    private int y;
-
+    public int type;
+    public int x;
+    public int y;
     private Job job;
     private House house;
-
-    private bool busy = false;
-
-    private int i = 0;
-
+    public bool busy = false;
+    public int i = 0;
     private Edge[] path;
-
     private Vector3 target;
-
     public List<Building> _buildings = new List<Building>();
-
     private GameObject current;
-    
     public bool jobFound = false;
-    private bool eat = false;
-    private bool work = false;
-    private bool stillWorking = false;
-    private bool justEat = false;
-    private bool obstAvoid = false;
-
+    public bool eat = false;
+    public bool work = false;
+    public bool stillWorking = false;
+    public bool justEat = false;
+    public int happiness = 100;
     private List<MeshRenderer> _meshRenderer;
+
+    private bool onLoad = false;
+
+    public bool endDay = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,21 +79,30 @@ public class People : MonoBehaviour
                 
                     
                 var g = path[i].to.sceneObject.transform.position;
-                    
+                
+                //Debug.Log(path[i].to.sceneObject.GetComponent<Build>().x + " " + path[i].to.sceneObject.GetComponent<Build>().y);
+                
                 target = new Vector3(g.x, g.y + 0.01f, g.z);
-                    
+                
             }
 
             //Debug.Log(path.Length + " " + i + " " + Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position));
             if (!stop && Vector3.Distance(target, transform.position) < 0.025f)
             {
+                if (path.Length > 0)
+                {
+                    var actualPos = path[i].to.sceneObject.GetComponent<Build>();
+                    x = actualPos.x;
+                    y = actualPos.y;
+                }
 
-                if(!obstAvoid)
+                i++;
+                /*if(!obstAvoid)
                     i++;
                 else
                 {
                     obstAvoid = false;
-                }
+                }*/
             }
             
             GetSteering();
@@ -110,9 +114,10 @@ public class People : MonoBehaviour
                 
                 if (_buildings.Count > 1)
                 {
-                    Building building = _buildings[0];
+                    Building building = null;
                     if (DayManager.D.dayTime == DayTime.Morning)
                     {
+                        endDay = false;
                         if (jobFound)
                         {
                             work = true;
@@ -124,13 +129,15 @@ public class People : MonoBehaviour
                         work = false;
                         var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
 
-                        Debug.Log(buildings.Count);
                         int l = 0;
                         foreach (var b in buildings)
                         {
                             int lb = GameManager.GM().PathSolver(x, y, b.x, b.y).Length;
                             if (lb > l)
+                            {
                                 building = b;
+                                l = lb;
+                            }
                         }
 
                         if(building)
@@ -142,8 +149,26 @@ public class People : MonoBehaviour
                         var r = Random.Range(0, _buildings.Count);
                         building = _buildings[r];
                     }
-                    else if (DayManager.D.dayTime == DayTime.Night)
+                    else if (DayManager.D.dayTime == DayTime.Night && !endDay)
                     {
+                        endDay = true;
+                        if (!justEat)
+                            happiness -= 20;
+                        else
+                        {
+                            happiness += 10;
+                        }
+                        if (!jobFound)
+                            happiness -= 15;
+
+                        if (GameManager.GM().entertainment < 0)
+                            happiness -= 5 * GameManager.GM().entertainment;
+
+                        if (GameManager.GM().entertainment == 0)
+                            happiness += 10;
+                        if (GameManager.GM().jobs == 0)
+                            happiness += 10;
+                        
                         justEat = false;
                         building = house;
                     }
@@ -161,11 +186,26 @@ public class People : MonoBehaviour
                     }
                     
                 }
+
+                if (happiness > 100)
+                    happiness = 100;
+                
                 StartCoroutine(Move(toX, toY));
+                
             }
         }
     }
 
+    public GameObject GetCurrentTarget()
+    {
+        return current;
+    }
+
+    public void SetCurrentTarget(GameObject g)
+    {
+        current = g;
+    }
+    
     private IEnumerator Produce()
     {
         stillWorking = true;
@@ -180,10 +220,20 @@ public class People : MonoBehaviour
         _buildings.Add(h);
     }
     
+    public House GetHouse()
+    {
+        return house;
+    }
+    
     public void SetJob(Job j)
     {
         job = j;
         _buildings.Add(j);
+    }
+    
+    public Job GetJob()
+    {
+        return job;
     }
 
     public IEnumerator Move(int toX, int toY)
@@ -195,30 +245,47 @@ public class People : MonoBehaviour
             mesh.enabled = false;
         }
         
-        yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
+        if(!justEat && !onLoad)
+            yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
+        else
+        {
+            onLoad = false;
+            yield return new WaitForSeconds(0);
+        }
         
         if(path.Length > 0)
             foreach (var mesh in _meshRenderer)
             {
                 mesh.enabled = true;
             }
+
+        
+        busy = true;
         
         i = 0;
-        busy = true;
     }
+    
 
     public void StartMove(int fromX, int fromY)
     {
-        x = fromX;
-        y = fromY;
-        foreach (var mesh in _meshRenderer)
+        if (!GameManager.GM().load)
         {
-            mesh.enabled = false;
+            x = fromX;
+            y = fromY;
+            foreach (var mesh in _meshRenderer)
+            {
+                mesh.enabled = false;
+            }
+
+            path = new Edge[0];
+            busy = true;
         }
-        
-        path = new Edge[0];
-        busy = true;
-        
+        else
+        {
+            onLoad = true;
+            StartCoroutine(Move(current.GetComponent<Building>().x, current.GetComponent<Building>().y));
+        }
+
     }
 
     public void RemoveBuilding(Building b)

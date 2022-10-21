@@ -90,6 +90,7 @@ public class GraphBuilder : MonoBehaviour {
 
 	protected Node[,] CreateLoadGrid(int x, int y, Material fm, float gap)
 	{
+
 		Node[,] matrix = new Node[x, y];
 
 		for (int i = 0; i < matrix.GetLength(0); i += 1)
@@ -120,8 +121,11 @@ public class GraphBuilder : MonoBehaviour {
 		var houses = GameManager.GM().GetHouses();
 		var jobs = GameManager.GM().GetJobs();
 		var ents = GameManager.GM().GetEntertainments();
-		
 
+		var data = GameManager.GM().data;
+		
+		FindObjectOfType<DayManager>().time = data.time;
+		
 		for (int k = 0; k < 100; k++)
 		{
 			var d = (int)Mathf.Floor(k / 10);
@@ -130,59 +134,62 @@ public class GraphBuilder : MonoBehaviour {
 			matrix[c, d].sceneObject.layer = GameManager.GM().data.layers[k];
 			if (matrix[c, d].sceneObject.layer == Constant.houseLayer)
 			{ 
-				GameObject h = Instantiate(houses[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
+				GameObject h = Instantiate(houses[data.buildings[k]], matrix[c, d].sceneObject.transform);
 				h.SetActive(true);
-				h.GetComponent<Building>().SetI(GameManager.GM().data.buildings[k]);
+				h.GetComponent<Building>().SetI(data.buildings[k]);
+				h.GetComponent<RotateObject>().enabled = false;
 				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
-				h.GetComponent<Building>().SetRotation(GameManager.GM().data.rotation[k]);
+				h.GetComponent<Building>().SetRotation(data.rotation[k]);
 				h.GetComponent<House>().x = c;
 				h.GetComponent<House>().y = d;
-				GameManager.GM().SpawnPeople(h.GetComponent<House>().people, h.GetComponent<House>(), matrix[c, d].sceneObject.transform.position);
+				//GameManager.GM().SpawnPeople(h.GetComponent<House>().people, h.GetComponent<House>(), matrix[c, d].sceneObject.transform.position);
 			}else if (matrix[c, d].sceneObject.layer == Constant.entertainmentLayer)
 			{
-				GameObject h = Instantiate(ents[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
+				GameObject h = Instantiate(ents[data.buildings[k]], matrix[c, d].sceneObject.transform);
+				h.GetComponent<RotateObject>().enabled = false;
 				h.SetActive(true);
-				h.GetComponent<Building>().SetI(GameManager.GM().data.buildings[k]);
-				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
-				h.GetComponent<Building>().SetRotation(GameManager.GM().data.rotation[k]);
+				h.GetComponent<Building>().SetI(data.buildings[k]);
+				Rotation(h, data.rotation[k], c, d, matrix);
+				h.GetComponent<Building>().SetRotation(data.rotation[k]);
 				h.GetComponent<Entertainment>().x = c;
 				h.GetComponent<Entertainment>().y = d;
 				GameManager.GM().GetPeopleManager().AddEntertainment(h.GetComponent<Entertainment>());
 			}else if (matrix[c, d].sceneObject.layer == Constant.jobLayer)
 			{
-				GameObject h = Instantiate(jobs[GameManager.GM().data.buildings[k]], matrix[c, d].sceneObject.transform);
+				GameObject h = Instantiate(jobs[data.buildings[k]], matrix[c, d].sceneObject.transform);
+				h.GetComponent<RotateObject>().enabled = false;
 				h.SetActive(true);
-				h.GetComponent<Building>().SetI(GameManager.GM().data.buildings[k]);
+				h.GetComponent<Building>().SetI(data.buildings[k]);
 				Rotation(h, GameManager.GM().data.rotation[k], c, d, matrix);
-				h.GetComponent<Building>().SetRotation(GameManager.GM().data.rotation[k]);
+				h.GetComponent<Building>().SetRotation(data.rotation[k]);
 				h.GetComponent<Job>().x = c;
 				h.GetComponent<Job>().y = d;
 				GameManager.GM().GetPeopleManager().AddJobs(h.GetComponent<Job>());
 			}else if (matrix[c, d].sceneObject.layer == Constant.streetLayer)
 			{
 				matrix[c, d].sceneObject.GetComponent<MeshRenderer>().material = sm;
-				if (GameManager.GM().data.street[k, 0])
+				if (data.street[k, 0])
 				{
 					var e = new Edge(matrix[c, d], matrix[c, d+1]);
 					var r = new Edge(matrix[c, d+1], matrix[c, d]);
 					g.AddEdge(e);
 					g.AddEdge(r);
 				}
-				if (GameManager.GM().data.street[k, 1])
+				if (data.street[k, 1])
 				{
 					var e = new Edge(matrix[c+1, d], matrix[c, d]);
 					var r = new Edge(matrix[c, d], matrix[c+1, d]);
 					g.AddEdge(e);
 					g.AddEdge(r);
 				}
-				if (GameManager.GM().data.street[k, 2])
+				if (data.street[k, 2])
 				{
 					var e = new Edge(matrix[c, d-1], matrix[c, d]);
 					var r = new Edge(matrix[c, d], matrix[c, d-1]);
 					g.AddEdge(e);
 					g.AddEdge(r);
 				}
-				if (GameManager.GM().data.street[k, 3])
+				if (data.street[k, 3])
 				{
 					var e = new Edge(matrix[c-1, d], matrix[c, d]);
 					var r = new Edge(matrix[c, d], matrix[c-1, d]);
@@ -206,12 +213,29 @@ public class GraphBuilder : MonoBehaviour {
 					Instantiate(trees[2], matrix[c,d].sceneObject.transform);
 				}
 			}
+			
 		}
-		
-		for(int i = 0; i < GameManager.GM().data.workerNum; i++)
-			GameManager.GM().SpawnWorker(matrix[0, 0].sceneObject.transform);
 
-		GameManager.GM().load = false;
+		for (int k = 0; k < 100; k++)
+		{
+			for (int f = 0; f < 30; f++)
+				if (data.type[k, f] != 99)
+				{
+
+					GameManager.GM().GetPeopleManager().SpawnPeople(data.type[k, f], k, data.toX[k, f], data.toY[k, f],
+						data.happiness[k, f], data.jobFound[k, f], data.eat[k, f],
+						data.work[k, f], data.stillWork[k, f], data.justEat[k, f], data.hj[k, f, 0], data.hj[k, f, 1]);
+				}
+
+		}
+
+		for (int i = 0; i < data.workerNum; i++)
+		{
+			GameManager.GM().SpawnWorker(matrix[0, 0].sceneObject.transform);
+		}
+
+		GameManager.GM().GetPeopleManager().FoodBuildings();
+		//GameManager.GM().load = false;
 	}
 
 

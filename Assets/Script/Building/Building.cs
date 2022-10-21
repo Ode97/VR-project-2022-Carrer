@@ -8,11 +8,12 @@ public class Building : MonoBehaviour
     public int woodNeed;
     public int x;
     public int y;
-    public int constructionTime;
+    public int constructionTimeInHour;
+    public string description;
     private int i;
     private int rotation;
     protected List<People> _peoples = new List<People>();
-    
+
     public bool CheckWood()
     {
         if (GameManager.GM().wood - woodNeed >= 0)

@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject buttonsMenu;
     [SerializeField] private GameObject dismantle;
     private static GameManager gm;
+    public AudioManager audioManager;
 
     private GameObject selectedCell;
     public GraphBuilder _graphBuilder;
@@ -42,15 +43,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI woodText;
     
-    private int people = 0;
+    public int people = 0;
     [SerializeField]
     private TextMeshProUGUI peopleText;
 
-    private int jobs = 0;
+    public int jobs = 0;
     [SerializeField]
     private TextMeshProUGUI jobText;
 
-    private int entertainment = 0;
+    public int entertainment = 0;
     [SerializeField]
     private TextMeshProUGUI entertainmentText;
 
@@ -62,7 +63,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI foodText;
 
-    public Data data = new Data();
+    [SerializeField] private TextMeshProUGUI happinessText;
+
+    public Data data;
     public bool load = false;
     
     private GameObject[] _houses;
@@ -91,7 +94,7 @@ public class GameManager : MonoBehaviour
         jobText.text = "0";
         entertainmentText.text = "0";
         woodText.text = wood.ToString();
-        workerText.text = "1";
+        workerText.text = "0";
         foodText.text = "0";
 
         var r = FindObjectOfType<LoadBuildings>();
@@ -116,7 +119,7 @@ public class GameManager : MonoBehaviour
         {
             _jobs[i] = r.itemJobs.GetChild(i).gameObject;
         }
-
+        
         load = false;
         
     }
@@ -125,8 +128,14 @@ public class GameManager : MonoBehaviour
     {
         warningText.text = t;
         warningText.enabled = true;
+        audioManager.Error();
         yield return new WaitForSeconds(2);
         warningText.enabled = false;
+    }
+    
+    public void SetHappiness(int h)
+    {
+        happinessText.text = h.ToString();
     }
 
     public GameObject[] GetHouses()
@@ -144,17 +153,28 @@ public class GameManager : MonoBehaviour
         return _jobs;
     }
 
-    public void SetLoad(int wood, int people, int jobs, int ents, int workers, int food)
+    public void SetLoad(int wood, int people, int jobs, int ents, int food)
     {
         this.wood = wood;
         this.people = people;
         this.jobs = jobs;
         this.entertainment = ents;
-        this.workerNum = workers;
         this.food = food;
         load = true;
         SetText();
 
+    }
+    
+    public void SetNewGame()
+    {
+        this.wood = 0;
+        this.people = 0;
+        this.jobs = 0;
+        this.entertainment = 0;
+        this.workerNum = 0;
+        this.food = 0;
+        load = false;
+        SetText();
     }
 
     public void SetText()
@@ -189,7 +209,9 @@ public class GameManager : MonoBehaviour
         }
 
         _graphBuilder = graphBuilder;
-        FindObjectOfType<DayManager>().StartTime();
+        if(load)
+            FindObjectOfType<DayManager>().StartTime();
+        //FindObjectOfType<DayManager>().StartTime();
     }
     
     public void OpenMenu()
@@ -286,29 +308,77 @@ public class GameManager : MonoBehaviour
 
     private bool CheckNearStreet(Worker w)
     {
+        bool ok = false;
+        
+        Edge[] path1 = new Edge[100];
+        Edge[] path2 = new Edge[100];
+        Edge[] path3 = new Edge[100];
+        Edge[] path4 = new Edge[100];
+        
         var gridPos = w.constructionCell.GetComponent<Build>();
         if (gridPos.x != 9 && _graphBuilder.matrix[gridPos.x + 1, gridPos.y].sceneObject.layer == Constant.streetLayer){
             w.SetTarget(new Vector2(gridPos.x + 1, gridPos.y));
-            return true;
-        }else if (gridPos.x != 0 && _graphBuilder.matrix[gridPos.x - 1, gridPos.y].sceneObject.layer == Constant.streetLayer){
-            w.SetTarget(new Vector2(gridPos.x - 1, gridPos.y));
-            return true;
-        }else if (gridPos.y != 9 && _graphBuilder.matrix[gridPos.x, gridPos.y + 1].sceneObject.layer == Constant.streetLayer){
-            w.SetTarget(new Vector2(gridPos.x, gridPos.y + 1));
-            return true;
-        }else if (gridPos.y != 0 && _graphBuilder.matrix[gridPos.x, gridPos.y - 1].sceneObject.layer == Constant.streetLayer){
-            w.SetTarget(new Vector2(gridPos.x, gridPos.y - 1));
-            return true;
-        }
+            path1 = _pathfindingSolver.Solve(_graphBuilder.g,
+                _graphBuilder[w.x, w.y],
+                _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
 
-        return false;
+            
+            
+            ok = true;
+        }
+        if (gridPos.x != 0 && _graphBuilder.matrix[gridPos.x - 1, gridPos.y].sceneObject.layer == Constant.streetLayer){
+            w.SetTarget(new Vector2(gridPos.x - 1, gridPos.y));
+            path2 = _pathfindingSolver.Solve(_graphBuilder.g,
+                _graphBuilder[w.x, w.y],
+                _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
+            
+            
+            ok = true;
+        }
+        if (gridPos.y != 9 && _graphBuilder.matrix[gridPos.x, gridPos.y + 1].sceneObject.layer == Constant.streetLayer){
+            w.SetTarget(new Vector2(gridPos.x, gridPos.y + 1));
+            path3 = _pathfindingSolver.Solve(_graphBuilder.g,
+                _graphBuilder[w.x, w.y],
+                _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
+          
+            
+            ok = true;
+        }
+        if (gridPos.y != 0 && _graphBuilder.matrix[gridPos.x, gridPos.y - 1].sceneObject.layer == Constant.streetLayer){
+            w.SetTarget(new Vector2(gridPos.x, gridPos.y - 1));
+            path4 = _pathfindingSolver.Solve(_graphBuilder.g,
+                _graphBuilder[w.x, w.y],
+                _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
+            
+            
+            ok = true;
+        }
+        
+        if (ok)
+        {
+            var path = path1;
+            if (path2.Length < path.Length)
+                path = path2;
+
+            if (path3.Length < path.Length)
+                path = path3;
+
+            if (path4.Length < path.Length)
+                path = path4;
+
+            Debug.Log(path.Length);
+            w.Walk(path);
+            
+            return true;
+        }else
+            return false;
     }
 
     public void SetBuilding(GameObject building, int layer)
     {
         Worker w = worker.Dequeue();
         w.constructionCell = selectedCell;
-        w.SetInfo(layer, building.GetComponent<Building>().constructionTime, building);
+        w.SetInfo(layer, building.GetComponent<Building>().constructionTimeInHour, building);
         MoveWorker(w);
     }
 
@@ -316,7 +386,7 @@ public class GameManager : MonoBehaviour
     {
         Worker w = worker.Dequeue();
         w.constructionCell = selectedCell;
-        w.SetInfo(Constant.streetLayer, 4);
+        w.SetInfo(Constant.streetLayer, 1);
         buttonsMenu.SetActive(false);
         MoveWorker(w);
     }
@@ -325,14 +395,16 @@ public class GameManager : MonoBehaviour
     {
         if (CheckNearStreet(w))
         {
+            
             w.constructionCell.GetComponent<Build>().SetInactive();
 
-            var path = _pathfindingSolver.Solve(_graphBuilder.g,
+            /*var path = _pathfindingSolver.Solve(_graphBuilder.g,
                 _graphBuilder[w.x, w.y],
                 _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
             
             
-            w.Walk(path);
+
+            w.Walk(path);*/
             
         }
         else
@@ -340,13 +412,12 @@ public class GameManager : MonoBehaviour
             StartCoroutine(WarningText("You must build near a street"));
             worker.Enqueue(w);
             buttonsMenu.SetActive(false);
-            w.constructionCell.GetComponent<Build>().SetActive();
         }
     }
 
     public void CutTree(Worker w)
     {
-        w.SetInfo(0, 3);
+        w.SetInfo(0, 1);
         w.constructionCell = selectedCell;
         w.tree = true;
         MoveWorker(w);
@@ -365,15 +436,17 @@ public class GameManager : MonoBehaviour
     public void EndWork(Worker w)
     {
         SetText();
-        worker.Enqueue(w);
         w.constructionCell.GetComponent<Build>().SetActive();
+        worker.Enqueue(w);
     }
 
     public void CreateBuilding(Worker w, int layer)
     {
         
         GameObject g = Instantiate(w.GetBuilding(), w.constructionCell.transform);
-
+        
+        audioManager.Construction();
+        
         var building = g.GetComponent<Building>();
         
         building.SetI(w.GetBuilding().GetComponent<Building>().GetI());
@@ -449,13 +522,15 @@ public class GameManager : MonoBehaviour
         g.GetComponent<RotateObject>().enabled = false;
         g.SetActive(true);
 
+
+        if((people >= 12 && workerNum == 1) || (people >= 32 && workerNum == 2) || (people >= 60 && workerNum == 3)|| (people >= 100 && workerNum == 4))
+            SpawnWorker(_graphBuilder[0, 0].sceneObject.transform);
+
         data.jobs = jobs;
         data.entertainment = entertainment;
         data.people = people;
         data.wood = wood;
-        
-        if((people >= 12 && workerNum == 1) || (people >= 32 && workerNum == 2) || (people >= 60 && workerNum == 3)|| (people >= 100 && workerNum == 4))
-            SpawnWorker(_graphBuilder[0, 0].sceneObject.transform);
+        data.workerNum = workerNum;
     }
 
     public void CreateStreet(Worker w)
@@ -524,6 +599,7 @@ public class GameManager : MonoBehaviour
 
     public void SpawnWorker(Transform cell)
     {
+        Debug.Log("a");
         if (workerNum < 5)
         {
             var pos = cell.position;
@@ -532,9 +608,7 @@ public class GameManager : MonoBehaviour
             w.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
             worker.Enqueue(w.GetComponent<Worker>());
             workerNum++;
-
-            data.workerNum = workerNum;
-            
+            SetText();
         }
     }
 
@@ -544,7 +618,7 @@ public class GameManager : MonoBehaviour
         buttonsMenu.gameObject.SetActive(false);
         w.constructionCell = selectedCell;
         //var t = w.constructionCell.transform.GetChild(0).GetComponent<Building>().constructionTime;
-        w.SetInfo(0, 10);
+        w.SetInfo(0, 2);
         MoveWorker(w);
         dismantle.SetActive(false);
     }
@@ -572,9 +646,13 @@ public class GameManager : MonoBehaviour
             wood += b.GetComponent<Building>().woodNeed;
 
             Destroy(b.gameObject);
+            audioManager.Explosion();
         }
         else
+        {
+            
             c.GetComponent<MeshRenderer>().material = _graphBuilder.firstMaterial;
+        }
 
         c.layer = 0;
     }

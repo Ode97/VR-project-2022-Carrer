@@ -23,7 +23,8 @@ public class DayManager : MonoBehaviour
         }else {
             D = this;
         }
-        
+
+        tc.text = "00:00";
     }
 
     // Update is called once per frame
