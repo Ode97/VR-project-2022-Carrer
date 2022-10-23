@@ -73,10 +73,26 @@ public class SaveCity : MonoBehaviour
                     justEat[i, x] = p.justEat;
                     happiness[i, x] = p.happiness;
                     path_i[i, x] = p.i;
-                    toX[i, x] = p.GetCurrentTarget().GetComponent<Building>().x;
-                    toY[i, x] = p.GetCurrentTarget().GetComponent<Building>().y;
+                    if (p.GetCurrentTarget())
+                    {
+                        toX[i, x] = p.GetCurrentTarget().GetComponent<Building>().x;
+                        toY[i, x] = p.GetCurrentTarget().GetComponent<Building>().y;
+                    }
+                    else
+                    {
+                        toX[i, x] = p.GetHouse().x;
+                        toY[i, x] = p.GetHouse().y;
+                    }
+
                     var t = p.GetHouse().x + p.GetHouse().y * 10;
-                    var r = p.GetJob().x + p.GetJob().y * 10;
+                    int r;
+                    if (p.GetJob())
+                    {
+                        r = p.GetJob().x + p.GetJob().y * 10;
+                    }
+                    else
+                        r = 99;
+
                     hj[i, x, 0] = t;
                     hj[i, x, 1] = r;
                         

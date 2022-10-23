@@ -13,4 +13,10 @@ public class Edge {
 		this.weight = weight;
 	}
 
+	public override string ToString()
+	{
+		var x = @from.ToString();
+		var y = to.ToString();
+		return x + " " + y;
+	}
 }

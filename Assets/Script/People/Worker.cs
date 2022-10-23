@@ -42,8 +42,8 @@ public class Worker : MonoBehaviour
                     y = actualPos.y;
                 }
 
-                
                 Do();
+                
                 //busy = false;
                 stop = true;
             }
@@ -55,13 +55,13 @@ public class Worker : MonoBehaviour
                 GetSteering();
             }
             
-            //Debug.Log(path.Length + " " + i + " " + Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position));
             if (!stop && Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position) < 0.025f)
             {
                 if(i < path.Length)
                     i++;
         
             }
+                
         }
 
         if (work && _sliderController.gameObject.activeSelf)

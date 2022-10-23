@@ -26,6 +26,30 @@ public class Graph {
 			data.Add (n, new List<Edge> ());
 	}
 
+	public void RemoveEdge(Node n)
+	{
+		if (data.ContainsKey(n))
+		{
+			var edges = getConnections(n);
+			foreach (var edge in edges)
+			{
+
+				data[edge.@from].Remove(edge);
+				
+				var edges2 = getConnections(edge.to);
+				foreach (var e in edges2)
+				{
+					if(e.to == n)
+						data[e.@from].Remove(e);
+				}
+				
+			}
+
+			data.Remove(n);
+		}
+
+	}
+
 	// returns the list of edged exiting from a node
 	public Edge[] getConnections(Node n) {
 		if (!data.ContainsKey (n)) return new Edge[0];

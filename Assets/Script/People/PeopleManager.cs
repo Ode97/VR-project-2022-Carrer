@@ -106,10 +106,15 @@ public class PeopleManager : MonoBehaviour
         c.stillWorking = stillWork;
         c.justEat = justEat;
         c.SetHouse(GameManager.GM()._graphBuilder.matrix[h%10, (int)Mathf.Floor(h / 10)].sceneObject.GetComponentInChildren<House>());
-        c.SetJob(GameManager.GM()._graphBuilder.matrix[j%10, (int)Mathf.Floor(j / 10)].sceneObject.GetComponentInChildren<Job>());
-
         c.GetHouse().AddPeople(c);
-        c.GetJob().AddPeople(c);
+        
+        if (j != 99)
+        {
+            c.SetJob(GameManager.GM()._graphBuilder.matrix[j % 10, (int) Mathf.Floor(j / 10)].sceneObject
+                .GetComponentInChildren<Job>());
+            c.GetJob().AddPeople(c);
+        }
+
 
         var position = GameManager.GM()._graphBuilder.matrix[c.x, c.y].sceneObject.transform.position;
         
