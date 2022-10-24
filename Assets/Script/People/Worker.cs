@@ -133,7 +133,7 @@ public class Worker : MonoBehaviour
     {
         _sliderController = Instantiate(sliderPrefab.GetComponent<SliderController>());
         
-        _sliderController.Reset();
+        _sliderController.Reset(time);
         _sliderController.gameObject.SetActive(true);
         var pos = constructionCell.transform.position;
         _sliderController.transform.position = new Vector3(pos.x, pos.y + 0.1f, pos.z);

@@ -55,7 +55,12 @@ public class LoadBuildings : MonoBehaviour
             itemJobs.GetChild(i).GetComponent<Building>().SetI(i);
         }
 
-        //LoadHouses();
+        nameText.text = "";
+        text.text = "";
+        woodText.text = "";
+        peopleText.text = "";
+        timeText.text = "";
+        description.text = "";
 
     }
 

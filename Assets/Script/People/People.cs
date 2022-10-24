@@ -54,19 +54,28 @@ public class People : MonoBehaviour
                 {
                     if (eat)
                     {
+                        Debug.Log(gameObject.name + " " + justEat);
                         if (!justEat)
                         {
-                            current.GetComponent<Food>().Eat();
+                            if (current.GetComponent<Food>().Eat())
+                            {
+                                happiness += 10;
+                                Debug.Log("mangiato");
+                            }
+                            else
+                            {
+                                happiness -= 20;
+                                Debug.Log("non c'è da mangiare");
+                            }
+
                             justEat = true;
                         }
-
-                        //justEat = true;
+                        
                     }
                     else if (work)
                     {
                         if (!stillWorking)
                         {
-                            Debug.Log("a");
                             StartCoroutine(Produce());
                         }
                     }
@@ -195,11 +204,6 @@ public class People : MonoBehaviour
                     
                 }*/
 
-                if (happiness > 100)
-                    happiness = 100;
-                
-                
-                
                 StartCoroutine(Move());
                 
             }
@@ -225,7 +229,7 @@ public class People : MonoBehaviour
                     building = job;
                 }
             }
-            else if (!eat && DayManager.D.dayTime == DayTime.Afternoon)
+            else if (!justEat && DayManager.D.dayTime == DayTime.Afternoon)
             {
                 stillWorking = false;
                 work = false;
@@ -250,30 +254,39 @@ public class People : MonoBehaviour
             }
             else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
             {
-                eat = false;
-                var r = Random.Range(0, _buildings.Count);
-                building = _buildings[r];
+                var buildings = _buildings.FindAll(b => b.GetType() != typeof(Food));
+                var r = Random.Range(0, buildings.Count);
+                building = buildings[r];
             }
             else if (DayManager.D.dayTime == DayTime.Night && !endDay)
             {
-                endDay = true;
-                if (!justEat)
-                    happiness -= 20;
-                else
-                {
-                    happiness += 10;
-                }
+
                 if (!jobFound)
-                    happiness -= 15;
+                {
+                    Debug.Log("non ho un lavoro");
+                    happiness -= 20;
+                }
 
                 if (GameManager.GM().entertainment < 0)
-                    happiness -= 5 * GameManager.GM().entertainment;
+                {
+                    Debug.Log("posti affollati");
+                    happiness += 5 * GameManager.GM().entertainment;
 
-                if (GameManager.GM().entertainment == 0)
-                    happiness += 10;
-                if (GameManager.GM().jobs == 0)
-                    happiness += 10;
-                
+                }
+                else if (GameManager.GM().entertainment > 0)
+                {
+                    Debug.Log("posti vuoti divertimento");
+                    happiness -= 2 * GameManager.GM().entertainment;
+                }
+
+                if (GameManager.GM().jobs < 0)
+                {
+                    Debug.Log("manca gente per lavorare");
+                    happiness -= 2 * GameManager.GM().jobs;
+                }
+
+                eat = false;
+                endDay = true;
                 justEat = false;
                 building = house;
             }
@@ -290,6 +303,8 @@ public class People : MonoBehaviour
                 v.y = y;
             }
             
+            if (happiness > 100)
+                happiness = 100;
         }
         
         return v;
@@ -343,10 +358,11 @@ public class People : MonoBehaviour
             mesh.enabled = false;
         }
 
-        if(!justEat && !onLoad && !runAway)
+        if(!eat && !onLoad && !runAway)
             yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
         else
         {
+            eat = false;
             runAway = false;
             yield return new WaitForSeconds(0);
         }
@@ -355,8 +371,6 @@ public class People : MonoBehaviour
         if (!onLoad)
         {
             Vector2 dest = SetDestination();
-            
-            Debug.Log(gameObject.name + " dest: " + dest.x +" " + dest.y + " pos: " + x + " " + y);
 
             path = GameManager.GM().PathSolver(x, y, (int) dest.x, (int) dest.y);
         }
@@ -367,23 +381,27 @@ public class People : MonoBehaviour
                 .PathSolver(x, y, current.GetComponent<Building>().x, current.GetComponent<Building>().y);
         }
 
-        //Debug.Log(gameObject.name + " " + current.gameObject.name + " " + path.Length + " pos: " + x + " " + y);
-        var pos = current.transform.position;
-        var v = new Vector3(pos.x, pos.y + 0.01f, pos.z);
-                
-        if (path.Length == 0 && Vector3.Distance(transform.position, v) >= 0.15f)
+        if (current)
         {
-            StartCoroutine(GameManager.GM().WarningText("Some people can't reach destination"));
-        }
-        else
-        {
+            var pos = current.transform.position;
+            var v = new Vector3(pos.x, pos.y + 0.01f, pos.z);
 
-            if (path.Length > 0)
-                foreach (var mesh in _meshRenderer)
-                {
-                    mesh.enabled = true;
-                }
+        
+            if (path.Length == 0 && Vector3.Distance(transform.position, v) >= 0.15f)
+            {
+                StartCoroutine(GameManager.GM().WarningText("Some people can't reach destination"));
+                happiness -= 5;
+            }
+            else
+            {
 
+                if (path.Length > 0)
+                    foreach (var mesh in _meshRenderer)
+                    {
+                        mesh.enabled = true;
+                    }
+
+            }
         }
 
         busy = true;

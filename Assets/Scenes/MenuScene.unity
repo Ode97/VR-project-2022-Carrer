@@ -400,8 +400,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Number of available jobs, a negative value means that the city needs more
-    of it, and happiness decrease.
+  m_text: 'Number of available jobs, a negative value means that there isn''t enough
+    employees, a positive value means that some people doesn''t have a work, and
+    happiness decrease in both cases.
 
 '
   m_isRightToLeft: 0
@@ -632,6 +633,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 1853663220, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 2054544772, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -760,6 +765,11 @@ PrefabInstance:
       propertyPath: description
       value: 
       objectReference: {fileID: 659193618}
+    - target: {fileID: 5811517816549364386, guid: abc1507f7f48f67439496f17f4601f3e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7683178723529049483, guid: abc1507f7f48f67439496f17f4601f3e,
         type: 3}
       propertyPath: m_IsActive
@@ -1719,7 +1729,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Number of total citizens of your city
+  m_text: Number of total citizens of your city, every citizen start with 100 of
+    happiness
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4a1159d79d4fcf94ea604733c5dd8a75, type: 2}
   m_sharedMaterial: {fileID: 8563505977407161356, guid: 4a1159d79d4fcf94ea604733c5dd8a75,
@@ -2516,7 +2527,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Number of available entertainments, a negative value means that the city
-    needs more of it, and happiness decrease.
+    needs more of it, a positive value means that there isn't enough customer, and
+    happiness decrease in both cases.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4a1159d79d4fcf94ea604733c5dd8a75, type: 2}
   m_sharedMaterial: {fileID: 8563505977407161356, guid: 4a1159d79d4fcf94ea604733c5dd8a75,
@@ -2736,8 +2748,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'This is the happiness, and the goal of the game is to avoid that this
-    value decrease too much.
+  m_text: 'This is the average happiness, and the goal of the game is to avoid that
+    this value decrease under the 30%.
 
 
     Now you know all.

@@ -383,7 +383,7 @@ public class GameManager : MonoBehaviour
 
             var posC = cell.transform.position;
             Vector3 x = new Vector3(posC.x, posC.y + 0.02f, posC.z);
-            Debug.Log("worker: " + Vector3.Distance(w.transform.position, x));
+            
             if(path.Length != 0 || Vector3.Distance(w.transform.position, x) <= 0.15f)
                 w.Walk(path);
             else

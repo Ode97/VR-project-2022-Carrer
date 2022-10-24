@@ -18,16 +18,17 @@ public class Food : Job
     {
     }
 
-    public void Eat()
+    public bool Eat()
     {
         if (_gameManager.GetFood() > 0)
-            _gameManager.Eat();
-        else
         {
-            
+            _gameManager.Eat();
+            _gameManager.SetText();
+            return true;
         }
+
         
-        _gameManager.SetText();
+        return false;
     }
 
     public override void Produce()
