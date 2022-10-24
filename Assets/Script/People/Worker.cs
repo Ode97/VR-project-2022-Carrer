@@ -160,10 +160,10 @@ public class Worker : MonoBehaviour
 
         if(layer == Constant.streetLayer)
             GameManager.GM().CreateStreet(this);
-        else if (tree)
+        else if (layer == Constant.treeLayer)
         {
             GameManager.GM().DestroyTree(this);
-            tree = false;
+            //tree = false;
         }else if (layer == 0)
         {
             GameManager.GM().Dismantle(this);

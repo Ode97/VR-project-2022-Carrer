@@ -71,6 +71,8 @@ public class GameManager : MonoBehaviour
     private GameObject[] _houses;
     private GameObject[] _entertainments;
     private GameObject[] _jobs;
+
+    private bool warning = false;
     
     // Start is called before the first frame update
     public static GameManager GM()
@@ -123,16 +125,21 @@ public class GameManager : MonoBehaviour
         load = false;
         
     }
-    
+
     public IEnumerator WarningText(string t)
     {
-        warningText.text = t;
-        warningText.enabled = true;
-        audioManager.Error();
-        yield return new WaitForSeconds(2);
-        warningText.enabled = false;
+        if (!warning)
+        {
+            warning = true;
+            warningText.text = t;
+            warningText.enabled = true;
+            audioManager.Error();
+            yield return new WaitForSeconds(2);
+            warning = false;
+            warningText.enabled = false;
+        }
     }
-    
+
     public void SetHappiness(int h)
     {
         happinessText.text = h.ToString();
@@ -376,8 +383,8 @@ public class GameManager : MonoBehaviour
 
             var posC = cell.transform.position;
             Vector3 x = new Vector3(posC.x, posC.y + 0.02f, posC.z);
-
-            if(path.Length != 0 || Vector3.Distance(w.transform.position, x) <= 0.11f)
+            Debug.Log("worker: " + Vector3.Distance(w.transform.position, x));
+            if(path.Length != 0 || Vector3.Distance(w.transform.position, x) <= 0.15f)
                 w.Walk(path);
             else
             {
@@ -433,9 +440,9 @@ public class GameManager : MonoBehaviour
 
     public void CutTree(Worker w)
     {
-        w.SetInfo(0, 1);
+        w.SetInfo(Constant.treeLayer, 1);
         w.constructionCell = selectedCell;
-        w.tree = true;
+        //w.tree = true;
         MoveWorker(w);
     }
 
@@ -633,7 +640,7 @@ public class GameManager : MonoBehaviour
         buttonsMenu.gameObject.SetActive(false);
         w.constructionCell = selectedCell;
         //var t = w.constructionCell.transform.GetChild(0).GetComponent<Building>().constructionTime;
-        w.SetInfo(0, 2);
+        w.SetInfo(0, 1);
         MoveWorker(w);
         dismantle.SetActive(false);
     }
@@ -654,9 +661,21 @@ public class GameManager : MonoBehaviour
                 _peopleManager.RemovePeople(h);
             }
             else if (c.layer == Constant.entertainmentLayer)
+            {
                 entertainment += b.GetComponent<Entertainment>().peopleEntertained;
+                _peopleManager.RemoveEnt(b.GetComponent<Entertainment>());
+            }
             else if (c.layer == Constant.jobLayer)
+            {
+                foreach (var p in b.GetComponent<Building>().GetPeople())
+                {
+                    p.jobFound = false;
+                }
+
+                
                 jobs += b.GetComponent<Job>().jobsNum;
+                _peopleManager.RemoveJob(b.GetComponent<Job>());
+            }
 
             wood += b.GetComponent<Building>().woodNeed;
 
@@ -665,9 +684,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _graphBuilder.g.RemoveEdge(_graphBuilder.matrix[c.GetComponent<Build>().x, c.GetComponent<Build>().y]);
             c.GetComponent<MeshRenderer>().material = _graphBuilder.firstMaterial;
         }
+        
+        _graphBuilder.g.RemoveEdge(_graphBuilder.matrix[c.GetComponent<Build>().x, c.GetComponent<Build>().y]);
 
         c.layer = 0;
     }

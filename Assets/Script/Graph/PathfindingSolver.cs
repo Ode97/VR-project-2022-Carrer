@@ -93,16 +93,29 @@ public class PathfindingSolver : MonoBehaviour {
 	}
 
 	// chek if the goal has been reached in a satisfactory way
-	protected static bool CheckSearchComplete(Node goal, List<Node> nodeList) {
-		// check if we reached the goal
-		if (status [goal].distance == float.MaxValue) return false;
-		// check if the first hit is ok 
-		if (immediateStop) return true;
-		// check if all nodes in list have loger or same paths 
-		foreach (Node n in nodeList) {
-			if (status[n].distance < status[goal].distance) return false;
+	protected static bool CheckSearchComplete(Node goal, List<Node> nodeList)
+	{
+		if (goal != null && status.ContainsKey(goal))
+		{
+			// check if we reached the goal
+			if (status[goal].distance == float.MaxValue) return false;
+			// check if the first hit is ok 
+			if (immediateStop) return true;
+			// check if all nodes in list have loger or same paths 
+			foreach (Node n in nodeList)
+			{
+				if (status[n].distance < status[goal].distance) return false;
+			}
 		}
+		else
+		{
+			Debug.Log("distrutto durante pathfinding");
+			return false;
+		}
+		
+
 		return true;
+		
 	}
 	
 	protected static float EuclideanEstimator(Node from, Node to) {

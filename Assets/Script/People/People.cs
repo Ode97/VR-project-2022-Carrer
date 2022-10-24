@@ -22,6 +22,7 @@ public class People : MonoBehaviour
     public bool work = false;
     public bool stillWorking = false;
     public bool justEat = false;
+    public bool runAway = false;
     public int happiness = 100;
     private List<MeshRenderer> _meshRenderer;
 
@@ -65,6 +66,7 @@ public class People : MonoBehaviour
                     {
                         if (!stillWorking)
                         {
+                            Debug.Log("a");
                             StartCoroutine(Produce());
                         }
                     }
@@ -109,7 +111,7 @@ public class People : MonoBehaviour
 
             if (stop)
             {
-                var toX = x;
+                /*var toX = x;
                 var toY = y;
                 
                 if (_buildings.Count > 1)
@@ -117,15 +119,18 @@ public class People : MonoBehaviour
                     Building building = null;
                     if (DayManager.D.dayTime == DayTime.Morning)
                     {
+                        Debug.Log("b");
                         endDay = false;
                         if (jobFound)
                         {
+                            Debug.Log("c");
                             work = true;
                             building = job;
                         }
                     }
                     else if (!eat && DayManager.D.dayTime == DayTime.Afternoon)
                     {
+                        stillWorking = false;
                         work = false;
                         var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
 
@@ -139,9 +144,12 @@ public class People : MonoBehaviour
                                 l = lb;
                             }
                         }
-
-                        if(building)
+                        
+                        if (building)
+                        {
+                            
                             eat = true;
+                        }
                     }
                     else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
                     {
@@ -185,15 +193,106 @@ public class People : MonoBehaviour
                         toY = y;
                     }
                     
-                }
+                }*/
 
                 if (happiness > 100)
                     happiness = 100;
                 
-                StartCoroutine(Move(toX, toY));
+                
+                
+                StartCoroutine(Move());
                 
             }
         }
+    }
+
+    public Vector2 SetDestination()
+    {
+        Vector2 v = new Vector2();
+        
+        v.x = x;
+        v.y = y;
+        
+        if (_buildings.Count >= 1)
+        {
+            Building building = null;
+            if (DayManager.D.dayTime == DayTime.Morning)
+            {
+                endDay = false;
+                if (jobFound)
+                {
+                    work = true;
+                    building = job;
+                }
+            }
+            else if (!eat && DayManager.D.dayTime == DayTime.Afternoon)
+            {
+                stillWorking = false;
+                work = false;
+                var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
+
+                int l = 0;
+                foreach (var b in buildings)
+                {
+                    int lb = GameManager.GM().PathSolver(x, y, b.x, b.y).Length;
+                    if (lb > l)
+                    {
+                        building = b;
+                        l = lb;
+                    }
+                }
+                
+                if (building)
+                {
+                    
+                    eat = true;
+                }
+            }
+            else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
+            {
+                eat = false;
+                var r = Random.Range(0, _buildings.Count);
+                building = _buildings[r];
+            }
+            else if (DayManager.D.dayTime == DayTime.Night && !endDay)
+            {
+                endDay = true;
+                if (!justEat)
+                    happiness -= 20;
+                else
+                {
+                    happiness += 10;
+                }
+                if (!jobFound)
+                    happiness -= 15;
+
+                if (GameManager.GM().entertainment < 0)
+                    happiness -= 5 * GameManager.GM().entertainment;
+
+                if (GameManager.GM().entertainment == 0)
+                    happiness += 10;
+                if (GameManager.GM().jobs == 0)
+                    happiness += 10;
+                
+                justEat = false;
+                building = house;
+            }
+
+            if (building)
+            {
+                current = building.gameObject;
+                v.x = building.x;
+                v.y = building.y;
+            }
+            else 
+            {
+                v.x = x;
+                v.y = y;
+            }
+            
+        }
+        
+        return v;
     }
 
     public GameObject GetCurrentTarget()
@@ -236,30 +335,57 @@ public class People : MonoBehaviour
         return job;
     }
 
-    public IEnumerator Move(int toX, int toY)
+    public IEnumerator Move()
     {
-        path = GameManager.GM().PathSolver(x, y, toX, toY);
-        
+
         foreach (var mesh in _meshRenderer)
         {
             mesh.enabled = false;
         }
-        
-        if(!justEat && !onLoad)
+
+        if(!justEat && !onLoad && !runAway)
             yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
         else
         {
-            onLoad = false;
+            runAway = false;
             yield return new WaitForSeconds(0);
         }
-        
-        if(path.Length > 0)
-            foreach (var mesh in _meshRenderer)
-            {
-                mesh.enabled = true;
-            }
 
-        
+
+        if (!onLoad)
+        {
+            Vector2 dest = SetDestination();
+            
+            Debug.Log(gameObject.name + " dest: " + dest.x +" " + dest.y + " pos: " + x + " " + y);
+
+            path = GameManager.GM().PathSolver(x, y, (int) dest.x, (int) dest.y);
+        }
+        else
+        {
+            onLoad = false;
+            path = GameManager.GM()
+                .PathSolver(x, y, current.GetComponent<Building>().x, current.GetComponent<Building>().y);
+        }
+
+        //Debug.Log(gameObject.name + " " + current.gameObject.name + " " + path.Length + " pos: " + x + " " + y);
+        var pos = current.transform.position;
+        var v = new Vector3(pos.x, pos.y + 0.01f, pos.z);
+                
+        if (path.Length == 0 && Vector3.Distance(transform.position, v) >= 0.15f)
+        {
+            StartCoroutine(GameManager.GM().WarningText("Some people can't reach destination"));
+        }
+        else
+        {
+
+            if (path.Length > 0)
+                foreach (var mesh in _meshRenderer)
+                {
+                    mesh.enabled = true;
+                }
+
+        }
+
         busy = true;
         
         i = 0;
@@ -283,7 +409,7 @@ public class People : MonoBehaviour
         else
         {
             onLoad = true;
-            StartCoroutine(Move(current.GetComponent<Building>().x, current.GetComponent<Building>().y));
+            StartCoroutine(Move());
         }
 
     }

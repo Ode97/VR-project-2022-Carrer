@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class PeopleManager : MonoBehaviour
 {
@@ -156,6 +158,60 @@ public class PeopleManager : MonoBehaviour
         foreach (var c in citizens)
         {
             c._buildings.Add(cell);
+        }
+    }
+
+    public void RemoveEnt(Entertainment cell)
+    {
+        entertainment.Remove(cell);
+        foreach (var c in citizens)
+        {
+            c._buildings.Remove(cell);
+            MoveFromDismantleCell(c, cell);
+        }
+    }
+
+    public void RemoveJob(Job cell)
+    {
+        jobsRemain.Remove(cell);
+        foreach (var c in citizens)
+        {
+            c._buildings.Remove(cell);
+            MoveFromDismantleCell(c, cell);
+        }
+    }
+
+    private void MoveFromDismantleCell(People c, Building cell)
+    {
+        var t = c.GetCurrentTarget().GetComponent<Building>();
+        var m = GameManager.GM()._graphBuilder.matrix;
+        
+        if (c.x == cell.x && c.y == cell.y)
+        {
+            c.runAway = true;
+            
+            if (c.x != 9 && m[c.x + 1, c.y].sceneObject.layer ==
+                Constant.streetLayer)
+            {
+                c.x = m[c.x + 1, c.y].sceneObject.GetComponent<Build>().x;
+                c.y = m[c.x + 1, c.y].sceneObject.GetComponent<Build>().y;
+            }else if (c.y != 9 && m[c.x, c.y + 1].sceneObject.layer == Constant.streetLayer)
+            {
+                c.x = m[c.x, c.y + 1].sceneObject.GetComponent<Build>().x;
+                c.y = m[c.x, c.y + 1].sceneObject.GetComponent<Build>().y;
+            }else if (c.x != 0 && m[c.x - 1, c.y].sceneObject.layer == Constant.streetLayer)
+            {
+                c.x = m[c.x - 1, c.y].sceneObject.GetComponent<Build>().x;
+                c.y = m[c.x - 1, c.y].sceneObject.GetComponent<Build>().y;
+            }else if (c.y != 0 && m[c.x, c.y - 1].sceneObject.layer == Constant.streetLayer)
+            {
+                c.x = m[c.x, c.y - 1].sceneObject.GetComponent<Build>().x;
+                c.y = m[c.x, c.y - 1].sceneObject.GetComponent<Build>().y;
+            }
+        }else if (t.x == cell.x && t.y == cell.y)
+        {
+            c.SetCurrentTarget(c.GetHouse().gameObject);
+            c.StartMove(c.x, c.y);
         }
     }
 
