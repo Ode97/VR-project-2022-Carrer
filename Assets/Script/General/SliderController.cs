@@ -20,7 +20,12 @@ public class SliderController : MonoBehaviour
 
     public void Reset(int v)
     {
-        valueText.text = v.ToString();
+        if(v != 1)
+            valueText.text = v.ToString() + " hours left";
+        else
+        {
+            valueText.text = v.ToString() + " hour left";
+        }
         t = v;
         slider.value = 0;
         progress = 0;
@@ -30,8 +35,12 @@ public class SliderController : MonoBehaviour
     public void OnSliderChange(float value)
     {
         var x = t - value;
-        valueText.text = x.ToString();
-        Debug.Log(valueText.text);
+        if(x != 1)
+            valueText.text = x.ToString() + " hours left";
+        else
+        {
+            valueText.text = x.ToString() + " hour left";
+        }
     }
 
     public void UpdateProgress()
@@ -39,6 +48,6 @@ public class SliderController : MonoBehaviour
         progress++;
         slider.value = progress;
         var x = t - progress;
-        valueText.text = x.ToString();
+        //valueText.text = x.ToString() + " hours left";
     }
 }

@@ -75,6 +75,44 @@ public class GraphBuilder : MonoBehaviour {
 					p.layer = Constant.streetLayer;
 					GameManager.GM().SpawnWorker(p.transform);
 					g.AddNode(matrix[i, j]);
+				}else if ((i == 1) && j == 0)
+				{
+					var houses = GameManager.GM().GetHouses();
+					
+					var fh = Instantiate(houses[0], matrix[i, j].sceneObject.transform);
+					
+					var building = fh.GetComponent<Building>();
+        
+					building.SetI(0);
+
+					matrix[i, j].sceneObject.layer = Constant.houseLayer;
+					
+					var a = new Edge(matrix[i, j], matrix[0, 0]);
+					var b = new Edge(matrix[0, 0], matrix[i, j]);
+					
+					g.AddEdge(a);
+					g.AddEdge(b);
+					
+					var h = fh.GetComponent<House>();
+					var newP = h.people;
+					h.x = i;
+					h.y = j;
+					GameManager.GM().people += newP;
+					GameManager.GM().jobs += newP;
+					GameManager.GM().entertainment += newP;
+					GameManager.GM().GetPeopleManager().SpawnPeople(newP, h, matrix[i, j].sceneObject.transform.position);
+					
+					fh.transform.localPosition = new Vector3(0f, 0f, 0f);
+					fh.transform.localScale *= 18;
+					building.SetRotation(0);
+
+					var pos = matrix[0, 0].sceneObject.transform.position;
+					var pos2 = matrix[1, 0].sceneObject.transform.position;
+					fh.transform.rotation = Quaternion.LookRotation(pos - pos2, Vector3.up);
+					fh.GetComponent<RotateObject>().enabled = false;
+					fh.SetActive(true);
+					GameManager.GM().data.people = GameManager.GM().people;
+					GameManager.GM().SetText();
 				}
 
 				else
@@ -142,6 +180,7 @@ public class GraphBuilder : MonoBehaviour {
 				h.GetComponent<Building>().SetRotation(data.rotation[k]);
 				h.GetComponent<House>().x = c;
 				h.GetComponent<House>().y = d;
+				h.transform.localScale *= 18;
 				//GameManager.GM().SpawnPeople(h.GetComponent<House>().people, h.GetComponent<House>(), matrix[c, d].sceneObject.transform.position);
 			}else if (matrix[c, d].sceneObject.layer == Constant.entertainmentLayer)
 			{
@@ -153,6 +192,7 @@ public class GraphBuilder : MonoBehaviour {
 				h.GetComponent<Building>().SetRotation(data.rotation[k]);
 				h.GetComponent<Entertainment>().x = c;
 				h.GetComponent<Entertainment>().y = d;
+				h.transform.localScale *= 18;
 				GameManager.GM().GetPeopleManager().AddEntertainment(h.GetComponent<Entertainment>());
 			}else if (matrix[c, d].sceneObject.layer == Constant.jobLayer)
 			{
@@ -164,6 +204,7 @@ public class GraphBuilder : MonoBehaviour {
 				h.GetComponent<Building>().SetRotation(data.rotation[k]);
 				h.GetComponent<Job>().x = c;
 				h.GetComponent<Job>().y = d;
+				h.transform.localScale *= 18;
 				GameManager.GM().GetPeopleManager().AddJobs(h.GetComponent<Job>());
 			}else if (matrix[c, d].sceneObject.layer == Constant.streetLayer)
 			{
@@ -229,9 +270,25 @@ public class GraphBuilder : MonoBehaviour {
 
 		}
 
-		for (int i = 0; i < data.workerNum; i++)
+		var totalHappiness = 0;
+		var people = GameManager.GM().GetPeopleManager().GetPeople();
+		foreach (var p in people)
 		{
-			GameManager.GM().SpawnWorker(matrix[0, 0].sceneObject.transform);
+			totalHappiness += p.happiness;
+		}
+
+		int tot = Mathf.RoundToInt(totalHappiness / people.Count);
+        
+		GameManager.GM().SetHappiness(tot);
+
+		var w = data.workerNum;
+		
+		for (int i = 0; i < w; i++)
+		{
+			Debug.Log(i);
+			var x = data.workerPos[i] % 10;
+			var y = (int)Mathf.Floor(data.workerPos[i] / 10);
+			GameManager.GM().SpawnWorker(matrix[x, y].sceneObject.transform);
 		}
 
 		GameManager.GM().GetPeopleManager().FoodBuildings();

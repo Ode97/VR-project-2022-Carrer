@@ -198,7 +198,8 @@ public class LoadBuildings : MonoBehaviour
             actual = Instantiate(b.transform, Camera.main.transform);
         }
         
-        actual.localPosition = new Vector3(0, -3, 20);
+        //actual.localPosition = new Vector3(0, -3, 20);
+        actual.localPosition = new Vector3(0, -0.1f, 0.7f);
         actual.localRotation = new Quaternion(0, 180, 0, 0);
         actual.gameObject.SetActive(true);
     }

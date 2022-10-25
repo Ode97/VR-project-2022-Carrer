@@ -57,9 +57,20 @@ public class Worker : MonoBehaviour
             
             if (!stop && Vector3.Distance(path[i].to.sceneObject.transform.position, transform.position) < 0.025f)
             {
-                if(i < path.Length)
+                if (path.Length > 0)
+                {
+                    var actualPos = path[i].to.sceneObject.GetComponent<Build>();
+                    x = actualPos.x;
+                    y = actualPos.y;
+                }
+                
+                
+                if (i < path.Length)
+                {
+                    
                     i++;
-        
+                }
+
             }
                 
         }

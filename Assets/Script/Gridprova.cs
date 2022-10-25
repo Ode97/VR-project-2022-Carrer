@@ -18,9 +18,13 @@ public class Gridprova : MonoBehaviour
 
         if (!GameManager.GM().load)
         {
-            var t = FindObjectOfType<Tutorial>();
-            t.enabled = true;
-            t.GetComponent<Image>().enabled = true;
+            if (!GameManager.GM().start)
+            {
+                var t = FindObjectOfType<Tutorial>();
+                t.enabled = true;
+                GameManager.GM().start = true;
+            }else
+                FindObjectOfType<DayManager>().StartTime();
         }
 
     }

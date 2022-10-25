@@ -17,38 +17,50 @@ public class PeopleManager : MonoBehaviour
     private List<Job> jobsRemain = new List<Job>();
     private List<Food> foodBuildings = new List<Food>();
     private bool updateHappiness = false;
+    private bool startGame = false;
+
+    private void Start()
+    {
+        
+    }
 
     void Update()
     {
-        if(!updateHappiness && citizens.Count > 0)
+        if(!updateHappiness)
             StartCoroutine(Happiness());
-        else if(citizens.Count == 0)
-        {
-            GameManager.GM().SetHappiness(0);
-        }
+        
     }
 
     private IEnumerator Happiness()
     {
         updateHappiness = true;
         var totalHappiness = 0;
-        yield return new WaitForSeconds(DayManager.D.gameHourInSeconds);
+        yield return new WaitForSeconds(1);
         foreach (var p in citizens)
         {
             totalHappiness += p.happiness;
         }
 
         updateHappiness = false;
-        int tot = Mathf.RoundToInt(totalHappiness / citizens.Count);
-        
-        GameManager.GM().SetHappiness(tot);
-
-        if (tot < 30 && citizens.Count > 0)
+        int tot = 0;
+        if (citizens.Count > 0)
         {
-            StartCoroutine(GameManager.GM().WarningText("YOU LOSE, people are run away from your city"));
-            yield return new WaitForSeconds(2);
-            SceneManager.LoadScene("MenuScene");
-            FindObjectOfType<Settings>().BackToMenu();
+            startGame = true;
+            tot = Mathf.RoundToInt(totalHappiness / citizens.Count);
+        }
+        else if(startGame)
+        {
+            GameManager.GM().EndGame();
+        }
+        
+        
+
+        GameManager.GM().SetHappiness(tot);
+        
+        if (tot < 30 && startGame)
+        {
+            
+            GameManager.GM().EndGame();
         }
     }
 
@@ -66,7 +78,6 @@ public class PeopleManager : MonoBehaviour
             citizen.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             citizen.transform.position = new Vector3(pos.x + r.x, pos.y + 0.01f, pos.z + r.y);
             c.SetHouse(cell);
-
             citizens.Add(citizen.GetComponent<People>());
             c._buildings.AddRange(entertainment);
             /*var food = FoodBuildingChoice(cell);
@@ -81,7 +92,7 @@ public class PeopleManager : MonoBehaviour
                 }else
                     jobsRemain.Remove(jobsRemain[0]);
             }
-
+            FoodBuildings();
         }
     }
     
@@ -96,6 +107,7 @@ public class PeopleManager : MonoBehaviour
         var r = Random.insideUnitCircle * 0.025f;
         var citizen = Instantiate(peoples[p], GameManager.GM()._graphBuilder.parent.transform);
         var c = citizen.GetComponent<People>();
+        c.loadCitizen = true;
         c.type = p;
         c.x = pos % 10;
         c.y = (int)Mathf.Floor(pos / 10);
@@ -185,29 +197,42 @@ public class PeopleManager : MonoBehaviour
     {
         var t = c.GetCurrentTarget().GetComponent<Building>();
         var m = GameManager.GM()._graphBuilder.matrix;
-        
+        c.runAway = true;
         if (c.x == cell.x && c.y == cell.y)
         {
-            c.runAway = true;
-            
+
             if (c.x != 9 && m[c.x + 1, c.y].sceneObject.layer ==
                 Constant.streetLayer)
             {
-                c.x = m[c.x + 1, c.y].sceneObject.GetComponent<Build>().x;
-                c.y = m[c.x + 1, c.y].sceneObject.GetComponent<Build>().y;
+                var x = m[c.x + 1, c.y].sceneObject.GetComponent<Build>().x;
+                var y = m[c.x + 1, c.y].sceneObject.GetComponent<Build>().y;
+
+                c.x = x;
+                c.y = y;
             }else if (c.y != 9 && m[c.x, c.y + 1].sceneObject.layer == Constant.streetLayer)
             {
-                c.x = m[c.x, c.y + 1].sceneObject.GetComponent<Build>().x;
-                c.y = m[c.x, c.y + 1].sceneObject.GetComponent<Build>().y;
+                var x = m[c.x, c.y + 1].sceneObject.GetComponent<Build>().x;
+                var y = m[c.x, c.y + 1].sceneObject.GetComponent<Build>().y;
+                
+                c.x = x;
+                c.y = y;
             }else if (c.x != 0 && m[c.x - 1, c.y].sceneObject.layer == Constant.streetLayer)
             {
-                c.x = m[c.x - 1, c.y].sceneObject.GetComponent<Build>().x;
-                c.y = m[c.x - 1, c.y].sceneObject.GetComponent<Build>().y;
+                var x = m[c.x - 1, c.y].sceneObject.GetComponent<Build>().x;
+                var y = m[c.x - 1, c.y].sceneObject.GetComponent<Build>().y;
+                
+                c.x = x;
+                c.y = y;
             }else if (c.y != 0 && m[c.x, c.y - 1].sceneObject.layer == Constant.streetLayer)
             {
-                c.x = m[c.x, c.y - 1].sceneObject.GetComponent<Build>().x;
-                c.y = m[c.x, c.y - 1].sceneObject.GetComponent<Build>().y;
+                var x = m[c.x, c.y - 1].sceneObject.GetComponent<Build>().x;
+                var y = m[c.x, c.y - 1].sceneObject.GetComponent<Build>().y;
+                
+                c.x = x;
+                c.y = y;
             }
+            
+            c.StartMove(c.x, c.y);
         }else if (t.x == cell.x && t.y == cell.y)
         {
             c.SetCurrentTarget(c.GetHouse().gameObject);

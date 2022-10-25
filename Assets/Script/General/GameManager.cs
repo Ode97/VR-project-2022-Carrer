@@ -9,6 +9,7 @@ using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
@@ -30,7 +31,9 @@ public class GameManager : MonoBehaviour
     public GameObject workerPrefab;
     public ARSessionOrigin _arSessionOrigin;
 
-    private Queue<Worker> worker = new Queue<Worker>();
+    private List<Worker> allWorkers = new List<Worker>();
+    private List<Worker> workers = new List<Worker>();
+    private Worker nextWorker;
 
     private PathfindingSolver _pathfindingSolver;
 
@@ -63,6 +66,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI foodText;
 
+    [SerializeField] public GameObject endPanel;
+    [SerializeField] private TextMeshProUGUI endText;
+
     [SerializeField] private TextMeshProUGUI happinessText;
 
     public Data data;
@@ -73,6 +79,7 @@ public class GameManager : MonoBehaviour
     private GameObject[] _jobs;
 
     private bool warning = false;
+    public bool start = false;
     
     // Start is called before the first frame update
     public static GameManager GM()
@@ -98,6 +105,7 @@ public class GameManager : MonoBehaviour
         woodText.text = wood.ToString();
         workerText.text = "0";
         foodText.text = "0";
+        happinessText.text = "0";
 
         var r = FindObjectOfType<LoadBuildings>();
         
@@ -123,8 +131,25 @@ public class GameManager : MonoBehaviour
         }
         
         load = false;
-        
+
+        start = Save.LoadSeenTutorial();
     }
+
+    public void EndGame()
+    {
+        endText.text = "Game is over, people are running away from your city\n" + "You reach a total population of " + people + " citizen";
+        endPanel.SetActive(true);
+        Time.timeScale = 0;
+        Reset();
+    }
+
+    public void Reset()
+    {
+        workers.Clear();
+        allWorkers.Clear();
+        happinessText.text = "0";
+    }
+    
 
     public IEnumerator WarningText(string t)
     {
@@ -158,6 +183,11 @@ public class GameManager : MonoBehaviour
     public GameObject[] GetJobs()
     {
         return _jobs;
+    }
+
+    public List<Worker> GetWorkers()
+    {
+        return allWorkers;
     }
 
     public void SetLoad(int wood, int people, int jobs, int ents, int food)
@@ -195,9 +225,10 @@ public class GameManager : MonoBehaviour
         foodText.text = food.ToString();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        
+            
     }
 
     public Edge[] PathSolver(int fromX, int fromY, int toX, int toY)
@@ -275,18 +306,32 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (worker.Count == 0)
+        if (workers.Count == 0)
         {
             StartCoroutine(WarningText("All workers are busy"));
             return;
         }
         else
         {
+            
+            var bestl = 100f;
+            foreach (var wor in workers)
+            {
+                var l = Vector3.Distance(wor.transform.position, cell.transform.position);
+                if (l < bestl)
+                {
+                    nextWorker = wor;
+                    bestl = l;
+                }
+            }
+
+            
+
             selectedCell = cell;
             if (cell.layer == Constant.treeLayer)
             {
-                Worker w = worker.Dequeue();
-                CutTree(w);
+                workers.Remove(nextWorker);
+                CutTree(nextWorker);
             }
             else if (cell.layer != 0)
             {
@@ -316,8 +361,10 @@ public class GameManager : MonoBehaviour
 
     public void ActionFinished(Worker w)
     {
-        worker.Enqueue(w);
+        //workers.Enqueue(w);
+        workers.Add(w);
         w.constructionCell.GetComponent<Build>().SetActive();
+        var c = w.constructionCell.GetComponent<Build>();
     }
 
     private bool CheckNearStreet(Worker w)
@@ -388,8 +435,9 @@ public class GameManager : MonoBehaviour
                 w.Walk(path);
             else
             {
-                StartCoroutine(WarningText("Worker can't reach destination"));
-                ActionFinished(w);
+                //StartCoroutine(WarningText("Worker can't reach destination"));
+                //ActionFinished(w);
+                return false;
             }
             
             return true;
@@ -399,19 +447,21 @@ public class GameManager : MonoBehaviour
 
     public void SetBuilding(GameObject building, int layer)
     {
-        Worker w = worker.Dequeue();
-        w.constructionCell = selectedCell;
-        w.SetInfo(layer, building.GetComponent<Building>().constructionTimeInHour, building);
-        MoveWorker(w);
+        //Worker w = workers.Dequeue();
+        workers.Remove(nextWorker);
+        nextWorker.constructionCell = selectedCell;
+        nextWorker.SetInfo(layer, building.GetComponent<Building>().constructionTimeInHour, building);
+        MoveWorker(nextWorker);
     }
 
     public void SetStreet()
     {
-        Worker w = worker.Dequeue();
-        w.constructionCell = selectedCell;
-        w.SetInfo(Constant.streetLayer, 1);
+        //Worker w = workers.Dequeue();
+        workers.Remove(nextWorker);
+        nextWorker.constructionCell = selectedCell;
+        nextWorker.SetInfo(Constant.streetLayer, 1);
         buttonsMenu.SetActive(false);
-        MoveWorker(w);
+        MoveWorker(nextWorker);
     }
 
     private void MoveWorker(Worker w)
@@ -420,19 +470,12 @@ public class GameManager : MonoBehaviour
         {
             
             w.constructionCell.GetComponent<Build>().SetInactive();
-
-            /*var path = _pathfindingSolver.Solve(_graphBuilder.g,
-                _graphBuilder[w.x, w.y],
-                _graphBuilder[w.GetTarget().x, w.GetTarget().y]);
-            
-            
-
-            w.Walk(path);*/
+            var c = w.constructionCell.GetComponent<Build>();
             
         }
         else
         {
-            StartCoroutine(WarningText("You must build near a street"));
+            StartCoroutine(WarningText("You must build near a reachable street"));
             ActionFinished(w);
             buttonsMenu.SetActive(false);
         }
@@ -459,7 +502,6 @@ public class GameManager : MonoBehaviour
     public void EndWork(Worker w)
     {
         SetText();
-        w.constructionCell.GetComponent<Build>().SetActive();
         ActionFinished(w);
     }
 
@@ -528,6 +570,8 @@ public class GameManager : MonoBehaviour
 
         //g.transform.localScale.Set(0.08f, 0.08f, 0.08f);
         g.transform.localPosition = new Vector3(0f, 0f, 0f);
+        g.transform.localScale *= 18;
+        
         var pos = _graphBuilder[w.GetTarget().x, w.GetTarget().y].sceneObject.transform.position;
         var target = w.GetTarget();
         
@@ -625,23 +669,30 @@ public class GameManager : MonoBehaviour
         if (workerNum < 5)
         {
             var pos = cell.position;
-            var w = Instantiate(workerPrefab, _graphBuilder.parent.transform);
-            w.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-            w.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
-            worker.Enqueue(w.GetComponent<Worker>());
+            var wo = Instantiate(workerPrefab, _graphBuilder.parent.transform);
+            wo.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            wo.transform.position = new Vector3(pos.x, pos.y + 0.02f, pos.z);
+            //workers.Enqueue(w.GetComponent<Worker>());
+            workers.Add(wo.GetComponent<Worker>());
+            allWorkers.Add(wo.GetComponent<Worker>());
             workerNum++;
+            data.workerNum = workerNum;
+            wo.GetComponent<Worker>().x = cell.GetComponent<Build>().x;
+            wo.GetComponent<Worker>().y = cell.GetComponent<Build>().y;
             SetText();
         }
     }
 
+
     public void StartDismantle()
     {
-        Worker w = worker.Dequeue();
+        //Worker w = workers.Dequeue();
+        workers.Remove(nextWorker);
         buttonsMenu.gameObject.SetActive(false);
-        w.constructionCell = selectedCell;
+        nextWorker.constructionCell = selectedCell;
         //var t = w.constructionCell.transform.GetChild(0).GetComponent<Building>().constructionTime;
-        w.SetInfo(0, 1);
-        MoveWorker(w);
+        nextWorker.SetInfo(0, 1);
+        MoveWorker(nextWorker);
         dismantle.SetActive(false);
     }
 

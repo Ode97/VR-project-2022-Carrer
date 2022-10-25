@@ -32,8 +32,16 @@ public class SaveCity : MonoBehaviour
         bool[,] stillWork = new bool[100, 30];
         bool[,] justEat = new bool[100, 30];
         int[, , ] hj = new int[100, 30, 2];
-        
-        
+
+        int[] workerPos = new int[5];
+
+        int z = 0;
+        foreach (var w in GameManager.GM().GetWorkers())
+        {
+            workerPos[z] = w.x + w.y * 10;
+            z++;
+        }
+
         var people = GameManager.GM().GetPeopleManager().GetPeople();
         
         foreach (var c in orderedCells)
@@ -110,7 +118,7 @@ public class SaveCity : MonoBehaviour
         GameManager.GM().data.layers = l;
         GameManager.GM().data.buildings = building;
         GameManager.GM().data.rotation = rotations;
-        //-------------------------------------
+        GameManager.GM().data.workerPos = workerPos;
         GameManager.GM().data.type = type;
         GameManager.GM().data.jobFound = jobFound;
         GameManager.GM().data.eat = eat;

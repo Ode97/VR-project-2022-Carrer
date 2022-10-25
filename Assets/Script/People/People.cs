@@ -23,9 +23,11 @@ public class People : MonoBehaviour
     public bool stillWorking = false;
     public bool justEat = false;
     public bool runAway = false;
+    private bool start = true;
     public int happiness = 100;
     private List<MeshRenderer> _meshRenderer;
 
+    public bool loadCitizen = false;
     private bool onLoad = false;
 
     public bool endDay = false;
@@ -38,6 +40,9 @@ public class People : MonoBehaviour
 
     void Update()
     {
+        if (!endDay && DayManager.D.dayTime == DayTime.Night)
+            UpdateHappiness();
+        
         if (busy)
         {
             var stop = false;
@@ -54,18 +59,12 @@ public class People : MonoBehaviour
                 {
                     if (eat)
                     {
-                        Debug.Log(gameObject.name + " " + justEat);
                         if (!justEat)
                         {
-                            if (current.GetComponent<Food>().Eat())
-                            {
-                                happiness += 10;
-                                Debug.Log("mangiato");
-                            }
-                            else
-                            {
+                            if (!current.GetComponent<Food>().Eat()){
+                            
                                 happiness -= 20;
-                                Debug.Log("non c'è da mangiare");
+                                Debug.Log("non ho mangiato");
                             }
 
                             justEat = true;
@@ -120,90 +119,7 @@ public class People : MonoBehaviour
 
             if (stop)
             {
-                /*var toX = x;
-                var toY = y;
-                
-                if (_buildings.Count > 1)
-                {
-                    Building building = null;
-                    if (DayManager.D.dayTime == DayTime.Morning)
-                    {
-                        Debug.Log("b");
-                        endDay = false;
-                        if (jobFound)
-                        {
-                            Debug.Log("c");
-                            work = true;
-                            building = job;
-                        }
-                    }
-                    else if (!eat && DayManager.D.dayTime == DayTime.Afternoon)
-                    {
-                        stillWorking = false;
-                        work = false;
-                        var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
-
-                        int l = 0;
-                        foreach (var b in buildings)
-                        {
-                            int lb = GameManager.GM().PathSolver(x, y, b.x, b.y).Length;
-                            if (lb > l)
-                            {
-                                building = b;
-                                l = lb;
-                            }
-                        }
-                        
-                        if (building)
-                        {
-                            
-                            eat = true;
-                        }
-                    }
-                    else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
-                    {
-                        eat = false;
-                        var r = Random.Range(0, _buildings.Count);
-                        building = _buildings[r];
-                    }
-                    else if (DayManager.D.dayTime == DayTime.Night && !endDay)
-                    {
-                        endDay = true;
-                        if (!justEat)
-                            happiness -= 20;
-                        else
-                        {
-                            happiness += 10;
-                        }
-                        if (!jobFound)
-                            happiness -= 15;
-
-                        if (GameManager.GM().entertainment < 0)
-                            happiness -= 5 * GameManager.GM().entertainment;
-
-                        if (GameManager.GM().entertainment == 0)
-                            happiness += 10;
-                        if (GameManager.GM().jobs == 0)
-                            happiness += 10;
-                        
-                        justEat = false;
-                        building = house;
-                    }
-
-                    if (building)
-                    {
-                        current = building.gameObject;
-                        toX = building.x;
-                        toY = building.y;
-                    }
-                    else 
-                    {
-                        toX = x;
-                        toY = y;
-                    }
-                    
-                }*/
-
+               
                 StartCoroutine(Move());
                 
             }
@@ -222,12 +138,14 @@ public class People : MonoBehaviour
             Building building = null;
             if (DayManager.D.dayTime == DayTime.Morning)
             {
+                start = false;
                 endDay = false;
                 if (jobFound)
                 {
                     work = true;
                     building = job;
                 }
+                    
             }
             else if (!justEat && DayManager.D.dayTime == DayTime.Afternoon)
             {
@@ -235,7 +153,7 @@ public class People : MonoBehaviour
                 work = false;
                 var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
 
-                int l = 0;
+                int l = -1;
                 foreach (var b in buildings)
                 {
                     int lb = GameManager.GM().PathSolver(x, y, b.x, b.y).Length;
@@ -245,48 +163,31 @@ public class People : MonoBehaviour
                         l = lb;
                     }
                 }
-                
+
                 if (building)
                 {
-                    
+
                     eat = true;
+                }
+                else
+                {
+                    happiness -= 20;
+                    Debug.Log("non ci sono posti per mangiare");
+                    justEat = true;
                 }
             }
             else if (DayManager.D.dayTime == DayTime.Evening || DayManager.D.dayTime == DayTime.Afternoon)
             {
                 var buildings = _buildings.FindAll(b => b.GetType() != typeof(Food));
+                
                 var r = Random.Range(0, buildings.Count);
                 building = buildings[r];
             }
-            else if (DayManager.D.dayTime == DayTime.Night && !endDay)
+            else if (DayManager.D.dayTime == DayTime.Night)
             {
-
-                if (!jobFound)
-                {
-                    Debug.Log("non ho un lavoro");
-                    happiness -= 20;
-                }
-
-                if (GameManager.GM().entertainment < 0)
-                {
-                    Debug.Log("posti affollati");
-                    happiness += 5 * GameManager.GM().entertainment;
-
-                }
-                else if (GameManager.GM().entertainment > 0)
-                {
-                    Debug.Log("posti vuoti divertimento");
-                    happiness -= 2 * GameManager.GM().entertainment;
-                }
-
-                if (GameManager.GM().jobs < 0)
-                {
-                    Debug.Log("manca gente per lavorare");
-                    happiness -= 2 * GameManager.GM().jobs;
-                }
+                
 
                 eat = false;
-                endDay = true;
                 justEat = false;
                 building = house;
             }
@@ -308,6 +209,38 @@ public class People : MonoBehaviour
         }
         
         return v;
+    }
+
+    private void UpdateHappiness()
+    {
+        endDay = true;
+        if (!start)
+        {
+            if (!jobFound)
+            {
+                Debug.Log("non ho un lavoro");
+                happiness -= 20;
+            }
+
+            if (GameManager.GM().entertainment < 0)
+            {
+                Debug.Log("posti affollati");
+                happiness += 5 * GameManager.GM().entertainment;
+
+            }
+            else if (GameManager.GM().entertainment > 0)
+            {
+                Debug.Log("posti vuoti divertimento");
+                happiness -= 2 * GameManager.GM().entertainment;
+            }
+
+            if (GameManager.GM().jobs < 0)
+            {
+                Debug.Log("manca gente per lavorare");
+                happiness += 5 * GameManager.GM().jobs;
+            }
+        }
+    
     }
 
     public GameObject GetCurrentTarget()
@@ -412,7 +345,7 @@ public class People : MonoBehaviour
 
     public void StartMove(int fromX, int fromY)
     {
-        if (!GameManager.GM().load)
+        if (!loadCitizen)
         {
             x = fromX;
             y = fromY;
@@ -421,11 +354,13 @@ public class People : MonoBehaviour
                 mesh.enabled = false;
             }
 
+            i = 0;
             path = new Edge[0];
             busy = true;
         }
         else
         {
+            loadCitizen = false;
             onLoad = true;
             StartCoroutine(Move());
         }
@@ -442,31 +377,6 @@ public class People : MonoBehaviour
         var transform1 = transform;
         var pos = transform1.position;
         var rot = transform1.rotation;
-
-        /*RaycastHit hit;
-        if(path.Length > 0 && Physics.Raycast(transform1.position, Vector3.forward, out hit, 0.03f, 1 << 11) && hit.transform != gameObject.transform)
-        {
-            Vector3 t;
-            var p = path[i - 1].to.sceneObject.GetComponent<Build>();
-            if(Mathf.Abs(p.x - x) > Mathf.Abs(p.y - y))
-                t = hit.point + Vector3.forward * 0.01f;
-            else
-            {
-                t = hit.point + Vector3.right * 0.01f;
-            }
-            
-            target = new Vector3(t.x, pos.y, t.z);
-
-            obstAvoid = true;
-            
-            Debug.Log(Vector3.Distance(pos, target));
-        }
-        else
-        {
-            if (target == Vector3.zero)
-                target = new Vector3(pos.x, pos.y, pos.z);
-            
-        }*/
 
         if (target == Vector3.zero)
             target = new Vector3(pos.x, pos.y, pos.z);

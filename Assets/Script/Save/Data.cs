@@ -27,6 +27,8 @@ public class Data
     public int[] rotation = new int[100];
 
     public float time = 0;
+
+    public int[] workerPos = new int[5];
     
     public int[,] type;
     public int[,] toX;
@@ -54,17 +56,5 @@ public class Data
         hj = new int[100, 30, 2];
     }
     
-    public Data(int wood, int people, int jobs, int entertainment, int workerNum, int food, bool[,] streets, int[] layers, int[] buildings, int[] rot)
-    {
-        this.wood = wood;
-        this.people = people;
-        this.jobs = jobs;
-        this.entertainment = entertainment;
-        this.workerNum = workerNum;
-        this.food = food;
-        this.street = streets;
-        this.layers = layers;
-        this.buildings = buildings;
-        this.rotation = rot;
-    }
+    
 }

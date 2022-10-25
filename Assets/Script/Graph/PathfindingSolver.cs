@@ -75,6 +75,7 @@ public class PathfindingSolver : MonoBehaviour {
 			result.Add (status [walker].predecessor);
 			walker = status [walker].predecessor.from;
 		}
+		
 		result.Reverse ();
 		return result.ToArray ();
 	}
@@ -95,7 +96,7 @@ public class PathfindingSolver : MonoBehaviour {
 	// chek if the goal has been reached in a satisfactory way
 	protected static bool CheckSearchComplete(Node goal, List<Node> nodeList)
 	{
-		if (goal != null && status.ContainsKey(goal))
+		/*if (goal != null && status.ContainsKey(goal))
 		{
 			// check if we reached the goal
 			if (status[goal].distance == float.MaxValue) return false;
@@ -111,8 +112,17 @@ public class PathfindingSolver : MonoBehaviour {
 		{
 			Debug.Log("distrutto durante pathfinding");
 			return false;
-		}
+		}*/
 		
+		
+		if (status[goal].distance == float.MaxValue) return false;
+		// check if the first hit is ok 
+		if (immediateStop) return true;
+		// check if all nodes in list have loger or same paths 
+		foreach (Node n in nodeList)
+		{
+			if (status[n].distance < status[goal].distance) return false;
+		}
 
 		return true;
 		

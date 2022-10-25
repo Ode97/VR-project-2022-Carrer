@@ -9,8 +9,8 @@ using UnityEngine.SceneManagement;
 public class Save : MonoBehaviour {
     public static void saveData(Data g){
         
-        string destination = Application.persistentDataPath + "/" + "_map.dat";
-        Debug.Log(destination);
+        string destination = Application.persistentDataPath + "/" + "_game.dat";
+        
         FileStream file;
 
         if(File.Exists(destination)) 
@@ -23,10 +23,48 @@ public class Save : MonoBehaviour {
         BinaryFormatter bf = new BinaryFormatter();
         bf.Serialize(file, data);
         file.Close();
+        GameManager.GM().audioManager.Confirm();
     }
 
+    public static void SaveSeenTutorial(bool s)
+    {
+        string destination = Application.persistentDataPath + "/" + "_t.dat";
+        
+        FileStream file;
+
+        if(File.Exists(destination)) 
+            file = File.OpenWrite(destination);
+        else 
+            file = File.Create(destination);
+
+        
+        BinaryFormatter bf = new BinaryFormatter();
+        bf.Serialize(file, s);
+        file.Close();
+    }
+
+    public static bool LoadSeenTutorial()
+    {
+        string destination = Application.persistentDataPath + "/" + "_t.dat";
+        FileStream file;
+
+        if(File.Exists(destination)) file = File.OpenRead(destination);
+        else
+        {
+            //Debug.LogError("Save File not found");
+            return false;
+        }
+
+        BinaryFormatter bf = new BinaryFormatter();
+        bool s = (bool) bf.Deserialize(file);
+        
+        file.Close();
+        
+        return s;    
+    }
+    
     public static Data loadData(){
-        string destination = Application.persistentDataPath + "/" + "_map.dat";
+        string destination = Application.persistentDataPath + "/" + "_game.dat";
         FileStream file;
 
         if(File.Exists(destination)) file = File.OpenRead(destination);
@@ -43,7 +81,6 @@ public class Save : MonoBehaviour {
 
         GameManager.GM().SetLoad(data.wood, data.people, data.jobs, data.entertainment, data.food);
         GameManager.GM().data = data;
-        
         return data;        
     }
     

@@ -15,6 +15,7 @@ public class PlaceOnPlane : PressInputBase
     [Tooltip("Instantiates this prefab on a plane at the touch location.")]
     GameObject m_PlacedPrefab;
     private float previousDistance = 0;
+    
 
     /// <summary>
     /// The prefab to instantiate on touch.
@@ -69,25 +70,25 @@ public class PlaceOnPlane : PressInputBase
                 
                 spawnedObject.GetComponent<GraphBuilder>().Create(spawnedObject);
 
-                var t = FindObjectOfType<Tutorial>();
-                t.enabled = true;
+                
+                if (!GameManager.GM().start)
+                {
+                    var t = FindObjectOfType<Tutorial>();
+                    t.enabled = true;
+                    GameManager.GM().start = true;
+                }else
+                    FindObjectOfType<DayManager>().StartTime();
+                    
+                
             }else if (Input.touchCount == 2 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
-                /*var currentDistance = Vector3.Distance(hitPose.position, s_Hits[1].pose.position);
-                if (currentDistance - previousDistance > 0)
-                    spawnedObject.transform.localScale += new Vector3(0.01f, 0.01f, 0.01f);
-                else if(currentDistance - previousDistance < 0)
-                {
-                    spawnedObject.transform.localScale -= new Vector3(0.01f, 0.01f, 0.01f);
-                }*/
-                spawnedObject.transform.position = hitPose.position;
-                //previousDistance = Vector3.Distance(hitPose.position, s_Hits[1].pose.position);
+                
+                //spawnedObject.transform.position = hitPose.position;
+                spawnedObject.transform.position = new Vector3(hitPose.position.x, spawnedObject.transform.position.y, hitPose.position.z);
             }else if (Input.touchCount == 3 && Input.GetTouch(0).phase == TouchPhase.Moved)
             {
-                //var r = spawnedObject.transform.rotation;
-                //spawnedObject.transform.rotation = new Quaternion(r.x, r.y + 0.05f, r.z, r.w);
                 Vector3 localAngle = spawnedObject.transform.localEulerAngles;
-                localAngle.y -= 0.5f * Input.GetTouch(0).deltaPosition.x;
+                localAngle.y -= 0.3f * Input.GetTouch(0).deltaPosition.x;
                 spawnedObject.transform.localEulerAngles = localAngle;
             }
         }

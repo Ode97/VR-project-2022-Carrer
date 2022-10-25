@@ -40,6 +40,7 @@
             <e p="Build.cs" t="Include" />
             <e p="Constant.cs" t="Include" />
             <e p="DayManager.cs" t="Include" />
+            <e p="EndGame.cs" t="Include" />
             <e p="GameManager.cs" t="Include" />
             <e p="Menu.cs" t="Include" />
             <e p="PlaceOnPlane.cs" t="Include" />
