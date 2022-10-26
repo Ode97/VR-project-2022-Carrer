@@ -389,7 +389,7 @@ MonoBehaviour:
   time: 0
   gameHourInSeconds: 4
   tc: {fileID: 64214172}
-  dayTime: 0
+  dayTime: 3
 --- !u!1 &422218013
 GameObject:
   m_ObjectHideFlags: 0

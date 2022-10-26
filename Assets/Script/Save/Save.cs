@@ -29,7 +29,7 @@ public class Save : MonoBehaviour {
     public static void SaveSeenTutorial(bool s)
     {
         string destination = Application.persistentDataPath + "/" + "_t.dat";
-        
+        Debug.Log(destination);
         FileStream file;
 
         if(File.Exists(destination)) 

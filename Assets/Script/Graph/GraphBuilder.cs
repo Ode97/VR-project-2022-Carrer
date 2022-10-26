@@ -264,8 +264,8 @@ public class GraphBuilder : MonoBehaviour {
 				{
 
 					GameManager.GM().GetPeopleManager().SpawnPeople(data.type[k, f], k, data.toX[k, f], data.toY[k, f],
-						data.happiness[k, f], data.jobFound[k, f], data.eat[k, f],
-						data.work[k, f], data.stillWork[k, f], data.justEat[k, f], data.hj[k, f, 0], data.hj[k, f, 1]);
+						data.happiness[k, f], data.jobFound[k, f], data.eat[k, f], data.work[k, f], data.stillWork[k, f], 
+						data.justEat[k, f], data.endDay[k,f], data.start[k,f], data.hj[k, f, 0], data.hj[k, f, 1]);
 				}
 
 		}
@@ -285,7 +285,6 @@ public class GraphBuilder : MonoBehaviour {
 		
 		for (int i = 0; i < w; i++)
 		{
-			Debug.Log(i);
 			var x = data.workerPos[i] % 10;
 			var y = (int)Mathf.Floor(data.workerPos[i] / 10);
 			GameManager.GM().SpawnWorker(matrix[x, y].sceneObject.transform);

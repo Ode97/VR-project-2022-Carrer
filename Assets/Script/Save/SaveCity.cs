@@ -31,6 +31,8 @@ public class SaveCity : MonoBehaviour
         bool[,] work = new bool[100, 30];
         bool[,] stillWork = new bool[100, 30];
         bool[,] justEat = new bool[100, 30];
+        bool[,] endDay = new bool[100, 30];
+        bool[,] start = new bool[100, 30];
         int[, , ] hj = new int[100, 30, 2];
 
         int[] workerPos = new int[5];
@@ -72,6 +74,8 @@ public class SaveCity : MonoBehaviour
                 var pos = p.x + p.y * 10;
                 if (pos == i)
                 {
+                    endDay[i, x] = p.endDay;
+                    start[i, x] = p.start;
                     type[i, x] = p.type;
                     busy[i, x] = p.busy;
                     jobFound[i, x] = p.jobFound;
@@ -114,7 +118,9 @@ public class SaveCity : MonoBehaviour
             
             i++;
         }
-        
+
+        GameManager.GM().data.endDay = endDay;
+        GameManager.GM().data.start = start;
         GameManager.GM().data.layers = l;
         GameManager.GM().data.buildings = building;
         GameManager.GM().data.rotation = rotations;

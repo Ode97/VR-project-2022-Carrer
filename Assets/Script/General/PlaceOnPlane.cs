@@ -36,6 +36,7 @@ public class PlaceOnPlane : PressInputBase
     protected override void Awake()
     {
         base.Awake();
+        FindObjectOfType<ARSession>().Reset();
         m_RaycastManager = GetComponent<ARRaycastManager>();
     }
 
@@ -67,6 +68,7 @@ public class PlaceOnPlane : PressInputBase
                 }
                 GetComponent<ARSessionOrigin>().GetComponent<ARPointCloudManager>().enabled = false;
                 GetComponent<ARPlaneManager>().enabled = false;
+                
                 
                 spawnedObject.GetComponent<GraphBuilder>().Create(spawnedObject);
 

@@ -23,7 +23,7 @@ public class People : MonoBehaviour
     public bool stillWorking = false;
     public bool justEat = false;
     public bool runAway = false;
-    private bool start = true;
+    public bool start = true;
     public int happiness = 100;
     private List<MeshRenderer> _meshRenderer;
 
@@ -64,7 +64,6 @@ public class People : MonoBehaviour
                             if (!current.GetComponent<Food>().Eat()){
                             
                                 happiness -= 20;
-                                Debug.Log("non ho mangiato");
                             }
 
                             justEat = true;
@@ -153,11 +152,11 @@ public class People : MonoBehaviour
                 work = false;
                 var buildings = _buildings.FindAll(b => b.GetType() == typeof(Food));
 
-                int l = -1;
+                int l = 100;
                 foreach (var b in buildings)
                 {
                     int lb = GameManager.GM().PathSolver(x, y, b.x, b.y).Length;
-                    if (lb > l)
+                    if (lb < l)
                     {
                         building = b;
                         l = lb;
@@ -172,7 +171,6 @@ public class People : MonoBehaviour
                 else
                 {
                     happiness -= 20;
-                    Debug.Log("non ci sono posti per mangiare");
                     justEat = true;
                 }
             }
@@ -218,25 +216,21 @@ public class People : MonoBehaviour
         {
             if (!jobFound)
             {
-                Debug.Log("non ho un lavoro");
                 happiness -= 20;
             }
 
             if (GameManager.GM().entertainment < 0)
             {
-                Debug.Log("posti affollati");
                 happiness += 5 * GameManager.GM().entertainment;
 
             }
             else if (GameManager.GM().entertainment > 0)
             {
-                Debug.Log("posti vuoti divertimento");
-                happiness -= 2 * GameManager.GM().entertainment;
+                happiness -= 3 * GameManager.GM().entertainment;
             }
 
             if (GameManager.GM().jobs < 0)
             {
-                Debug.Log("manca gente per lavorare");
                 happiness += 5 * GameManager.GM().jobs;
             }
         }

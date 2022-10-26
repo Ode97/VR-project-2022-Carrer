@@ -921,21 +921,41 @@ PrefabInstance:
       propertyPath: woodNeed
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 746586289, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
+      propertyPath: peopleEntertained
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 746586290, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: woodNeed
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 746586290, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
+      propertyPath: peopleEntertained
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 746586291, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: woodNeed
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 746586291, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
+      propertyPath: peopleEntertained
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 746586292, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: woodNeed
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 746586292, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
+      propertyPath: peopleEntertained
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 746586293, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: woodNeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 746586293, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
+      propertyPath: peopleEntertained
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 746586294, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: peopleEntertained
@@ -947,15 +967,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 746586296, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: people
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 746586297, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: people
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 746586298, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: people
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 746586299, guid: abc1507f7f48f67439496f17f4601f3e, type: 3}
       propertyPath: people

@@ -147,6 +147,9 @@ public class GameManager : MonoBehaviour
     {
         workers.Clear();
         allWorkers.Clear();
+        buttonsMenu.SetActive(false);
+        dismantle.SetActive(false);
+        buildingMenu.SetActive(false);
         happinessText.text = "0";
     }
     

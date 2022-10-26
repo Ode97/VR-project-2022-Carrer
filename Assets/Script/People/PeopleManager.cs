@@ -99,7 +99,7 @@ public class PeopleManager : MonoBehaviour
     //------------------------------------------------
     
     public void SpawnPeople(int type, int pos, int toX, int toY, int happiness, bool jobFound, bool eat,
-                            bool work, bool stillWork, bool justEat, int h, int j)
+                            bool work, bool stillWork, bool justEat, bool endDay, bool start, int h, int j)
     {
 
 
@@ -119,6 +119,8 @@ public class PeopleManager : MonoBehaviour
         c.work = work;
         c.stillWorking = stillWork;
         c.justEat = justEat;
+        c.start = start;
+        c.endDay = endDay;
         c.SetHouse(GameManager.GM()._graphBuilder.matrix[h%10, (int)Mathf.Floor(h / 10)].sceneObject.GetComponentInChildren<House>());
         c.GetHouse().AddPeople(c);
         

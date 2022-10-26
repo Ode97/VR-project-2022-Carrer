@@ -29,7 +29,9 @@ public class Data
     public float time = 0;
 
     public int[] workerPos = new int[5];
-    
+
+    public bool[,] endDay;
+    public bool[,] start;
     public int[,] type;
     public int[,] toX;
     public int[,] toY;
@@ -44,6 +46,8 @@ public class Data
 
     public Data()
     {
+        endDay = new bool[100, 30];
+        start = new bool[100, 30];
         type = new int[100, 30];
         toX = new int[100, 30];
         toY = new int[100, 30];
