@@ -51,4 +51,14 @@ public class AudioManager : MonoBehaviour
         audioSourceButton.volume = volume.value;
         //soundtrack.volume = volume.value;
     }
+
+    public void PlaySoundtrack()
+    {
+        soundtrack.Play();
+    }
+
+    public void StopSoundtrack()
+    {
+        soundtrack.Stop();
+    }
 }

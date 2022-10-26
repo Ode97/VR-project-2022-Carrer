@@ -19,7 +19,6 @@ public class Settings : MonoBehaviour
 
     public void OpenSettings()
     {
-        
         setting.SetActive(true);
         mainMenu.SetActive(false);
         GetComponent<Image>().enabled = false;
@@ -33,15 +32,16 @@ public class Settings : MonoBehaviour
     {
         SceneManager.LoadScene("MenuScene");
         setting.SetActive(false);
+        cityInfo.SetActive(false);
         mainMenu.SetActive(true);
         GetComponent<Image>().enabled = true;
-        cityInfo.SetActive(false);
         backToMenu.SetActive(false);
         GameManager.GM().endPanel.SetActive(false);
         GameManager.GM().load = false;
         GameManager.GM().Reset();
-        GameManager.GM().audioManager.Move();
         Time.timeScale = 1;
+        GameManager.GM().audioManager.Move();
+        GameManager.GM().audioManager.PlaySoundtrack();
     }
 
     public void Back()
@@ -98,6 +98,8 @@ public class Settings : MonoBehaviour
         GameManager.GM().audioManager.Confirm();
         if(!GameManager.GM().start)
             tutorial.SetActive(true);
+        
+        GameManager.GM().audioManager.StopSoundtrack();
     }
     
     public void LoadGame()
@@ -115,11 +117,13 @@ public class Settings : MonoBehaviour
             cityInfo.SetActive(true);
             mainMenu.SetActive(false);
             GameManager.GM().audioManager.Confirm();
+            GameManager.GM().audioManager.StopSoundtrack();
         }
         else
         {
             StartCoroutine(GameManager.GM().WarningText("Nessun Salvataggio"));
         }
+        
         
     }
 }

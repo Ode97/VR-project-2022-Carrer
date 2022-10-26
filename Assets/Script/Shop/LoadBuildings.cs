@@ -144,6 +144,23 @@ public class LoadBuildings : MonoBehaviour
         ShowObject();
     }
 
+    public void Previous()
+    {
+        Destroy(actual.gameObject);
+        i--;
+        if (i == -1)
+            i = item.childCount - 1;
+
+        if(house)
+            peopleText.text = "People: " + item.GetChild(i).GetComponent<House>().people.ToString();
+        else if(ent)
+            peopleText.text = "People\nEntertained: " + item.GetChild(i).GetComponent<Entertainment>().peopleEntertained.ToString();
+        else if(job)
+            peopleText.text = "Jobs: " + item.GetChild(i).GetComponent<Job>().jobsNum.ToString();
+        
+        ShowObject();
+    }
+    
     public void Select()
     {
         if(!actual)
